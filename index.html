@@ -63,6 +63,29 @@
   .set .cap b { font-size:15px; font-weight:900; } .set .cap span { font-size:12px; color:var(--sub); }
   .sets { display:flex; flex-direction:column; gap:14px; padding:0 20px; }
 
+.chips.sub { padding:4px 20px 2px; gap:6px; }
+  .sb { flex:none; display:inline-flex; align-items:center; gap:6px; min-height:40px; padding:0 13px; border-radius:20px; border:1px solid var(--line); background:#fff; font-size:13px; font-weight:700; cursor:pointer; white-space:nowrap; }
+  .sb i { width:8px; height:8px; border-radius:2px; background:var(--c); }
+  .sb.on { background:var(--c, var(--ink)); border-color:var(--c, var(--ink)); color:#fff; }
+  .sb.on i { background:#fff; }
+  .bd { display:inline-flex; align-items:center; gap:5px; font-size:11.5px; font-weight:700; color:var(--c); background:color-mix(in srgb, var(--c) 10%, #fff); border:1px solid color-mix(in srgb, var(--c) 35%, #fff); border-radius:6px; padding:2px 7px; }
+  .bd::before { content:''; width:7px; height:7px; border-radius:2px; background:var(--c); }
+  .rank { list-style:none; margin:0; padding:0 20px; display:flex; flex-direction:column; gap:8px; }
+  .rr { width:100%; display:flex; align-items:center; gap:12px; padding:8px 12px 8px 6px; border:0; border-radius:14px; background:#fff; cursor:pointer; text-align:left; }
+  .rr .no { width:34px; flex:none; text-align:center; font-family:Anton, sans-serif; font-size:22px; color:#8a8378; }
+  .rr .no.top { color:var(--ink); font-size:26px; }
+  .rr .th { width:56px; height:70px; flex:none; border-radius:10px; overflow:hidden; background:var(--soft); display:flex; align-items:center; justify-content:center; color:#8a8378; }
+  .rr .th img { width:100%; height:100%; object-fit:cover; display:block; }
+  .rr .th svg { width:26px; height:26px; }
+  .rr .tx { flex:1; min-width:0; display:flex; flex-direction:column; gap:3px; }
+  .rr .l1 { display:flex; gap:6px; align-items:center; }
+  .rr .nw { font-family:Anton, sans-serif; font-size:10.5px; letter-spacing:1px; background:var(--ink); color:var(--bg); border-radius:4px; padding:1px 6px; }
+  .rr b { font-size:14.5px; font-weight:900; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .rr small { font-size:11.5px; color:var(--sub); }
+  .rr .go { flex:none; color:#b5ad9f; }
+  .morebox { display:flex; justify-content:center; padding:12px 20px 0; }
+  .per { margin:10px 20px 0; font-size:11.5px; color:var(--sub); }
+  .sec h2 { white-space:nowrap; }
   .note { margin:28px 20px 0; font-size:11.5px; color:#666; line-height:1.7; }
   .empty { margin:8px 20px; padding:18px; border:1px dashed #bdb6aa; border-radius:14px; font-size:13px; color:var(--sub); line-height:1.6; }
   .loading { padding:80px 20px; text-align:center; color:var(--sub); font-size:14px; }
@@ -129,7 +152,7 @@
   var NEW_DAYS = 14;
   var D = null;               // 받은 자료
   var byCode = {};
-  var st = { cat:'전체', q:'', best:'own', fitT:0, fitB:0 };
+  var st = { cat:'전체', sub:'', q:'', best:'own', more:false, fitT:0, fitB:0 };
 
   function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c]; }); }
   function won(n) { return n ? n.toLocaleString('ko-KR') + '원' : ''; }
@@ -153,51 +176,106 @@
     var a = p.seen.split('-'), d = new Date(+a[0], +a[1]-1, +a[2]);
     return (today0() - d) / 86400000 < NEW_DAYS;
   }
-  function match(p) {
+  function match(p, noSub) {
     if (st.cat !== '전체' && group(p) !== st.cat) return false;
+    if (!noSub && st.sub && p.it !== st.sub) return false;
     if (st.q) { var q = st.q.toLowerCase(); return (name(p) + ' ' + p.c + ' ' + p.it).toLowerCase().indexOf(q) >= 0; }
     return true;
   }
 
+  // 품목 뱃지 색 — 전산 화면(탬퍼몽키 인기/비인기)과 같은 색
+  var BADGE_PALETTE = ['#2563eb','#db2777','#16a34a','#ea580c','#7c3aed','#0891b2','#b45309','#6b4f3a','#c026d3','#334155','#65a30d','#dc2626','#0f766e','#9333ea','#64748b','#a16207'];
+  var BADGE_FIXED = { '팬츠':0,'반바지':1,'맨투맨':2,'후드':3,'집업후드':4,'긴팔':5,'반팔':6,'자켓':7,'점퍼':8,'니트':9,'가디건':10,'양말':11,'베스트':12,'긴팔셔츠':13,'반팔셔츠':14,'패딩':15 };
+  function badgeColor(nm) {
+    var i = BADGE_FIXED[nm];
+    if (i === undefined) { var h = 0; String(nm || '').split('').forEach(function (ch) { h = (h * 31 + ch.charCodeAt(0)) >>> 0; }); i = h % BADGE_PALETTE.length; }
+    return BADGE_PALETTE[i];
+  }
+  function badge(nm) { return nm ? '<span class="bd" style="--c:' + badgeColor(nm) + '">' + esc(nm) + '</span>' : ''; }
+
   function card(p, opt) {
     opt = opt || {};
-    var badge = opt.rank ? '<span class="rk">' + String(opt.rank).padStart(2, '0') + '</span>' : (opt.isNew ? '<span class="tag">NEW</span>' : '');
-    return '<button class="card" data-p="' + esc(p.c) + '"><div class="ph">' + imgTag(p.img, 400, name(p)) + badge + '</div>' +
-      '<span class="nm">' + esc(name(p)) + '</span>' + (opt.season ? '<span class="se">' + esc(p.se) + '</span>' : '') + '</button>';
+    var tag = opt.isNew ? '<span class="tag">NEW</span>' : '';
+    return '<button class="card" data-p="' + esc(p.c) + '"><div class="ph">' + imgTag(p.img, 400, name(p)) + tag + '</div>' +
+      '<span class="nm">' + esc(name(p)) + '</span>' + (opt.season ? '<span class="se">' + esc(p.it) + ' · ' + esc(p.se) + '</span>' : '') + '</button>';
   }
 
-  // ---------- 메인 ----------
+  // ---------- 메인 (틀은 한 번만 그리고, 필터·내용만 다시 그림 → 검색칸 한글 입력이 끊기지 않음) ----------
   function renderHome() {
     var app = document.getElementById('app');
-    var items = D.items.filter(match);
-    var news = items.filter(isNew).sort(function (a, b) { return a.seen < b.seen ? 1 : a.seen > b.seen ? -1 : skey(b.c) - skey(a.c); });
-    var newTitle = '신규 입고', newSmall = 'NEW IN', newFlag = true;
-    if (!news.length) {
-      var top = items.map(function (p) { return skey(p.c); }).sort(function (a, b) { return b - a; })[0] || 0;
-      news = items.filter(function (p) { return skey(p.c) >= top - 1; }).slice(0, 12);
-      newTitle = '이번 시즌'; newSmall = 'NOW'; newFlag = false;
+    if (!document.getElementById('content')) {
+      app.innerHTML =
+        '<header class="top"><div class="brand"><b>DOUBLEJD</b><span>현대백화점 천호점 · B1 영스트리트</span></div>' +
+        '<a class="pill dark" href="#/fit">코디해보기</a></header>' +
+        '<div class="search"><input id="q" type="search" aria-label="상품 검색" placeholder="후드집업, 와이드 데님…" autocomplete="off"></div>' +
+        '<div class="chips hs" id="cats"></div><div class="chips sub hs" id="subs"></div><div id="content"></div>';
+      var q = document.getElementById('q');
+      q.value = st.q;
+      q.addEventListener('input', function () { st.q = q.value.trim(); st.more = false; renderContent(); });
     }
-    var rk = st.best === 'own' ? 'ro' : 'ra';
-    var best = items.filter(function (p) { return p[rk] > 0; }).sort(function (a, b) { return a[rk] - b[rk]; }).slice(0, 12);
-    var sets = (D.sets || []).filter(function (s) { return byCode[s.top] && byCode[s.bot]; });
-    var all = items.slice().sort(function (a, b) { return skey(b.c) - skey(a.c) || (a.c < b.c ? -1 : 1); });
+    renderFilters();
+    renderContent();
+  }
 
+  function renderFilters() {
+    document.getElementById('cats').innerHTML = CATS.map(function (c) {
+      return '<button class="pill' + (c === st.cat ? ' on' : '') + '" data-cat="' + c + '">' + c + '</button>';
+    }).join('');
+    var subs = document.getElementById('subs');
+    if (st.cat === '전체') { subs.innerHTML = ''; subs.style.display = 'none'; return; }
+    var cnt = {};
+    D.items.forEach(function (p) { if (group(p) === st.cat && p.it) cnt[p.it] = (cnt[p.it] || 0) + 1; });
+    var names = Object.keys(cnt).sort(function (a, b) { return cnt[b] - cnt[a]; });
+    subs.style.display = names.length > 1 ? '' : 'none';
+    subs.innerHTML = '<button class="sb' + (!st.sub ? ' on' : '') + '" data-sub="">' + st.cat + ' 전체</button>' +
+      names.map(function (n) {
+        return '<button class="sb' + (st.sub === n ? ' on' : '') + '" data-sub="' + esc(n) + '" style="--c:' + badgeColor(n) + '"><i></i>' + esc(n) + '</button>';
+      }).join('');
+  }
+
+  function renderContent() {
+    var items = D.items.filter(function (p) { return match(p); });
+    var label = st.sub || (st.cat === '전체' ? '' : st.cat);
     var h = '';
-    h += '<header class="top"><div class="brand"><b>DOUBLEJD</b><span>현대백화점 천호점 · B1 영스트리트</span></div>' +
-         '<a class="pill dark" href="#/fit">코디해보기</a></header>';
-    h += '<div class="search"><input id="q" type="search" aria-label="상품 검색" placeholder="후드집업, 와이드 데님…" value="' + esc(st.q) + '"></div>';
-    h += '<div class="chips hs">' + CATS.map(function (c) { return '<button class="pill' + (c === st.cat ? ' on' : '') + '" data-cat="' + c + '">' + c + '</button>'; }).join('') + '</div>';
 
-    h += '<div class="sec"><h2>' + newTitle + '</h2><small>' + newSmall + '</small></div>';
-    h += news.length ? '<div class="row hs">' + news.map(function (p) { return card(p, { isNew: newFlag }); }).join('') + '</div>'
-                     : '<div class="empty">조건에 맞는 상품이 없어요.</div>';
-
-    h += '<div class="sec"><h2>베스트</h2><div class="seg" role="group" aria-label="베스트 기준">' +
+    // 1) 인기 순위 (메인) — 품목을 고르면 그 품목 안에서 1위부터 다시 매김
+    var rk = st.best === 'own' ? 'ro' : 'ra';
+    var pop = items.filter(function (p) { return p[rk] > 0; }).sort(function (a, b) { return a[rk] - b[rk]; });
+    var LIMIT = 10;
+    h += '<div class="sec"><h2>' + (label ? esc(label) + ' ' : '') + '인기 순위</h2><div class="seg" role="group" aria-label="순위 기준">' +
          '<button data-best="own" class="' + (st.best === 'own' ? 'on' : '') + '">천호점</button>' +
          '<button data-best="all" class="' + (st.best === 'all' ? 'on' : '') + '">전국</button></div></div>';
-    h += best.length ? '<div class="grid">' + best.map(function (p) { return card(p, { rank: p[rk] }); }).join('') + '</div>'
-                     : '<div class="empty">이번 주 순위를 준비 중이에요.</div>';
+    var period = D.rankAt && D.rankAt[st.best === 'own' ? 'own' : 'all'];
+    if (pop.length) {
+      h += '<ol class="rank">' + pop.slice(0, st.more ? 100 : LIMIT).map(function (p, i) {
+        var n = i + 1;
+        return '<li><button class="rr" data-p="' + esc(p.c) + '">' +
+          '<span class="no' + (n <= 3 ? ' top' : '') + '">' + n + '</span>' +
+          '<span class="th">' + imgTag(p.img, 200, name(p)) + '</span>' +
+          '<span class="tx"><span class="l1">' + badge(p.it) + (isNew(p) ? '<span class="nw">NEW</span>' : '') + '</span>' +
+          '<b>' + esc(name(p)) + '</b>' +
+          '<small>' + esc(p.se) + (label ? ' · 전체 ' + p[rk] + '위' : '') + '</small></span>' +
+          '<svg class="go" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg>' +
+          '</button></li>';
+      }).join('') + '</ol>';
+      if (pop.length > LIMIT) h += '<div class="morebox"><button class="pill" data-more="1">' + (st.more ? '접기' : '순위 더 보기 (' + pop.length + '개)') + '</button></div>';
+      h += '<p class="per">' + (st.best === 'own' ? '천호점' : '전국') + ' 최근 1주 판매 기준' + (period ? ' · ' + esc(period) + '까지' : '') + '</p>';
+    } else {
+      h += '<div class="empty">' + (label ? esc(label) + '은(는) ' : '') + '이번 주 순위가 아직 없어요.</div>';
+    }
 
+    // 2) 신상품
+    var news = items.filter(isNew).sort(function (a, b) { return a.seen < b.seen ? 1 : a.seen > b.seen ? -1 : skey(b.c) - skey(a.c); });
+    if (!news.length) {
+      var top = items.map(function (p) { return skey(p.c); }).sort(function (a, b) { return b - a; })[0] || 0;
+      news = items.filter(function (p) { return skey(p.c) >= top - 1; }).sort(function (a, b) { return skey(b.c) - skey(a.c); }).slice(0, 12);
+    }
+    h += '<div class="sec"><h2>신상품</h2><small>NEW</small></div>';
+    h += news.length ? '<div class="row hs">' + news.map(function (p) { return card(p, { isNew: isNew(p) }); }).join('') + '</div>'
+                     : '<div class="empty">조건에 맞는 상품이 없어요.</div>';
+
+    // 3) 코디 셋업
+    var sets = (D.sets || []).filter(function (s) { return byCode[s.top] && byCode[s.bot]; });
     if (sets.length && st.cat === '전체' && !st.q) {
       h += '<div class="sec"><h2>베스트 코디 셋업</h2><small>SET UP</small></div><div class="sets">' + sets.map(function (s) {
         var t = byCode[s.top], b = byCode[s.bot];
@@ -207,19 +285,13 @@
       }).join('') + '</div>';
     }
 
-    h += '<div class="sec"><h2>매장 상품 전체</h2><small>' + all.length + '</small></div>';
+    // 4) 전체
+    var all = items.slice().sort(function (a, b) { return skey(b.c) - skey(a.c) || (a.c < b.c ? -1 : 1); });
+    h += '<div class="sec"><h2>' + (label ? esc(label) + ' ' : '매장 상품 ') + '전체</h2><small>' + all.length + '</small></div>';
     h += all.length ? '<div class="grid">' + all.map(function (p) { return card(p, { season: true, isNew: isNew(p) }); }).join('') + '</div>' : '<div class="empty">조건에 맞는 상품이 없어요.</div>';
 
     h += '<p class="note">매장 재고는 수시로 바뀌어요. 방문 전 매장에 문의해 주세요.' + (D.at ? '<br>업데이트 ' + esc(D.at) : '') + '</p>';
-    app.innerHTML = h;
-
-    var q = document.getElementById('q');
-    q.addEventListener('input', function () {
-      st.q = q.value.trim();
-      var pos = q.selectionStart;
-      renderHome();
-      var q2 = document.getElementById('q'); q2.focus(); try { q2.setSelectionRange(pos, pos); } catch (e) {}
-    });
+    document.getElementById('content').innerHTML = h;
   }
 
   // ---------- 상세 ----------
@@ -341,11 +413,13 @@
     document.body.style.overflow = '';
   }
   document.addEventListener('click', function (e) {
-    var t = e.target.closest('[data-p],[data-cat],[data-best],[data-mv]');
+    var t = e.target.closest('[data-p],[data-cat],[data-sub],[data-best],[data-more],[data-mv]');
     if (!t) return;
     if (t.dataset.p) { if (!location.hash.match(/^#\/p\//)) homeY = window.scrollY; location.hash = '#/p/' + t.dataset.p; return; }
-    if (t.dataset.cat) { st.cat = t.dataset.cat; renderHome(); return; }
-    if (t.dataset.best) { st.best = t.dataset.best; renderHome(); return; }
+    if (t.dataset.cat) { st.cat = t.dataset.cat; st.sub = ''; st.more = false; renderFilters(); renderContent(); return; }
+    if (t.dataset.sub !== undefined) { st.sub = t.dataset.sub; st.more = false; renderFilters(); renderContent(); return; }
+    if (t.dataset.best) { st.best = t.dataset.best; st.more = false; renderContent(); return; }
+    if (t.dataset.more) { st.more = !st.more; renderContent(); return; }
     if (t.dataset.mv) { var a = t.dataset.mv.split(':'); move(a[0], +a[1]); }
   });
   window.addEventListener('hashchange', route);
