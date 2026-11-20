@@ -218,6 +218,24 @@
   .zoom { position:fixed; z-index:70; width:300px; aspect-ratio:3/4; border-radius:12px; overflow:hidden; background:#fff; box-shadow:0 10px 30px rgba(0,0,0,.25); pointer-events:none; }
   .zoom img { width:100%; height:100%; object-fit:cover; display:block; }
   .linkfix { border:0; background:none; font-size:12.5px; color:var(--blue); font-weight:600; cursor:pointer; padding:6px 0; }
+  .hbtns { display:flex; gap:6px; }
+  .evall { font-size:12.5px; color:var(--blue); font-weight:600; text-decoration:none; white-space:nowrap; }
+  .evrow .evc { flex:0 0 200px; scroll-snap-align:start; display:flex; flex-direction:column; gap:6px; text-decoration:none; color:var(--ink); }
+  .evc .ei { display:block; aspect-ratio:1/1; border-radius:10px; overflow:hidden; background:var(--soft); }
+  .evc .ei img { width:100%; height:100%; object-fit:cover; display:block; }
+  .evc b { font-size:13.5px; font-weight:600; line-height:1.4; overflow:hidden; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; }
+  .evc small { font-size:11.5px; color:var(--mute); }
+  .visitcard { margin:30px 20px 0; display:flex; align-items:center; gap:12px; padding:10px; border:1px solid var(--line); border-radius:12px; text-decoration:none; color:var(--ink); }
+  .visitcard img { width:84px; height:66px; object-fit:cover; border-radius:8px; flex:none; }
+  .visitcard span { flex:1; min-width:0; display:flex; flex-direction:column; gap:3px; }
+  .visitcard b { font-size:15px; } .visitcard small { font-size:12px; color:var(--sub); line-height:1.5; }
+  .vlead { margin:-6px 0 0; font-size:14px; color:var(--sub); }
+  .vmap { width:100%; display:block; border-radius:12px; border:1px solid var(--line); }
+  .vbox { border-top:1px solid var(--line); padding-top:12px; }
+  .vbox > b { font-size:15px; display:flex; align-items:center; gap:6px; }
+  .vbox em { font-style:normal; font-size:11px; font-weight:700; color:#fff; background:var(--blue); border-radius:4px; padding:1px 6px; }
+  .vbox p { margin:6px 0 0; font-size:13.5px; line-height:1.7; }
+  .mute { color:var(--mute); }
   .toast { position:fixed; left:50%; bottom:24px; transform:translateX(-50%); z-index:50; background:var(--ink); color:#fff; font-size:13.5px; padding:11px 18px; border-radius:22px; }
   @media (min-width:700px) {
     .nl b { font-weight:500; }
@@ -240,7 +258,7 @@
   var CATS = ['전체','아우터','상의','하의','ACC'];
   var NEW_DAYS = 14;
   var D = null, byCode = {};
-  var st = { cat:'전체', sub:'', q:'', best:'own', more:false, fitT:0, fitB:0 };
+  var st = { cat:'전체', sub:'', q:'', best:'own', more:false, ev:'buy', fitT:0, fitB:0 };
 
   function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c]; }); }
   function won(n) { return n ? Number(n).toLocaleString('ko-KR') + '원' : ''; }
@@ -300,7 +318,7 @@
     if (!document.getElementById('content')) {
       app.innerHTML =
         '<header class="top"><a class="brand" href="#/" aria-label="더블제이디 현대백화점 천호점"><img src="assets/logo-blue.png" alt="DOUBLEJD"><span>현대백화점 천호점</span></a>' +
-        '<a class="pill dark" href="#/fit">코디해보기</a></header>' +
+        '<div class="hbtns"><a class="pill sm" href="#/visit">오시는 길</a><a class="pill sm dark" href="#/fit">코디해보기</a></div></header>' +
         '<div class="search"><input id="q" type="search" aria-label="상품 검색" placeholder="후드집업, 와이드 데님…" autocomplete="off"></div>' +
         '<div class="chips hs" id="cats"></div><div class="chips sub hs" id="subs"></div><div id="content"></div>';
       var q = document.getElementById('q');
@@ -362,11 +380,63 @@
       }
     }
 
+    if (st.cat === '전체' && !st.q) h += evSection();
+
     var all = items.slice().sort(newOrder);
     h += '<div class="sec"><h2>' + (label ? esc(label) + ' 전체' : '매장 상품 전체') + '</h2><small>' + all.length + '개</small></div>';
     h += all.length ? '<div class="grid">' + all.map(function (p) { return card(p, { isNew: true }); }).join('') + '</div>' : empty('조건에 맞는 상품이 없어요.');
+    h += '<a class="visitcard" href="#/visit"><img src="assets/b1-map.png" alt=""><span><b>찾아오시는 길</b><small>천호역 3·4번 출구에서 백화점 지하로 바로 연결 · 지하1층 영스트리트</small></span>' + chev('r') + '</a>';
     h += '<p class="note">매장 재고는 수시로 바뀌어요. 방문 전 매장에 문의해 주세요.' + (D.at ? '<br>업데이트 ' + esc(D.at) : '') + '</p>';
     document.getElementById('content').innerHTML = h;
+  }
+
+  // ---------- 천호점 행사 (앱스 스크립트가 현대백화점 행사안내에서 가져옴) ----------
+  var EV = null, EV_PAGE = 'https://www.ehyundai.com/newPortal/SN/SN_0101000.do?branchCd=B00126000';
+  var EV_GIFT = /\d+\s*만\s*원\s*이상/;
+  function evSection() {
+    var more = '<a class="evall" href="' + EV_PAGE + '" target="_blank" rel="noopener">행사 전체 보기 ›</a>';
+    var head = '<div class="sec"><h2>천호점 행사</h2>' + more + '</div>';
+    if (!EV) return head + '<div class="empty">현대백화점 천호점 행사를 불러오는 중…</div>';
+    if (!EV.ok) return head + '<div style="padding:0 20px"><a class="pill" style="width:100%;min-height:48px" href="' + EV_PAGE + '" target="_blank" rel="noopener">현대백화점 천호점 행사 안내 보기</a></div>';
+    var tabs = [['buy', '구매 사은품'], ['popup', '팝업스토어'], ['gift', '사은행사 전체']];
+    var list = st.ev === 'popup' ? EV.popup : (st.ev === 'gift' ? EV.gift : EV.gift.filter(function (x) { return EV_GIFT.test(x.t); }));
+    var h = head + '<div class="chips sub hs" style="padding-top:0">' + tabs.map(function (t) { return '<button class="sb' + (st.ev === t[0] ? ' on' : '') + '" data-ev="' + t[0] + '">' + t[1] + '</button>'; }).join('') + '</div>';
+    h += list.length ? '<div class="row hs evrow">' + list.map(function (x) {
+      return '<a class="evc" href="' + esc(x.url) + '" target="_blank" rel="noopener"><span class="ei">' + (x.img ? '<img loading="lazy" src="' + esc(x.img) + '" alt="">' : '') + '</span>' +
+        '<b>' + esc(x.t) + '</b><small>' + esc(x.d) + (x.at ? ' · ' + esc(x.at) : '') + '</small></a>';
+    }).join('') + '</div>' : empty(st.ev === 'popup' ? '지금 진행 중인 팝업스토어가 없어요.' : '지금 진행 중인 사은행사가 없어요.');
+    return h;
+  }
+  function loadEvents() {
+    fetch(API + (API.indexOf('?') >= 0 ? '&' : '?') + 'hp=ev', { cache: 'no-store' })
+      .then(function (r) { return r.json(); })
+      .then(function (d) { EV = d && d.ok ? d : { ok: false }; if (EV.ok) { EV.gift = EV.gift || []; EV.popup = EV.popup || []; } })
+      .catch(function () { EV = { ok: false }; })
+      .then(function () { if (D && document.getElementById('content')) renderContent(); });
+  }
+
+  // ---------- 오시는 길 ----------
+  function renderVisit() {
+    var layer = document.getElementById('layer');
+    var q = encodeURIComponent('현대백화점 천호점');
+    var h = '<div class="ov" id="ov"><div class="sheet" role="dialog" aria-modal="true" aria-label="찾아오시는 길">' +
+      '<button class="x" id="close" aria-label="닫기"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>' +
+      '<div class="body" style="padding-top:22px">' +
+      '<h1 class="title" style="margin:0">찾아오시는 길</h1>' +
+      '<p class="vlead">현대백화점 천호점 <b>지하1층 영스트리트</b>, 크록스 옆이에요.</p>' +
+      '<a href="assets/b1-map.png" target="_blank" rel="noopener"><img class="vmap" src="assets/b1-map.png" alt="지하1층 약도 — 더블제이디 위치 표시"></a>' +
+      '<div class="vbox"><b>지하철 <em>가장 편해요</em></b><p>5·8호선 <b>천호역 3·4번 출구</b>에서 백화점 지하2층으로 바로 연결돼요. 에스컬레이터로 한 층 올라오시면 지하1층이에요.</p></div>' +
+      '<div class="vbox"><b>버스</b><p><b>천호역2번출구·현대백화점</b>, <b>천호역3번출구·현대백화점</b> 정류장<br>간선 340 · 지선 3318, 3321, 3324, 3411<br><span class="mute">천호역 주변 정류장: 130, 341, 342, 3214, 3316, 4318 등</span></p></div>' +
+      '<div class="vbox"><b>자가용</b><p>서울 강동구 천호대로 1005<br>주차 최초 30분 무료 · 3만원 이상 구매 1시간 · 5만원 이상 2시간 · 10만원 이상 3시간<br><span class="mute">주차관리실 02-2225-8713</span></p></div>' +
+      '<div class="ask"><a class="pill" href="https://map.naver.com/p/search/' + q + '" target="_blank" rel="noopener">네이버 지도</a><a class="pill" href="https://map.kakao.com/?q=' + q + '" target="_blank" rel="noopener">카카오맵</a></div>' +
+      '<div class="store"><img src="assets/store-card.jpg" alt="더블제이디 현대백화점 천호점 · 02-2225-8934">' +
+      '<div class="ask"><a class="pill" href="tel:' + STORE.tel.replace(/-/g, '') + '">전화 문의</a><a class="pill blue" href="' + smsLink('[더블제이디 천호점 문의]\n') + '">문자 문의</a></div></div>' +
+      '<p class="meta">주차·교통 정보는 현대백화점 안내 기준이에요. <a href="https://www.ehyundai.com/newPortal/DP/WC/WC000000_V.do?branchCd=B00126000" target="_blank" rel="noopener">현대백화점 위치/주차 안내</a></p>' +
+      '</div></div></div>';
+    layer.innerHTML = h;
+    document.body.style.overflow = 'hidden';
+    document.getElementById('close').onclick = function () { if (history.length > 1) history.back(); else location.hash = '#/'; };
+    document.getElementById('ov').addEventListener('click', function (e) { if (e.target.id === 'ov') location.hash = '#/'; });
   }
 
   // ---------- 상세 ----------
@@ -784,15 +854,17 @@
     var h = location.hash || '#/', m;
     if (h.indexOf('#/admin') === 0) { if (h === '#/admin') A.edit = null; renderAdmin(); return; }
     if (!D) return;
+    if (h === '#/visit') { renderVisit(); return; }
     if ((m = h.match(/^#\/p\/(J[A-Z]{3}\d{2}[0-9A-Z]\d{2})/))) { renderDetail(m[1]); return; }
     if ((m = h.match(/^#\/fit(?:\/(J[A-Z]{3}\d{2}[0-9A-Z]\d{2}(?:\+J[A-Z]{3}\d{2}[0-9A-Z]\d{2})?))?/))) { renderFit(m[1]); return; }
     document.getElementById('layer').innerHTML = '';
     document.body.style.overflow = '';
   }
   document.addEventListener('click', function (e) {
-    var t = e.target.closest('[data-p],[data-cat],[data-sub],[data-best],[data-more],[data-mv],[data-rnd],[data-rec],[data-load],[data-acat],[data-ahide],[data-aedit],[data-opt],[data-pk],[data-delph],[data-main],[data-addsz],[data-hset],[data-admhome]');
+    var t = e.target.closest('[data-p],[data-cat],[data-sub],[data-best],[data-more],[data-mv],[data-rnd],[data-rec],[data-load],[data-acat],[data-ahide],[data-aedit],[data-opt],[data-pk],[data-delph],[data-main],[data-addsz],[data-hset],[data-admhome],[data-ev]');
     if (!t) return;
     var d = t.dataset;
+    if (d.ev) { st.ev = d.ev; renderContent(); return; }
     if (d.admhome) { A.edit = null; A.pq = ''; A.askMain = ''; if (location.hash !== '#/admin') location.hash = '#/admin'; else renderAdmin(); return; }
     if (d.p) { location.hash = '#/p/' + d.p; return; }
     if (d.cat) { st.cat = d.cat; st.sub = ''; st.more = false; renderFilters(); renderContent(); return; }
@@ -869,7 +941,7 @@
   // 열 때마다 시트에서 최신 자료를 받아 옴 (그동안 '불러오는 중' 화면)
   fetch(API + (API.indexOf('?') >= 0 ? '&' : '?') + 'hp=1', { cache: 'no-store' })
     .then(function (r) { return r.json(); })
-    .then(function (d) { if (!d || !d.ok) throw new Error(); start(d); })
+    .then(function (d) { if (!d || !d.ok) throw new Error(); start(d); loadEvents(); })
     .catch(function () { fail('상품을 불러오지 못했어요. 잠시 뒤 다시 열어 주세요.'); });
 })();
 </script>
