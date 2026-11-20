@@ -17,7 +17,7 @@
   window.HP_API = 'https://script.google.com/macros/s/AKfycbwH2g-V2rRrxohamc6uhoH8fLHupxrtYLxBXwxEGZSoKaIvhSaUkoDzfL0l_wnnRK6S/exec';
 </script>
 <style>
-  :root { --bg:#fff; --ink:#111; --sub:#6b6b6b; --mute:#9a9a9a; --line:#e9e9e9; --soft:#f5f5f5; --blue:#1767A6; --pink:#D6286A; }
+  :root { --bg:#0d0d0f; --ink:#f2f2f3; --sub:#a9a9af; --mute:#7c7c83; --line:rgba(255,255,255,.09); --soft:#1a1a1d; --blue:#6cb4ff; --pink:#ff4d8d; --card:rgba(14,14,16,.93); --solid:#111113; --stroke:rgba(255,255,255,.16); --on:#0d0d0f; color-scheme:dark; }
   * { box-sizing:border-box; }
   html, body { margin:0; background:var(--bg); color:var(--ink); font-family:'Pretendard Variable', Pretendard, -apple-system, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif; -webkit-tap-highlight-color:transparent; letter-spacing:-0.01em; }
   body { min-height:100vh; }
@@ -61,7 +61,6 @@
   .inst { flex:none; display:inline-flex; align-items:center; gap:5px; min-height:32px; padding:0 11px; border-radius:16px; border:1px solid #d6d6d6; background:rgba(255,255,255,.92); font-size:12.5px; font-weight:600; cursor:pointer; color:var(--ink); }
   .inst[hidden] { display:none; }
   /* 흰 카드 묶음 */
-  body:has(#hometop) { background:#f1f2f4; }
   .box { background:#fff; border-radius:18px; margin:10px 10px 0; padding-bottom:18px; overflow:hidden; }
   .box :is(.sec, .row, .svl.home, .chips, .search, .rank, .grid, .morebox) { padding-left:16px; padding-right:16px; }
   .box :is(.row, .svl.home) { scroll-padding-inline:16px; }
@@ -99,46 +98,6 @@
   .igadm .igx button:disabled { opacity:.25; }
   .igadm.act { border-color:var(--blue); }
   .evbox { position:relative; }
-  /* ===== 홈 다크 무드: 매장 사진 배경 + 금속 느낌 유리 카드 ===== */
-  html:has(#hometop) { background:#0d0d0f; }
-  body:has(#hometop) { background:transparent; }
-  body:has(#hometop)::before { content:''; position:fixed; inset:-20px; z-index:-1; background:url(assets/store-bg.jpg) center 35%/cover no-repeat; filter:brightness(.6) saturate(1.1) blur(1.5px); }
-  body:has(#hometop)::after { content:''; position:fixed; inset:0; z-index:-1; pointer-events:none; background:linear-gradient(180deg, rgba(13,13,15,0) 0%, rgba(13,13,15,.35) 40%, rgba(13,13,15,.6) 100%); }
-  #app:has(#hometop) { --bg:#0d0d0f; --ink:#f4f4f5; --sub:#b4b4ba; --mute:#85858c; --line:rgba(255,255,255,.1); --soft:rgba(255,255,255,.06); --blue:#6cb4ff; --pink:#ff4d8d; color:var(--ink); }
-  #app:has(#hometop) .box, #app:has(#hometop) .foot .visitcard {
-    background:linear-gradient(180deg, rgba(28,29,32,.74), rgba(14,14,16,.8)); -webkit-backdrop-filter:blur(16px) saturate(1.2); backdrop-filter:blur(16px) saturate(1.2);
-    border:1px solid rgba(255,255,255,.09); box-shadow:inset 0 1px 0 rgba(255,255,255,.14), 0 10px 30px rgba(0,0,0,.35); position:relative; }
-  #app:has(#hometop) .box::before { content:''; position:absolute; left:18px; right:18px; top:0; height:1px; background:linear-gradient(90deg, transparent, rgba(255,255,255,.55), rgba(190,190,200,.25), transparent); }
-  #app:has(#hometop) .sec h2 { font-weight:800; letter-spacing:-.02em; }
-  #app:has(#hometop) .sec .lab { background:linear-gradient(90deg, #f2f2f2, #9a9aa2 45%, #e6e6ea 70%, #8d8d95); -webkit-background-clip:text; background-clip:text; color:transparent; }
-  #app:has(#hometop) .sec .lab em { color:var(--pink); -webkit-text-fill-color:var(--pink); }
-  #app:has(#hometop) .evall { color:var(--blue); }
-  #app:has(#hometop) .pill, #app:has(#hometop) .sb, #app:has(#hometop) .seg button, #app:has(#hometop) .inst { background:rgba(255,255,255,.06); border-color:rgba(255,255,255,.16); color:var(--ink); }
-  #app:has(#hometop) .seg { border-color:rgba(255,255,255,.16); }
-  #app:has(#hometop) .pill.dark, #app:has(#hometop) .chips .pill.on, #app:has(#hometop) .seg button.on, #app:has(#hometop) .sb.on:not([style]) {
-    background:linear-gradient(180deg, #ffffff, #c9c9cf); border-color:transparent; color:#111; }
-  #app:has(#hometop) .sb.on[style] { color:#fff; }
-  #app:has(#hometop) .search input { background:rgba(255,255,255,.06); border-color:rgba(255,255,255,.16); color:var(--ink); }
-  #app:has(#hometop) .search input::placeholder { color:#8a8a92; }
-  #app:has(#hometop) .search input:focus { border-color:rgba(255,255,255,.5); }
-  #app:has(#hometop) .rr { background:transparent; color:var(--ink); }
-  #app:has(#hometop) .sv { background:transparent; border-color:rgba(255,255,255,.12); }
-  #app:has(#hometop) .bd { color:color-mix(in srgb, var(--c) 55%, #fff); background:color-mix(in srgb, var(--c) 20%, transparent); border-color:color-mix(in srgb, var(--c) 50%, transparent); }
-  #app:has(#hometop) .card, #app:has(#hometop) .evc, #app:has(#hometop) .igc { color:var(--ink); }
-  #app:has(#hometop) .empty { border-color:rgba(255,255,255,.18); }
-  #app:has(#hometop) .empty img { filter:invert(1); opacity:.5; }
-  #app:has(#hometop) .roll span { background:#1c1c1f; }
-  #app:has(#hometop) .gbg { display:none; }
-  #app:has(#hometop) .visitcard { color:var(--ink); }
-  #app:has(#hometop) .note { color:#8a8a92; }
-  .hb { flex-direction:row; align-items:center; gap:12px; }
-  .hb .av { width:50px; height:50px; flex:none; border-radius:50%; padding:2px; background:conic-gradient(from 210deg, #f4f4f4, #7d7d85, #e9e9ee, #6a6a72, #f4f4f4); box-shadow:0 4px 14px rgba(0,0,0,.45); }
-  .hb .av img { width:100%; height:100%; border-radius:50%; object-fit:cover; display:block; border:2px solid #0d0d0f; box-sizing:border-box; height:46px; }
-  .hb .bt { display:flex; flex-direction:column; gap:6px; }
-  .hb .bt img { height:17px; width:auto; display:block; filter:drop-shadow(0 0 10px rgba(255,255,255,.25)); }
-  .hb .bt span { font-size:12px; color:#e2e2e6; letter-spacing:.02em; text-shadow:0 1px 6px rgba(0,0,0,.9); }
-  #app:has(#hometop) .acts .pill { background:rgba(20,20,22,.55); -webkit-backdrop-filter:blur(10px); backdrop-filter:blur(10px); }
-  #app:has(#hometop) .acts .pill.dark { background:linear-gradient(180deg, #ffffff, #c9c9cf); }
   .evc.ghost { visibility:hidden; }
   .evbox > .empty { position:absolute; left:0; right:0; top:0; }
   .guide { position:fixed; inset:0; z-index:80; background:rgba(0,0,0,.45); display:flex; align-items:flex-end; justify-content:center; }
@@ -342,6 +301,66 @@
     .rr .nl { font-size:15px; }
     .sheet { height:90vh; margin-bottom:3vh; border-radius:18px; }
   }
+
+  /* ===== 다크 테마 (전체 공통): 매장 사진 배경 + 검정 카드, 효과 최소 ===== */
+  html { background:#0d0d0f; }
+  html body { background:transparent; color:var(--ink); }
+  body::before { content:''; position:fixed; inset:-40px; z-index:-1; background:url(assets/store-bg.jpg) center 35%/cover no-repeat; filter:blur(14px) brightness(.5) saturate(1.05); }
+  .box, .foot .visitcard { background:var(--card); border:1px solid var(--line); box-shadow:none; }
+  .hcard { background:var(--card); border:1px solid var(--line); border-top:0; border-radius:0 0 18px 18px; margin:0 10px; }
+  .hcard header.top { padding:18px 16px 16px; }
+  .gbg { display:none; }
+  .hb { flex-direction:row; align-items:center; gap:12px; }
+  .hb .av { width:46px; height:46px; flex:none; border-radius:50%; overflow:hidden; border:1px solid rgba(255,255,255,.25); }
+  .hb .av img { width:100%; height:100%; object-fit:cover; display:block; }
+  .hb .bt { display:flex; flex-direction:column; gap:6px; }
+  .hb .bt img { height:16px; width:auto; display:block; }
+  .hb .bt span { font-size:12px; color:var(--sub); font-weight:400; }
+  .brand span { color:var(--sub); }
+  /* 글자: 가늘게 */
+  .sec h2 { font-weight:600; letter-spacing:-.02em; }
+  .sec .lab { color:#9b9ba2; font-weight:600; }
+  .sec .lab em { color:var(--pink); }
+  .nl b, .evc b, .igc b, .lb, .visitcard b { font-weight:500; }
+  .fith b, .sheet h1, .sheet h2 { font-weight:600; }
+  .admhome { font-weight:600; }
+  /* 버튼·입력 */
+  .pill, .sb, .seg button, .inst, .tg, .opts button, .acts .pill { background:rgba(255,255,255,.04); border-color:var(--stroke); color:var(--ink); }
+  .seg { border-color:var(--stroke); }
+  .pill.dark, .acts .pill.dark, .chips .pill.on, .seg button.on, .opts button.on, .sb.on:not([style*="--c"]) { background:#f2f2f3; border-color:#f2f2f3; color:var(--on); }
+  .sb.on[style*="--c"] { color:#fff; }
+  .sb.on:not([style*="--c"]) i { background:var(--on); }
+  .pill.blue, .tg.on { background:#2f7fd0; border-color:#2f7fd0; color:#fff; }
+  .search input, .fld input, .fld textarea, .szgrid input { background:rgba(255,255,255,.04); border-color:var(--stroke); color:var(--ink); }
+  .search input::placeholder, .fld input::placeholder, .fld textarea::placeholder, .szgrid input::placeholder { color:#6f6f76; }
+  .search input:focus, .fld input:focus, .fld textarea:focus { border-color:rgba(255,255,255,.45); }
+  .bd { color:color-mix(in srgb, var(--c) 50%, #fff); background:color-mix(in srgb, var(--c) 16%, transparent); border-color:color-mix(in srgb, var(--c) 40%, transparent); font-weight:500; }
+  .ranks span { background:rgba(108,180,255,.12); }
+  .askmain { background:rgba(108,180,255,.1); }
+  .drop:focus, .drop.on { background:rgba(108,180,255,.08); }
+  /* 표면 */
+  .rr, .card, .evc, .igc, .visitcard { background:transparent; color:var(--ink); }
+  .sv, .recs button, .pick button, .lb { background:var(--soft); border-color:var(--line); color:var(--ink); }
+  .ph, .shots, .shots .ph img, .evc .ei, .igc .ip { background:var(--soft); }
+  .empty { border-color:var(--stroke); }
+  .empty img, .loading img { filter:invert(1); opacity:.55; }
+  .loading img[src*="bear-cap"] { filter:none; opacity:1; }
+  .roll span { background:#1c1c1f; box-shadow:none; }
+  .sheet { background:var(--solid); }
+  .ov { background:rgba(0,0,0,.6); }
+  .fit { background:var(--solid); }
+  .half { background:transparent; }
+  .recs { background:#161618; }
+  .zoom { background:var(--solid); box-shadow:0 10px 30px rgba(0,0,0,.5); }
+  .guide > div { background:var(--solid); }
+  .toast { background:#f2f2f3; color:var(--on); }
+  .igadm .igp { background:var(--soft); border-color:var(--stroke); }
+  .phs div { border-color:var(--line); }
+  .store img, .vmap { border-color:var(--line); }
+  .stage .nav, .stage .rnd { background:rgba(17,17,19,.78); border:1px solid var(--stroke); box-shadow:none; color:var(--ink); }
+  .phs em { background:rgba(17,17,19,.85); color:var(--ink); }
+  .busy { background:rgba(13,13,15,.85); }
+  .busy i { background:#2a2a2e; }
 </style>
 </head>
 <body>
@@ -420,7 +439,7 @@
     var app = document.getElementById('app');
     if (!document.getElementById('content')) {
       app.innerHTML =
-        '<div class="topwrap"><header class="top"><div class="trow"><a class="brand hb" href="#/" aria-label="더블제이디 현대백화점 천호점"><span class="av"><img src="assets/store-sign.jpg" alt=""></span><span class="bt"><img src="assets/logo-white.png" alt="DOUBLEJD"><span>현대백화점 천호점 B1</span></span></a>' +
+        '<div class="topwrap hcard"><header class="top"><div class="trow"><a class="brand hb" href="#/" aria-label="더블제이디 현대백화점 천호점"><span class="av"><img src="assets/store-sign.jpg" alt=""></span><span class="bt"><img src="assets/logo-white.png" alt="DOUBLEJD"><span>현대백화점 천호점 B1</span></span></a>' +
         '<button class="inst" id="inst" hidden>' + ICON_DL + '앱으로 설치</button></div>' +
         '<div class="acts"><a class="pill sm" href="tel:' + STORE.tel.replace(/-/g, '') + '">' + ICON_TEL + '전화</a><a class="pill sm" href="' + smsLink('[더블제이디 천호점 문의]\n') + '">' + ICON_SMS + '문자</a>' +
         '<a class="pill sm" href="#/visit">오시는 길</a><a class="pill sm dark" href="#/fit">코디해보기</a></div></header></div>' +
@@ -744,7 +763,7 @@
       .then(function (j) { if (!j.ok) throw new Error(j.error === 'key' ? '비밀번호가 달라요' : (j.error || '저장 실패')); return j; });
   }
   function admHead(title) {
-    return '<header class="top"><div class="brand"><div class="brow"><a href="#/" aria-label="고객용 페이지로"><img src="assets/logo-blue.png" alt="DOUBLEJD"></a>' +
+    return '<header class="top"><div class="brand"><div class="brow"><a href="#/" aria-label="고객용 페이지로"><img src="assets/logo-white.png" alt="DOUBLEJD"></a>' +
       '<button class="admhome" data-admhome="1">관리자 페이지</button></div><span>' + title + '</span></div>' +
       (A.key ? '<button class="pill" id="logout">잠금</button>' : '') + '</header>';
   }
@@ -1213,7 +1232,7 @@
     D = prep(data);
     if (document.getElementById('content')) { renderFilters(); renderContent(); }
   }
-  function fail(msg) { if (D) return; document.getElementById('app').innerHTML = '<header class="top"><a class="brand" href="#/"><img src="assets/logo-blue.png" alt="DOUBLEJD"><span>현대백화점 천호점</span></a></header>' + empty(msg); }
+  function fail(msg) { if (D) return; document.getElementById('app').innerHTML = '<header class="top"><a class="brand" href="#/"><img src="assets/logo-white.png" alt="DOUBLEJD"><span>현대백화점 천호점</span></a></header>' + empty(msg); }
   if ((location.hash || '').indexOf('#/admin') === 0) route();
   // 열 때마다 시트에서 최신 자료를 받아 옴 (그동안 '불러오는 중' 화면)
   fetch(API + (API.indexOf('?') >= 0 ? '&' : '?') + 'hp=1', { cache: 'no-store' })
