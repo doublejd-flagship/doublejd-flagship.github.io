@@ -217,6 +217,7 @@
   .busy em { display:block; height:100%; background:var(--blue); transition:width .3s; }
   .zoom { position:fixed; z-index:70; width:300px; aspect-ratio:3/4; border-radius:12px; overflow:hidden; background:#fff; box-shadow:0 10px 30px rgba(0,0,0,.25); pointer-events:none; }
   .zoom img { width:100%; height:100%; object-fit:cover; display:block; }
+  .linkfix { border:0; background:none; font-size:12.5px; color:var(--blue); font-weight:600; cursor:pointer; padding:6px 0; }
   .toast { position:fixed; left:50%; bottom:24px; transform:translateX(-50%); z-index:50; background:var(--ink); color:#fff; font-size:13.5px; padding:11px 18px; border-radius:22px; }
   @media (min-width:700px) {
     .nl b { font-weight:500; }
@@ -566,6 +567,7 @@
     layer.innerHTML = admWrap(admHead('상품 ' + A.items.length + '개 · 숨김 ' + hidden + '개') +
       '<div class="search"><input id="aq" type="search" placeholder="품명·품번 검색" value="' + esc(A.q) + '" autocomplete="off"></div>' +
       '<div class="chips hs">' + CATS.map(function (c) { return '<button class="pill' + (c === A.cat ? ' on' : '') + '" data-acat="' + c + '">' + c + '</button>'; }).join('') + '</div>' +
+      '<div style="padding:4px 20px 0;text-align:right"><button class="linkfix" id="fixlinks">추천 조합 양쪽 맞추기</button></div>' +
       '<div style="padding:6px 20px 40px">' + A.order.map(findA).filter(Boolean).map(function (p) {
         var extra = [p.link && p.link.length ? '조합 ' + p.link.length : '', p.fit || p.size ? '정보' : '', p.ph && p.ph.length ? '사진 ' + p.ph.length : ''].filter(String).join(' · ');
         return '<div class="row2' + (p.hide ? ' off' : '') + '"><span class="th">' + imgTag(p.main || p.img, 120, '') + '</span>' +
@@ -576,6 +578,7 @@
     var aq = document.getElementById('aq');
     aq.addEventListener('input', function () { A.q = aq.value.trim(); var pos = aq.selectionStart; clearTimeout(A.t); A.t = setTimeout(function () { renderAdmin(); document.getElementById('admscroll').scrollTop = 0; var x = document.getElementById('aq'); x.focus(); try { x.setSelectionRange(pos, pos); } catch (e) {} }, 400); });
     document.getElementById('logout').onclick = admLogout;
+    document.getElementById('fixlinks').onclick = fixAllLinks;
   }
   function findA(c) { for (var i = 0; i < A.items.length; i++) if (A.items[i].c === c) return A.items[i]; return null; }
 
@@ -696,11 +699,45 @@
       sync(); if (A.busy) return;
       A.busy = true; renderEdit();
       var payload = { rename: f.rename.trim(), intro: f.intro.trim(), fit: f.fit.trim(), thick: f.thick.trim(), size: SZ_MODE[sizeMode(p)] ? buildSize(f, sizeMode(p)) : f.size.trim(), url: f.url.trim(), link: f.link, ph: f.ph, hide: f.hide, main: f.main && f.main !== p.img ? f.main : '' };
+      var before = (p.link || []).slice();
       post({ op: 'hpedit', code: p.c, f: payload }).then(function () {
-        Object.assign(p, payload);  toast('저장했어요 · 홈페이지는 5분 안에 바뀌어요');
+        Object.assign(p, payload);
+        // 추천 조합 양방향: 새로 넣은 상대에는 나를 추가, 뺀 상대에서는 나를 뺌
+        var jobs = [];
+        f.link.forEach(function (c) { if (before.indexOf(c) < 0) jobs.push({ c: c, add: true }); });
+        before.forEach(function (c) { if (f.link.indexOf(c) < 0) jobs.push({ c: c, add: false }); });
+        return syncLinks(p.c, jobs);
+      }).then(function (n) {
+        toast('저장했어요' + (n ? ' · 상대 상품 ' + n + '개에도 반영' : '') + ' · 홈페이지는 5분 안에 바뀌어요');
         A.busy = false; A.edit = null; A.pq = ''; A.askMain = ''; renderAdmin();
       }).catch(function (er) { A.busy = false; toast(er.message); renderEdit(); });
     };
+  }
+  // 상대 상품들의 '연계 상품'에 me를 넣거나 뺌 → 바뀐 개수
+  function syncLinks(me, jobs) {
+    var n = 0;
+    return jobs.reduce(function (pr, j) {
+      return pr.then(function () {
+        var x = findA(j.c); if (!x) return;
+        var lk = (x.link || []).slice(), i = lk.indexOf(me);
+        if (j.add && i < 0) lk.push(me); else if (!j.add && i >= 0) lk.splice(i, 1); else return;
+        return post({ op: 'hpedit', code: x.c, f: { link: lk } }).then(function () { x.link = lk; n++; });
+      });
+    }, Promise.resolve()).then(function () { return n; });
+  }
+  // 예전에 한쪽에만 넣은 추천 조합을 양쪽 다 채움
+  function fixAllLinks() {
+    var miss = [];
+    A.items.forEach(function (a) { (a.link || []).forEach(function (c) { var b = findA(c); if (b && (b.link || []).indexOf(a.c) < 0) miss.push([b.c, a.c]); }); });
+    if (!miss.length) { toast('이미 모두 양쪽으로 맞춰져 있어요'); return; }
+    if (!confirm('한쪽에만 들어 있는 추천 조합 ' + miss.length + '개를 상대 상품에도 넣을까요?')) return;
+    var ov = document.createElement('div'); ov.className = 'busy'; var k = 0;
+    var setOv = function () { ov.innerHTML = '<div><img src="assets/bear-cap.png" alt=""><b>추천 조합 맞추는 중 ' + k + ' / ' + miss.length + '</b><span>창을 닫지 말고 잠시 기다려 주세요</span><i><em style="width:' + Math.round(k / miss.length * 100) + '%"></em></i></div>'; };
+    setOv(); document.body.appendChild(ov);
+    miss.reduce(function (pr, m) {
+      return pr.then(function () { return syncLinks(m[1], [{ c: m[0], add: true }]); }).then(function () { k++; setOv(); });
+    }, Promise.resolve()).then(function () { toast('추천 조합 ' + miss.length + '개를 양쪽으로 맞췄어요'); }).catch(function (er) { toast(er.message); })
+      .then(function () { ov.remove(); renderAdmin(); });
   }
   function uploadPhotos(files) {
     if (!A.edit || !files || !files.length) return;
