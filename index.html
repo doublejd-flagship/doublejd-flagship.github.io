@@ -218,6 +218,8 @@
   .zoom { position:fixed; z-index:70; width:300px; aspect-ratio:3/4; border-radius:12px; overflow:hidden; background:#fff; box-shadow:0 10px 30px rgba(0,0,0,.25); pointer-events:none; }
   .zoom img { width:100%; height:100%; object-fit:cover; display:block; }
   .linkfix { border:0; background:none; font-size:12.5px; color:var(--blue); font-weight:600; cursor:pointer; padding:6px 0; }
+  .hroll { position:relative; }
+  .hroll.rolling .svl { filter:blur(3px); opacity:.5; transition:filter .2s, opacity .2s; }
   .hbtns { display:flex; gap:6px; }
   .evall { font-size:12.5px; color:var(--blue); font-weight:600; text-decoration:none; white-space:nowrap; }
   .evrow .evc { flex:0 0 200px; scroll-snap-align:start; display:flex; flex-direction:column; gap:6px; text-decoration:none; color:var(--ink); }
@@ -258,7 +260,7 @@
   var CATS = ['전체','아우터','상의','하의','ACC'];
   var NEW_DAYS = 14;
   var D = null, byCode = {};
-  var st = { cat:'전체', sub:'', q:'', best:'own', more:false, ev:'buy', fitT:0, fitB:0 };
+  var st = { cat:'전체', sub:'', q:'', best:'own', more:false, ev:'popup', fitT:0, fitB:0 };
 
   function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c]; }); }
   function won(n) { return n ? Number(n).toLocaleString('ko-KR') + '원' : ''; }
@@ -319,13 +321,14 @@
       app.innerHTML =
         '<header class="top"><a class="brand" href="#/" aria-label="더블제이디 현대백화점 천호점"><img src="assets/logo-blue.png" alt="DOUBLEJD"><span>현대백화점 천호점</span></a>' +
         '<div class="hbtns"><a class="pill sm" href="#/visit">오시는 길</a><a class="pill sm dark" href="#/fit">코디해보기</a></div></header>' +
-        '<div class="search"><input id="q" type="search" aria-label="상품 검색" placeholder="후드집업, 와이드 데님…" autocomplete="off"></div>' +
+        '<div id="hometop"></div>' +
+        '<div class="search" style="padding-top:34px"><input id="q" type="search" aria-label="상품 검색" placeholder="후드집업, 와이드 데님…" autocomplete="off"></div>' +
         '<div class="chips hs" id="cats"></div><div class="chips sub hs" id="subs"></div><div id="content"></div>';
       var q = document.getElementById('q');
       q.value = st.q;
       q.addEventListener('input', function () { st.q = q.value.trim(); st.more = false; renderContent(); });
     }
-    renderFilters(); renderContent();
+    renderTop(); renderFilters(); renderContent();
   }
   function renderFilters() {
     document.getElementById('cats').innerHTML = CATS.map(function (c) { return '<button class="pill' + (c === st.cat ? ' on' : '') + '" data-cat="' + c + '">' + c + '</button>'; }).join('');
@@ -338,6 +341,43 @@
     subs.innerHTML = '<button class="sb' + (!st.sub ? ' on' : '') + '" data-sub="">' + st.cat + ' 전체</button>' +
       names.map(function (n) { return '<button class="sb' + (st.sub === n ? ' on' : '') + '" data-sub="' + esc(n) + '" style="--c:' + badgeColor(n) + '"><i></i>' + esc(n) + '</button>'; }).join('');
   }
+  // 맨 위: 현대백화점 천호점 행사 안내 → 신상품 → 천호점 추천 코디 (검색·필터와 상관없이 전체 기준)
+  function homeSets(reshuffle) {
+    if (!D.homeAll) {
+      var seen = {}, pairs = [];
+      (D.sets || []).forEach(function (x) { if (byCode[x.top] && byCode[x.bot]) { seen[x.top + '+' + x.bot] = 1; pairs.push([x.top, x.bot]); } });
+      D.items.filter(isTop).forEach(function (t) { recs(t, isBot, 3).forEach(function (b) { var k = t.c + '+' + b.c; if (!seen[k] && t.img && b.img) { seen[k] = 1; pairs.push([t.c, b.c]); } }); });
+      D.homeAll = pairs;
+    }
+    if (!D.homeSets || reshuffle) {
+      var p = D.homeAll.slice();
+      for (var i = p.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)), tmp = p[i]; p[i] = p[j]; p[j] = tmp; }
+      D.homeSets = p.slice(0, 20);
+    }
+    return D.homeSets;
+  }
+  function renderTop() {
+    var el = document.getElementById('hometop'); if (!el) return;
+    var h = evSection();
+    var news = D.items.slice().sort(newOrder).slice(0, 16);
+    h += '<div class="sec"><h2>신상품</h2></div>';
+    h += news.length ? '<div class="row hs">' + news.map(function (p) { return card(p, { isNew: true }); }).join('') + '</div>' : empty('상품을 준비 중이에요.');
+    var sets = homeSets(false);
+    if (sets.length) {
+      h += '<div class="sec"><h2>천호점 추천 코디</h2><button class="pill sm" data-hroll="1">' + ICON_DICE + '랜덤</button></div>' +
+        '<div class="hroll' + (st.hrolling ? ' rolling' : '') + '"><div class="svl hs home" id="hsets">' + sets.map(function (k) {
+          var x = byCode[k[0]], y = byCode[k[1]];
+          return '<button class="sv" data-hset="' + esc(k[0] + '+' + k[1]) + '" aria-label="' + esc(name(x) + ' + ' + name(y)) + '"><span>' + imgTag(x.img, 300, '') + '</span><span>' + imgTag(y.img, 300, '') + '</span></button>';
+        }).join('') + '</div>' + (st.hrolling ? '<div class="roll"><span>' + ICON_DICE + '</span></div>' : '') + '</div>';
+    }
+    el.innerHTML = h;
+  }
+  function hroll() {
+    if (st.hrolling) return;
+    st.hrolling = true; renderTop();
+    setTimeout(function () { st.hrolling = false; homeSets(true); renderTop(); var x = document.getElementById('hsets'); if (x) x.scrollLeft = 0; }, 650);
+  }
+
   function renderContent() {
     var items = D.items.filter(match);
     var label = st.sub || (st.cat === '전체' ? '' : st.cat);
@@ -359,29 +399,6 @@
       h += '<p class="per">' + (st.best === 'own' ? '천호점' : '전국') + ' 최근 1주 판매 기준' + (period ? ' · ' + esc(period) + '까지' : '') + '</p>';
     } else h += empty('이번 주 순위가 아직 없어요.');
 
-    var news = items.slice().sort(newOrder).slice(0, 16);
-    h += '<div class="sec"><h2>신상품</h2></div>';
-    h += news.length ? '<div class="row hs">' + news.map(function (p) { return card(p, { isNew: true }); }).join('') + '</div>' : empty('조건에 맞는 상품이 없어요.');
-
-    // 매장 추천 코디: 시트 '코디' 탭 + 관리자 추천 조합(상의→하의)을 섞어서 매번 랜덤으로
-    if (st.cat === '전체' && !st.q) {
-      if (!D.homeSets) {
-        var seen = {}, pairs = [];
-        (D.sets || []).forEach(function (x) { if (byCode[x.top] && byCode[x.bot]) { seen[x.top + '+' + x.bot] = 1; pairs.push([x.top, x.bot]); } });
-        D.items.filter(isTop).forEach(function (t) { recs(t, isBot, 3).forEach(function (b) { var k = t.c + '+' + b.c; if (!seen[k] && t.img && b.img) { seen[k] = 1; pairs.push([t.c, b.c]); } }); });
-        for (var i = pairs.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)), tmp = pairs[i]; pairs[i] = pairs[j]; pairs[j] = tmp; }
-        D.homeSets = pairs.slice(0, 20);
-      }
-      if (D.homeSets.length) {
-        h += '<div class="sec"><h2>매장 추천 코디</h2><small>누르면 코디해보기</small></div><div class="svl hs home">' + D.homeSets.map(function (k) {
-          var x = byCode[k[0]], y = byCode[k[1]];
-          return '<button class="sv" data-hset="' + esc(k[0] + '+' + k[1]) + '" aria-label="' + esc(name(x) + ' + ' + name(y)) + '"><span>' + imgTag(x.img, 300, '') + '</span><span>' + imgTag(y.img, 300, '') + '</span></button>';
-        }).join('') + '</div>';
-      }
-    }
-
-    if (st.cat === '전체' && !st.q) h += evSection();
-
     var all = items.slice().sort(newOrder);
     h += '<div class="sec"><h2>' + (label ? esc(label) + ' 전체' : '매장 상품 전체') + '</h2><small>' + all.length + '개</small></div>';
     h += all.length ? '<div class="grid">' + all.map(function (p) { return card(p, { isNew: true }); }).join('') + '</div>' : empty('조건에 맞는 상품이 없어요.');
@@ -395,16 +412,16 @@
   var EV_GIFT = /\d+\s*만\s*원\s*이상/;
   function evSection() {
     var more = '<a class="evall" href="' + EV_PAGE + '" target="_blank" rel="noopener">행사 전체 보기 ›</a>';
-    var head = '<div class="sec"><h2>천호점 행사</h2>' + more + '</div>';
+    var head = '<div class="sec" style="padding-top:18px"><h2>현대백화점 천호점 행사 안내</h2>' + more + '</div>';
     if (!EV) return head + '<div class="empty">현대백화점 천호점 행사를 불러오는 중…</div>';
     if (!EV.ok) return head + '<div style="padding:0 20px"><a class="pill" style="width:100%;min-height:48px" href="' + EV_PAGE + '" target="_blank" rel="noopener">현대백화점 천호점 행사 안내 보기</a></div>';
-    var tabs = [['buy', '구매 사은품'], ['popup', '팝업스토어'], ['gift', '사은행사 전체']];
+    var tabs = [['popup', '팝업 스토어'], ['buy', '백화점카드 사은품'], ['gift', '사은행사 전체']];
     var list = st.ev === 'popup' ? EV.popup : (st.ev === 'gift' ? EV.gift : EV.gift.filter(function (x) { return EV_GIFT.test(x.t); }));
-    var h = head + '<div class="chips sub hs" style="padding-top:0">' + tabs.map(function (t) { return '<button class="sb' + (st.ev === t[0] ? ' on' : '') + '" data-ev="' + t[0] + '">' + t[1] + '</button>'; }).join('') + '</div>';
+    var h = head + '<div class="chips sub hs" style="padding:0 20px 14px">' + tabs.map(function (t) { return '<button class="sb' + (st.ev === t[0] ? ' on' : '') + '" data-ev="' + t[0] + '">' + t[1] + '</button>'; }).join('') + '</div>';
     h += list.length ? '<div class="row hs evrow">' + list.map(function (x) {
       return '<a class="evc" href="' + esc(x.url) + '" target="_blank" rel="noopener"><span class="ei">' + (x.img ? '<img loading="lazy" src="' + esc(x.img) + '" alt="">' : '') + '</span>' +
         '<b>' + esc(x.t) + '</b><small>' + esc(x.d) + (x.at ? ' · ' + esc(x.at) : '') + '</small></a>';
-    }).join('') + '</div>' : empty(st.ev === 'popup' ? '지금 진행 중인 팝업스토어가 없어요.' : '지금 진행 중인 사은행사가 없어요.');
+    }).join('') + '</div>' : empty(st.ev === 'popup' ? '지금 진행 중인 팝업 스토어가 없어요.' : '지금 진행 중인 사은행사가 없어요.');
     return h;
   }
   function loadEvents() {
@@ -412,7 +429,7 @@
       .then(function (r) { return r.json(); })
       .then(function (d) { EV = d && d.ok ? d : { ok: false }; if (EV.ok) { EV.gift = EV.gift || []; EV.popup = EV.popup || []; } })
       .catch(function () { EV = { ok: false }; })
-      .then(function () { if (D && document.getElementById('content')) renderContent(); });
+      .then(function () { if (D && document.getElementById('hometop')) renderTop(); });
   }
 
   // ---------- 오시는 길 ----------
@@ -535,7 +552,7 @@
         '<button class="nav r" data-mv="' + which + ':1" aria-label="다음">' + chev('r') + '</button>' +
         (rolling ? '<div class="roll"><span>' + ICON_DICE + '</span></div>' : '') + '</div>' +
         '<div class="lbrow"><button class="lb" data-p="' + esc(p.c) + '">' + nameLine(p) + '<small>상세보기 ›</small></button>' +
-        '<a class="ask1" href="' + smsOne(p) + '">' + ICON_MSG + '문의</a></div></div>' + r + '</div>';
+        '<a class="ask1" href="' + smsOne(p) + '">' + ICON_MSG + '상품 문의</a></div></div>' + r + '</div>';
     }
     var svl = saved.map(function (k) {
       var a = k.split('+'), x = byCode[a[0]], y = byCode[a[1]];
@@ -545,7 +562,7 @@
     layer.innerHTML = '<div class="fit"><div class="fitin">' + head(true) +
       half(t, 't', st.fitT, L.tops.length, recs(t, isBot, 3), '추천<br>하의', b.c) +
       half(b, 'b', st.fitB, L.bots.length, recs(b, isTop, 3), '추천<br>상의', t.c) +
-      '<div class="bar"><button class="pill sm' + (on ? '' : ' blue') + '" id="save">' + (on ? '저장됨' : '코디 저장') + '</button><a class="pill sm" href="' + smsSet(t, b) + '">' + ICON_MSG + '문자 문의</a></div>' +
+      '<div class="bar"><a class="pill sm" href="' + smsSet(t, b) + '">' + ICON_MSG + '문자 문의</a><button class="pill sm' + (on ? '' : ' blue') + '" id="save">' + (on ? '저장됨' : '코디 저장') + '</button></div>' +
       '<div class="saved"><div class="hd"><b>저장한 코디' + (saved.length ? ' ' + saved.length : '') + '</b>' + (saved.length ? '<button id="clear">비우기</button>' : '') + '</div>' +
       (svl ? '<div class="svl hs" id="svl">' + svl + '</div>' : '<div class="svempty">마음에 드는 조합을 저장하면 여기에 쌓여요.</div>') + '</div>' +
       '</div></div>';
@@ -861,10 +878,11 @@
     document.body.style.overflow = '';
   }
   document.addEventListener('click', function (e) {
-    var t = e.target.closest('[data-p],[data-cat],[data-sub],[data-best],[data-more],[data-mv],[data-rnd],[data-rec],[data-load],[data-acat],[data-ahide],[data-aedit],[data-opt],[data-pk],[data-delph],[data-main],[data-addsz],[data-hset],[data-admhome],[data-ev]');
+    var t = e.target.closest('[data-p],[data-cat],[data-sub],[data-best],[data-more],[data-mv],[data-rnd],[data-rec],[data-load],[data-acat],[data-ahide],[data-aedit],[data-opt],[data-pk],[data-delph],[data-main],[data-addsz],[data-hset],[data-admhome],[data-ev],[data-hroll]');
     if (!t) return;
     var d = t.dataset;
-    if (d.ev) { st.ev = d.ev; renderContent(); return; }
+    if (d.ev) { st.ev = d.ev; renderTop(); return; }
+    if (d.hroll) { hroll(); return; }
     if (d.admhome) { A.edit = null; A.pq = ''; A.askMain = ''; if (location.hash !== '#/admin') location.hash = '#/admin'; else renderAdmin(); return; }
     if (d.p) { location.hash = '#/p/' + d.p; return; }
     if (d.cat) { st.cat = d.cat; st.sub = ''; st.more = false; renderFilters(); renderContent(); return; }
