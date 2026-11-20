@@ -788,7 +788,7 @@
   // 작은 사진에 마우스를 대면 크게 보기 (마우스가 있는 PC에서만)
   (function () {
     if (!window.matchMedia || !matchMedia('(hover: hover) and (pointer: fine)').matches) return;
-    var SMALL = '.rr .th img, .row2 .th img, .pick .i img, .phs img, .recs img, .sv img, .mini .ph img';
+    var SMALL = '.rr .th img, .row2 .th img, .phs img, .recs img, .sv img, .mini .ph img';   // 추천 고르기(.pick)는 사진이 커서 제외
     var z = null;
     function hide() { if (z) { z.remove(); z = null; } }
     function place(e) {
