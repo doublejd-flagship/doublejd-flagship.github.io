@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>더블제이디 현대백화점 천호점</title>
 <meta name="description" content="더블제이디 현대백화점 천호점 — 인기 순위, 신상품, 코디">
-<meta name="theme-color" content="#ffffff">
+<meta name="theme-color" content="#0d0d0f">
 <link rel="icon" href="assets/icon.png">
 <link rel="apple-touch-icon" href="assets/app-180.png">
 <link rel="manifest" href="manifest.webmanifest">
@@ -79,7 +79,66 @@
   .hs.fr { -webkit-mask-image:linear-gradient(to right, #000 calc(100% - 56px), rgba(0,0,0,.25)); mask-image:linear-gradient(to right, #000 calc(100% - 56px), rgba(0,0,0,.25)); }
   .hs.fl { -webkit-mask-image:linear-gradient(to right, rgba(0,0,0,.25), #000 40px); mask-image:linear-gradient(to right, rgba(0,0,0,.25), #000 40px); }
   .hs.fl.fr { -webkit-mask-image:linear-gradient(to right, rgba(0,0,0,.25), #000 40px, #000 calc(100% - 56px), rgba(0,0,0,.25)); mask-image:linear-gradient(to right, rgba(0,0,0,.25), #000 40px, #000 calc(100% - 56px), rgba(0,0,0,.25)); }
+  .box .row.igrow .igc { flex:0 0 calc((100% - 20px) / 2.4); }
+  @media (min-width:520px) { .box .row.igrow .igc { flex-basis:calc((100% - 30px) / 3.4); } }
+  .igc { min-width:0; display:flex; flex-direction:column; gap:6px; color:var(--ink); text-decoration:none; scroll-snap-align:start; }
+  .igc .ip { position:relative; display:block; aspect-ratio:4/5; border-radius:10px; overflow:hidden; background:var(--soft); }
+  .igc .ip img { width:100%; height:100%; object-fit:cover; display:block; }
+  .igc .ic { position:absolute; right:7px; top:7px; width:24px; height:24px; border-radius:7px; background:linear-gradient(45deg,#f9a825,#e91e63 55%,#7b1fa2); display:flex; align-items:center; justify-content:center; }
+  .igc b { font-size:13px; font-weight:600; overflow:hidden; white-space:nowrap; text-overflow:ellipsis; }
+  .igc small { font-size:11.5px; color:var(--mute); }
+  .igadm { display:flex; gap:10px; align-items:center; padding:10px; border:1px solid var(--line); border-radius:12px; }
+  .igadm .igp { position:relative; width:64px; height:80px; flex:none; border-radius:8px; overflow:hidden; background:#fafafa; border:1.5px dashed #c9c9c9; display:flex; align-items:center; justify-content:center; font-size:10.5px; line-height:1.35; color:#999; text-align:center; cursor:pointer; }
+  .igadm .igp.has { border:0; }
+  .igadm .igp img { width:100%; height:100%; object-fit:cover; display:block; }
+  .igadm .igp.on { border-color:var(--blue); background:#eef5fb; }
+  .igadm .igf { flex:1; min-width:0; display:flex; flex-direction:column; gap:6px; }
+  .igadm .igf input { height:36px; font-size:13.5px; }
+  .igadm .igx { display:flex; flex-direction:column; gap:2px; }
+  .igadm .igx button { width:32px; height:28px; border:0; background:none; font-size:15px; color:#888; cursor:pointer; border-radius:6px; }
+  .igadm .igx button:disabled { opacity:.25; }
+  .igadm.act { border-color:var(--blue); }
   .evbox { position:relative; }
+  /* ===== 홈 다크 무드: 매장 사진 배경 + 금속 느낌 유리 카드 ===== */
+  html:has(#hometop) { background:#0d0d0f; }
+  body:has(#hometop) { background:transparent; }
+  body:has(#hometop)::before { content:''; position:fixed; inset:-20px; z-index:-1; background:url(assets/store-bg.jpg) center 35%/cover no-repeat; filter:brightness(.6) saturate(1.1) blur(1.5px); }
+  body:has(#hometop)::after { content:''; position:fixed; inset:0; z-index:-1; pointer-events:none; background:linear-gradient(180deg, rgba(13,13,15,0) 0%, rgba(13,13,15,.35) 40%, rgba(13,13,15,.6) 100%); }
+  #app:has(#hometop) { --bg:#0d0d0f; --ink:#f4f4f5; --sub:#b4b4ba; --mute:#85858c; --line:rgba(255,255,255,.1); --soft:rgba(255,255,255,.06); --blue:#6cb4ff; --pink:#ff4d8d; color:var(--ink); }
+  #app:has(#hometop) .box, #app:has(#hometop) .foot .visitcard {
+    background:linear-gradient(180deg, rgba(28,29,32,.74), rgba(14,14,16,.8)); -webkit-backdrop-filter:blur(16px) saturate(1.2); backdrop-filter:blur(16px) saturate(1.2);
+    border:1px solid rgba(255,255,255,.09); box-shadow:inset 0 1px 0 rgba(255,255,255,.14), 0 10px 30px rgba(0,0,0,.35); position:relative; }
+  #app:has(#hometop) .box::before { content:''; position:absolute; left:18px; right:18px; top:0; height:1px; background:linear-gradient(90deg, transparent, rgba(255,255,255,.55), rgba(190,190,200,.25), transparent); }
+  #app:has(#hometop) .sec h2 { font-weight:800; letter-spacing:-.02em; }
+  #app:has(#hometop) .sec .lab { background:linear-gradient(90deg, #f2f2f2, #9a9aa2 45%, #e6e6ea 70%, #8d8d95); -webkit-background-clip:text; background-clip:text; color:transparent; }
+  #app:has(#hometop) .sec .lab em { color:var(--pink); -webkit-text-fill-color:var(--pink); }
+  #app:has(#hometop) .evall { color:var(--blue); }
+  #app:has(#hometop) .pill, #app:has(#hometop) .sb, #app:has(#hometop) .seg button, #app:has(#hometop) .inst { background:rgba(255,255,255,.06); border-color:rgba(255,255,255,.16); color:var(--ink); }
+  #app:has(#hometop) .seg { border-color:rgba(255,255,255,.16); }
+  #app:has(#hometop) .pill.dark, #app:has(#hometop) .chips .pill.on, #app:has(#hometop) .seg button.on, #app:has(#hometop) .sb.on:not([style]) {
+    background:linear-gradient(180deg, #ffffff, #c9c9cf); border-color:transparent; color:#111; }
+  #app:has(#hometop) .sb.on[style] { color:#fff; }
+  #app:has(#hometop) .search input { background:rgba(255,255,255,.06); border-color:rgba(255,255,255,.16); color:var(--ink); }
+  #app:has(#hometop) .search input::placeholder { color:#8a8a92; }
+  #app:has(#hometop) .search input:focus { border-color:rgba(255,255,255,.5); }
+  #app:has(#hometop) .rr { background:transparent; color:var(--ink); }
+  #app:has(#hometop) .sv { background:transparent; border-color:rgba(255,255,255,.12); }
+  #app:has(#hometop) .bd { color:color-mix(in srgb, var(--c) 55%, #fff); background:color-mix(in srgb, var(--c) 20%, transparent); border-color:color-mix(in srgb, var(--c) 50%, transparent); }
+  #app:has(#hometop) .card, #app:has(#hometop) .evc, #app:has(#hometop) .igc { color:var(--ink); }
+  #app:has(#hometop) .empty { border-color:rgba(255,255,255,.18); }
+  #app:has(#hometop) .empty img { filter:invert(1); opacity:.5; }
+  #app:has(#hometop) .roll span { background:#1c1c1f; }
+  #app:has(#hometop) .gbg { display:none; }
+  #app:has(#hometop) .visitcard { color:var(--ink); }
+  #app:has(#hometop) .note { color:#8a8a92; }
+  .hb { flex-direction:row; align-items:center; gap:12px; }
+  .hb .av { width:50px; height:50px; flex:none; border-radius:50%; padding:2px; background:conic-gradient(from 210deg, #f4f4f4, #7d7d85, #e9e9ee, #6a6a72, #f4f4f4); box-shadow:0 4px 14px rgba(0,0,0,.45); }
+  .hb .av img { width:100%; height:100%; border-radius:50%; object-fit:cover; display:block; border:2px solid #0d0d0f; box-sizing:border-box; height:46px; }
+  .hb .bt { display:flex; flex-direction:column; gap:6px; }
+  .hb .bt img { height:17px; width:auto; display:block; filter:drop-shadow(0 0 10px rgba(255,255,255,.25)); }
+  .hb .bt span { font-size:12px; color:#e2e2e6; letter-spacing:.02em; text-shadow:0 1px 6px rgba(0,0,0,.9); }
+  #app:has(#hometop) .acts .pill { background:rgba(20,20,22,.55); -webkit-backdrop-filter:blur(10px); backdrop-filter:blur(10px); }
+  #app:has(#hometop) .acts .pill.dark { background:linear-gradient(180deg, #ffffff, #c9c9cf); }
   .evc.ghost { visibility:hidden; }
   .evbox > .empty { position:absolute; left:0; right:0; top:0; }
   .guide { position:fixed; inset:0; z-index:80; background:rgba(0,0,0,.45); display:flex; align-items:flex-end; justify-content:center; }
@@ -361,7 +420,7 @@
     var app = document.getElementById('app');
     if (!document.getElementById('content')) {
       app.innerHTML =
-        '<div class="topwrap"><div class="gbg" aria-hidden="true"></div><header class="top"><div class="trow"><a class="brand" href="#/" aria-label="더블제이디 현대백화점 천호점"><img src="assets/logo-blue.png" alt="DOUBLEJD"><span>현대백화점 천호점</span></a>' +
+        '<div class="topwrap"><header class="top"><div class="trow"><a class="brand hb" href="#/" aria-label="더블제이디 현대백화점 천호점"><span class="av"><img src="assets/store-sign.jpg" alt=""></span><span class="bt"><img src="assets/logo-white.png" alt="DOUBLEJD"><span>현대백화점 천호점 B1</span></span></a>' +
         '<button class="inst" id="inst" hidden>' + ICON_DL + '앱으로 설치</button></div>' +
         '<div class="acts"><a class="pill sm" href="tel:' + STORE.tel.replace(/-/g, '') + '">' + ICON_TEL + '전화</a><a class="pill sm" href="' + smsLink('[더블제이디 천호점 문의]\n') + '">' + ICON_SMS + '문자</a>' +
         '<a class="pill sm" href="#/visit">오시는 길</a><a class="pill sm dark" href="#/fit">코디해보기</a></div></header></div>' +
@@ -400,15 +459,35 @@
     }
     return D.homeSets;
   }
+  // 섹션 번호: 있는 섹션만 차례로 01, 02, …
+  function secNo(key) {
+    var ks = ['ev', 'new'];
+    if (D.ig && D.ig.length) ks.push('ig');
+    if (homeSets(false).length) ks.push('sty');
+    ks.push('best', 'all');
+    var i = ks.indexOf(key) + 1;
+    return (i < 10 ? '0' : '') + i;
+  }
+  var IG_HOME = 'https://www.instagram.com/doublejd_cheonho/';
+  var ICON_IG = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="#fff" stroke="none"/></svg>';
+  function igDate(d) { var m = String(d || '').match(/^\d{4}-(\d{2})-(\d{2})/); return m ? (+m[1]) + '.' + (+m[2]) : ''; }
+  function igSection() {
+    if (!D.ig || !D.ig.length) return '';
+    return '<div class="box">' + secHead(secNo('ig'), 'INSTAGRAM', '더블제이디 천호점 소식', '<a class="evall" href="' + IG_HOME + '" target="_blank" rel="noopener">인스타 보기 ›</a>') +
+      '<div class="row hs igrow">' + D.ig.map(function (x) {
+        return '<a class="igc" href="' + esc(x.u) + '" target="_blank" rel="noopener"><span class="ip">' + imgTag(x.id, 500, x.t || '천호점 인스타 게시물') + '<i class="ic">' + ICON_IG + '</i></span>' +
+          '<b>' + (x.t ? esc(x.t) : '&nbsp;') + '</b><small>' + (igDate(x.d) || '&nbsp;') + '</small>' + '</a>';
+      }).join('') + '</div></div>';
+  }
   function renderTop() {
     var el = document.getElementById('hometop'); if (!el) return;
     var h = '<div class="box">' + evSection() + '</div>';
     var news = D.items.slice().sort(newOrder).slice(0, 16);
-    h += '<div class="box">' + secHead('02', 'NEW ARRIVALS', '신상품');
-    h += (news.length ? '<div class="row hs">' + news.map(function (p) { return card(p, { isNew: true }); }).join('') + '</div>' : empty('상품을 준비 중이에요.')) + '</div>';
+    h += '<div class="box">' + secHead(secNo('new'), 'NEW ARRIVALS', '신상품');
+    h += (news.length ? '<div class="row hs">' + news.map(function (p) { return card(p, { isNew: true }); }).join('') + '</div>' : empty('상품을 준비 중이에요.')) + '</div>' + igSection();
     var sets = homeSets(false);
     if (sets.length) {
-      h += '<div class="box">' + secHead('03', 'STYLING', '천호점 추천 코디', '<button class="pill sm" data-hroll="1">' + ICON_DICE + '랜덤</button>') +
+      h += '<div class="box">' + secHead(secNo('sty'), 'STYLING', '천호점 추천 코디', '<button class="pill sm" data-hroll="1">' + ICON_DICE + '랜덤</button>') +
         '<div class="hroll' + (st.hrolling ? ' rolling' : '') + '"><div class="svl hs home" id="hsets">' + sets.map(function (k) {
           var x = byCode[k[0]], y = byCode[k[1]];
           return '<button class="sv" data-hset="' + esc(k[0] + '+' + k[1]) + '" aria-label="' + esc(name(x) + ' + ' + name(y)) + '"><span>' + imgTag(x.img, 300, '') + '</span><span>' + imgTag(y.img, 300, '') + '</span></button>';
@@ -429,7 +508,7 @@
     var rk = st.best === 'own' ? 'ro' : 'ra';
     var pop = items.filter(function (p) { return p[rk] > 0; }).sort(function (a, b) { return a[rk] - b[rk]; });
     var LIMIT = 10;
-    h += secHead('04', 'BEST', (label ? esc(label) + ' ' : '') + '인기 순위', '<div class="seg" role="group" aria-label="순위 기준">' +
+    h += secHead(secNo('best'), 'BEST', (label ? esc(label) + ' ' : '') + '인기 순위', '<div class="seg" role="group" aria-label="순위 기준">' +
          '<button data-best="own" class="' + (st.best === 'own' ? 'on' : '') + '">천호점</button>' +
          '<button data-best="all" class="' + (st.best === 'all' ? 'on' : '') + '">전국</button></div>');
     if (pop.length) {
@@ -445,7 +524,7 @@
 
     document.getElementById('content').innerHTML = h;
     var all = items.slice().sort(newOrder);
-    h = '<div class="box">' + secHead('05', 'ALL ITEMS', label ? esc(label) + ' 전체' : '매장 상품 전체', '<small>' + all.length + '개</small>');
+    h = '<div class="box">' + secHead(secNo('all'), 'ALL ITEMS', label ? esc(label) + ' 전체' : '매장 상품 전체', '<small>' + all.length + '개</small>');
     h += (all.length ? '<div class="grid">' + all.map(function (p) { return card(p, { isNew: true }); }).join('') + '</div>' : empty('조건에 맞는 상품이 없어요.')) + '</div><div class="foot">';
     h += '<a class="visitcard" href="#/visit"><img src="assets/b1-map.png" alt=""><span><b>찾아오시는 길</b><small>천호역 3·4번 출구에서 백화점 지하로 바로 연결 · 지하1층 영스트리트</small></span>' + chev('r') + '</a>';
     h += '<p class="note">매장 재고는 수시로 바뀌어요. 방문 전 매장에 문의해 주세요.' + (D.at ? '<br>업데이트 ' + esc(D.at) : '') + '</p>';
@@ -458,7 +537,7 @@
   var EV_GIFT = /\d+\s*만\s*원\s*이상/;
   function evSection() {
     var more = '<a class="evall" href="' + EV_PAGE + '" target="_blank" rel="noopener">더보기 ›</a>';
-    var head = secHead('01', 'EVENT', '천호점 행사 안내', more).replace('class="sec"', 'class="sec" style="padding-top:18px"');
+    var head = secHead(secNo('ev'), 'EVENT', '천호점 행사 안내', more).replace('class="sec"', 'class="sec" style="padding-top:18px"');
     if (!EV) return head + '<div class="chips sub evt" style="visibility:hidden"><span class="sb">&nbsp;</span></div>' + evBox([], '천호점 행사를 불러오는 중…');
     if (!EV.ok) return head + '<div style="padding:0 16px"><a class="pill" style="width:100%;min-height:48px" href="' + EV_PAGE + '" target="_blank" rel="noopener">천호점 행사 안내 보기</a></div>';
     var tabs = [['popup', '팝업 스토어'], ['buy', '백화점카드 사은품'], ['gift', '사은행사 전체']];
@@ -671,7 +750,7 @@
   }
   function admWrap(inner) { return '<div class="fit" style="overflow-y:auto;display:block" id="admscroll"><div class="app adm">' + inner + '</div></div>'; }
   function admScroll() { var el = document.getElementById('admscroll'); return el ? el.scrollTop : 0; }
-  function admLogout() { A.key = ''; A.items = null; A.edit = null; A.order = null; try { localStorage.removeItem('dj_admin_key'); } catch (e) {} renderAdmin(); }
+  function admLogout() { A.igOpen = false; A.key = ''; A.items = null; A.edit = null; A.order = null; try { localStorage.removeItem('dj_admin_key'); } catch (e) {} renderAdmin(); }
   function admName(p) { return p.rename || p.nm || p.it; }
   function renderAdmin() {
     var layer = document.getElementById('layer');
@@ -680,7 +759,7 @@
       layer.innerHTML = admWrap(admHead('비밀번호를 넣어 주세요') + '<div class="body"><div class="fld"><label for="pw">관리자 비밀번호</label><input id="pw" type="password" inputmode="numeric" autocomplete="current-password"></div><button class="pill dark" id="pwok" style="min-height:48px">들어가기</button><p class="meta">이 기기에서는 한 번만 입력하면 돼요.</p></div>');
       var go = function () {
         A.key = document.getElementById('pw').value.trim();
-        post({ op: 'hpadmin' }).then(function (j) { try { localStorage.setItem('dj_admin_key', A.key); } catch (e) {} A.items = j.items; A.order = null; renderAdmin(); })
+        post({ op: 'hpadmin' }).then(function (j) { try { localStorage.setItem('dj_admin_key', A.key); } catch (e) {} A.items = j.items; A.ig = j.ig || []; A.order = null; renderAdmin(); })
           .catch(function (e) { A.key = ''; toast(e.message); });
       };
       document.getElementById('pwok').onclick = go;
@@ -689,10 +768,11 @@
     }
     if (!A.items) {
       layer.innerHTML = admWrap(admHead('불러오는 중') + '<div class="loading"><img src="assets/bear-cap.png" alt=""><span>불러오는 중…</span></div>');
-      post({ op: 'hpadmin' }).then(function (j) { A.items = j.items; A.order = null; renderAdmin(); }).catch(function (e) { toast(e.message); if (/비밀번호/.test(e.message)) admLogout(); });
+      post({ op: 'hpadmin' }).then(function (j) { A.items = j.items; A.ig = j.ig || []; A.order = null; renderAdmin(); }).catch(function (e) { toast(e.message); if (/비밀번호/.test(e.message)) admLogout(); });
       return;
     }
     if (A.edit) return renderEdit();
+    if (A.igOpen) return renderIg();
     // 정렬: 노출 상품(입고 순번 → 품번 시즌 최신순) 위, 숨김(DP 아웃) 아래. 노출/숨김을 눌러도 그 자리에 둠(목록을 새로 열 때 다시 정렬)
     var okey = A.cat + '|' + A.q;
     if (!A.order || A.orderKey !== okey) {
@@ -708,7 +788,7 @@
     layer.innerHTML = admWrap(admHead('상품 ' + A.items.length + '개 · 숨김 ' + hidden + '개') +
       '<div class="search"><input id="aq" type="search" placeholder="품명·품번 검색" value="' + esc(A.q) + '" autocomplete="off"></div>' +
       '<div class="chips hs">' + CATS.map(function (c) { return '<button class="pill' + (c === A.cat ? ' on' : '') + '" data-acat="' + c + '">' + c + '</button>'; }).join('') + '</div>' +
-      '<div style="padding:4px 20px 0;text-align:right"><button class="linkfix" id="fixlinks">추천 조합 양쪽 맞추기</button></div>' +
+      '<div style="padding:4px 20px 0;display:flex;justify-content:space-between;align-items:center"><button class="pill sm" id="igopen">' + '인스타 게시물 ' + (A.ig || []).length + '개 관리' + '</button><button class="linkfix" id="fixlinks">추천 조합 양쪽 맞추기</button></div>' +
       '<div style="padding:6px 20px 40px">' + A.order.map(findA).filter(Boolean).map(function (p) {
         var extra = [p.link && p.link.length ? '조합 ' + p.link.length : '', p.fit || p.size ? '정보' : '', p.ph && p.ph.length ? '사진 ' + p.ph.length : ''].filter(String).join(' · ');
         return '<div class="row2' + (p.hide ? ' off' : '') + '"><span class="th">' + imgTag(p.main || p.img, 120, '') + '</span>' +
@@ -720,6 +800,85 @@
     aq.addEventListener('input', function () { A.q = aq.value.trim(); var pos = aq.selectionStart; clearTimeout(A.t); A.t = setTimeout(function () { renderAdmin(); document.getElementById('admscroll').scrollTop = 0; var x = document.getElementById('aq'); x.focus(); try { x.setSelectionRange(pos, pos); } catch (e) {} }, 400); });
     document.getElementById('logout').onclick = admLogout;
     document.getElementById('fixlinks').onclick = fixAllLinks;
+    document.getElementById('igopen').onclick = function () { A.igOpen = true; A.igForm = (A.ig || []).map(function (x) { return { u: x.u, t: x.t, id: x.id }; }); if (!A.igForm.length) A.igForm.push({ u: '', t: '', id: '' }); A.igRow = 0; renderIg(); document.getElementById('admscroll').scrollTop = 0; };
+  }
+
+  // ---------- 관리자: 천호점 인스타 게시물 ----------
+  var IG_MAX = 6;
+  function renderIg() {
+    var layer = document.getElementById('layer'), F = A.igForm;
+    var y = admScroll();
+    layer.innerHTML = admWrap(admHead('인스타 게시물') +
+      '<div class="body" style="padding-top:6px">' +
+      '<p class="meta" style="margin:0;line-height:1.7">인스타 게시물 링크를 붙여넣고, 사진 칸을 눌러 사진을 고르거나 끌어다 놓거나 Ctrl+V로 붙여넣으세요. 위에 있는 순서대로 홈에 보여요. (최대 ' + IG_MAX + '개)</p>' +
+      F.map(function (x, i) {
+        return '<div class="igadm' + (A.igRow === i ? ' act' : '') + '" data-igi="' + i + '">' +
+          '<label class="igp' + (x.id ? ' has' : '') + '" data-igdrop="' + i + '">' + (x.id ? imgTag(x.id, 200, '') : '사진<br>넣기') + '<input type="file" accept="image/*" data-igfile="' + i + '" style="display:none"></label>' +
+          '<div class="igf"><input data-igu="' + i + '" value="' + esc(x.u) + '" placeholder="instagram.com/p/… 게시물 링크" inputmode="url" autocomplete="off">' +
+          '<input data-igt="' + i + '" value="' + esc(x.t) + '" placeholder="한 줄 제목 (비워도 돼요)" maxlength="60"></div>' +
+          '<div class="igx"><button data-igmv="' + i + ':-1"' + (i ? '' : ' disabled') + ' aria-label="위로">↑</button><button data-igmv="' + i + ':1"' + (i < F.length - 1 ? '' : ' disabled') + ' aria-label="아래로">↓</button><button data-igdel="' + i + '" aria-label="빼기">✕</button></div></div>';
+      }).join('') +
+      (F.length < IG_MAX ? '<button class="pill" id="igadd" style="min-height:44px;border-style:dashed">+ 게시물 추가</button>' : '') +
+      '<button class="pill" id="igpaste" style="min-height:40px">복사한 사진을 선택한 칸에 붙여넣기</button>' +
+      '<button class="pill dark" id="igsave" style="min-height:52px;font-size:15px">' + (A.busy ? '처리 중…' : '저장') + '</button>' +
+      '<button class="pill" id="igback" style="min-height:44px">목록으로</button></div>');
+    document.getElementById('admscroll').scrollTop = y;
+    var sync = function () {
+      layer.querySelectorAll('[data-igu]').forEach(function (el) { F[+el.dataset.igu].u = el.value.trim(); });
+      layer.querySelectorAll('[data-igt]').forEach(function (el) { F[+el.dataset.igt].t = el.value.trim(); });
+    };
+    A.igSync = sync;
+    layer.querySelectorAll('[data-igu],[data-igt]').forEach(function (el) { el.addEventListener('input', sync); });
+    layer.querySelectorAll('[data-igi]').forEach(function (el) {
+      el.addEventListener('focusin', function () { setIgRow(+el.dataset.igi); });
+      el.addEventListener('pointerdown', function () { setIgRow(+el.dataset.igi); });
+    });
+    layer.querySelectorAll('[data-igfile]').forEach(function (el) { el.onchange = function (e) { var f = (e.target.files || [])[0]; if (f) igUpload(+el.dataset.igfile, f); }; });
+    layer.querySelectorAll('[data-igdrop]').forEach(function (el) {
+      el.addEventListener('dragover', function (e) { e.preventDefault(); el.classList.add('on'); });
+      el.addEventListener('dragleave', function () { el.classList.remove('on'); });
+      el.addEventListener('drop', function (e) { e.preventDefault(); el.classList.remove('on'); var f = [].filter.call((e.dataTransfer && e.dataTransfer.files) || [], function (x) { return /^image\//.test(x.type); })[0]; if (f) igUpload(+el.dataset.igdrop, f); });
+    });
+    layer.querySelectorAll('[data-igmv]').forEach(function (el) { el.onclick = function () { sync(); var a = el.dataset.igmv.split(':'), i = +a[0], j = i + +a[1]; var t = F[i]; F[i] = F[j]; F[j] = t; A.igRow = j; renderIg(); }; });
+    layer.querySelectorAll('[data-igdel]').forEach(function (el) { el.onclick = function () { sync(); var i = +el.dataset.igdel; if ((F[i].u || F[i].id) && !confirm('이 게시물을 뺄까요?')) return; F.splice(i, 1); A.igRow = Math.max(0, Math.min(A.igRow, F.length - 1)); renderIg(); }; });
+    var add = document.getElementById('igadd'); if (add) add.onclick = function () { sync(); F.push({ u: '', t: '', id: '' }); A.igRow = F.length - 1; renderIg(); };
+    document.getElementById('logout').onclick = admLogout;
+    document.getElementById('igback').onclick = function () { A.igOpen = false; renderAdmin(); };
+    document.getElementById('igpaste').onclick = function () {
+      if (!navigator.clipboard || !navigator.clipboard.read) { toast('이 브라우저는 버튼 붙여넣기를 지원하지 않아요. 칸을 누르고 Ctrl+V 해 주세요'); return; }
+      navigator.clipboard.read().then(function (items) {
+        for (var k = 0; k < items.length; k++) { var tp = items[k].types.filter(function (x) { return /^image\//.test(x); })[0]; if (tp) return items[k].getType(tp); }
+        throw new Error('복사한 사진이 없어요');
+      }).then(function (b) { igUpload(A.igRow || 0, b); }).catch(function (er) { toast(er.message || '붙여넣기를 할 수 없어요'); });
+    };
+    document.getElementById('igsave').onclick = function () {
+      sync(); if (A.busy) return;
+      var list = F.filter(function (x) { return x.u || x.id; });
+      for (var k = 0; k < list.length; k++) {
+        if (!/instagram\.com\/(?:[\w.]+\/)?(p|reel|tv)\/[\w-]+/.test(list[k].u)) { toast((k + 1) + '번째 링크를 인스타 게시물 주소로 넣어 주세요'); return; }
+        if (!list[k].id) { toast((k + 1) + '번째 게시물에 사진을 넣어 주세요'); return; }
+      }
+      A.busy = true; renderIg();
+      post({ op: 'hpig', list: list }).then(function (j) { A.ig = j.ig || []; if (D) { D.ig = A.ig.filter(function (x) { return x.u && x.id; }); renderTop(); renderContent(); } toast('인스타 게시물을 저장했어요'); A.igOpen = false; })
+        .catch(function (er) { toast(er.message); }).then(function () { A.busy = false; if (A.igOpen) renderIg(); else renderAdmin(); });
+    };
+  }
+  function setIgRow(i) {
+    if (A.igRow === i) return;
+    A.igRow = i;
+    document.querySelectorAll('.igadm').forEach(function (el) { el.classList.toggle('act', +el.dataset.igi === i); });
+  }
+  function igUpload(i, file) {
+    if (!A.igForm || !A.igForm[i]) return;
+    A.igSync && A.igSync();
+    A.busy = true; A.igRow = i;
+    var ov = document.createElement('div'); ov.className = 'busy';
+    ov.innerHTML = '<div><img src="assets/bear-cap.png" alt=""><b>사진 올리는 중</b><span>창을 닫지 말고 잠시 기다려 주세요</span><i><em style="width:60%"></em></i></div>';
+    document.body.appendChild(ov);
+    shrink(file).then(function (data) { return post({ op: 'hpigimg', data: data }); })
+      .then(function (j) { A.igForm[i].id = j.id; toast('사진을 넣었어요. 저장을 눌러야 홈에 보여요'); })
+      .catch(function (er) { toast(er.message); })
+      .then(function () { ov.remove(); A.busy = false; renderIg(); });
   }
   function findA(c) { for (var i = 0; i < A.items.length; i++) if (A.items[i].c === c) return A.items[i]; return null; }
 
@@ -895,7 +1054,13 @@
   }
   // 관리자 상품 화면에서 Ctrl+V 로 사진 붙여넣기
   document.addEventListener('paste', function (e) {
-    if (!A.edit || (location.hash || '').indexOf('#/admin') !== 0) return;
+    if ((location.hash || '').indexOf('#/admin') !== 0) return;
+    if (A.igOpen && !A.edit) {
+      var g = [].slice.call((e.clipboardData && e.clipboardData.files) || []).filter(function (x) { return /^image\//.test(x.type); })[0];
+      if (g) { e.preventDefault(); igUpload(A.igRow || 0, g); }
+      return;
+    }
+    if (!A.edit) return;
     var files = [].slice.call((e.clipboardData && e.clipboardData.files) || []).filter(function (x) { return /^image\//.test(x.type); });
     if (files.length) { e.preventDefault(); uploadPhotos(files); }
   });
@@ -937,7 +1102,7 @@
     var d = t.dataset;
     if (d.ev) { st.ev = d.ev; renderTop(); return; }
     if (d.hroll) { hroll(); return; }
-    if (d.admhome) { A.edit = null; A.pq = ''; A.askMain = ''; if (location.hash !== '#/admin') location.hash = '#/admin'; else renderAdmin(); return; }
+    if (d.admhome) { A.igOpen = false; A.edit = null; A.pq = ''; A.askMain = ''; if (location.hash !== '#/admin') location.hash = '#/admin'; else renderAdmin(); return; }
     if (d.p) { location.hash = '#/p/' + d.p; return; }
     if (d.cat) { st.cat = d.cat; st.sub = ''; st.more = false; renderFilters(); renderContent(); return; }
     if (d.sub !== undefined) { st.sub = d.sub; st.more = false; renderFilters(); renderContent(); return; }
