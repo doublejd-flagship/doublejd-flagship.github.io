@@ -385,7 +385,7 @@
     if (p.intro) h += '<div style="font-size:14.5px;line-height:1.7;white-space:pre-line">' + esc(p.intro) + '</div>';
     var rows = '';
     if (p.col && p.col.length) rows += '<div><dt>색상·사이즈</dt><dd class="colors">' + p.col.map(function (c) { return '<span style="color:var(--ink)">' + esc(c.n || c.c) + ' <span>' + esc(c.s.join(' · ') || '문의') + '</span></span>'; }).join('') + '</dd></div>';
-    if (p.size) rows += '<div><dt>사이즈 정보</dt><dd>' + esc(p.size) + '</dd></div>';
+    if (p.size) rows += '<div><dt>' + (isTop(p) ? '추천 사이즈' : '사이즈 정보') + '</dt><dd>' + esc(p.size) + '</dd></div>';
     if (p.fit) rows += '<div><dt>핏</dt><dd>' + esc(p.fit) + '</dd></div>';
     if (p.thick) rows += '<div><dt>두께감</dt><dd>' + esc(p.thick) + '</dd></div>';
     if (rows) h += '<dl class="info">' + rows + '</dl>';
@@ -579,29 +579,36 @@
   }
   function findA(c) { for (var i = 0; i < A.items.length; i++) if (A.items[i].c === c) return A.items[i]; return null; }
 
-  // 하의 사이즈 정보: 사이즈별 허리(인치)·총장(cm) 칸 ↔ 'S: 허리 28인치 · 총장 102cm' 줄
-  function parseSize(text) {
-    var rows = {}, memo = [];
+  // 사이즈 칸 ↔ '사이즈 정보' 글자
+  //  하의: 사이즈별 허리(인치)·총장(cm) → 'S: 허리 28인치 · 총장 102cm'
+  //  상의·아우터: 사이즈별 추천 여성·남성 → 'M: 여성 55~66 · 남성 95'
+  var SZ_MODE = {
+    b: { a: '허리', b: '총장', la: '허리(인치)', lb: '총장(cm)', ua: '인치', ub: 'cm', num: true, label: '사이즈 정보 (숫자만)', ph: '추가 메모 (예: 밑단 스트링으로 기장 조절)' },
+    t: { a: '여성', b: '남성', la: '여성', lb: '남성', ua: '', ub: '', num: false, label: '추천 사이즈 (사이즈별 여성·남성)', ph: '추가 메모 (예: 여유 있게 입으려면 한 치수 크게)' }
+  };
+  function parseSize(text, mode) {
+    var M = SZ_MODE[mode], rows = {}, memo = [];
+    var pick = function (str, key) { var m = str.match(new RegExp(key + '\\s*([^·]+?)\\s*(?:·|$)')); return m ? m[1].replace(M.ua && key === M.a ? M.ua : '\u0000', '').replace(M.ub && key === M.b ? M.ub : '\u0000', '').trim() : ''; };
     String(text || '').split(/\n/).forEach(function (ln) {
       var m = ln.trim().match(/^(\S+)\s*:\s*(.*)$/);
-      var w = m && (m[2].match(/허리\s*([\d.]+)/) || [])[1], l = m && (m[2].match(/총장\s*([\d.]+)/) || [])[1];
-      if (m && (w || l)) rows[m[1]] = { w: w || '', l: l || '' };
+      var x = m && pick(m[2], M.a), y = m && pick(m[2], M.b);
+      if (m && SIZES.indexOf(m[1]) >= 0 && (x || y)) rows[m[1]] = { w: x || '', l: y || '' };
       else if (ln.trim()) memo.push(ln.trim());
     });
     return { rows: rows, memo: memo.join('\n') };
   }
-  function buildSize(f) {
-    var lines = [];
+  function buildSize(f, mode) {
+    var M = SZ_MODE[mode], lines = [];
     f.sizes.forEach(function (s) {
-      var r = f.sz[s] || {};
-      var parts = [];
-      if (r.w) parts.push('허리 ' + r.w + '인치');
-      if (r.l) parts.push('총장 ' + r.l + 'cm');
+      var r = f.sz[s] || {}, parts = [];
+      if (r.w) parts.push(M.a + ' ' + r.w + M.ua);
+      if (r.l) parts.push(M.b + ' ' + r.l + M.ub);
       if (parts.length) lines.push(s + ': ' + parts.join(' · '));
     });
     if (f.memo.trim()) lines.push(f.memo.trim());
     return lines.join('\n');
   }
+  function sizeMode(p) { return isBot(p) ? 'b' : (isTop(p) ? 't' : ''); }
 
   function renderEdit() {
     var layer = document.getElementById('layer');
@@ -624,12 +631,13 @@
         (isMain ? '' : '<button class="mk" data-main="' + esc(t.id) + '">대표로</button>') + '</div>';
     }).join('') + '</div>';
     var ask = A.askMain ? '<div class="askmain"><span>방금 올린 사진을 대표 이미지로 쓸까요?</span><div><button class="pill sm blue" data-main="' + esc(A.askMain) + '">이 사진으로</button><button class="pill sm" id="keepmain">기존 유지</button></div></div>' : '';
-    var sizeHtml;
-    if (bottom) {
-      sizeHtml = '<div class="fld"><label>사이즈 정보 (숫자만)</label><div class="szgrid"><span></span><span>허리(인치)</span><span>총장(cm)</span>' +
-        f.sizes.map(function (s) { var r = f.sz[s] || {}; return '<b>' + s + '</b><input inputmode="decimal" data-szw="' + s + '" value="' + esc(r.w || '') + '"><input inputmode="decimal" data-szl="' + s + '" value="' + esc(r.l || '') + '">'; }).join('') +
+    var sizeHtml, mode = sizeMode(p), SM = SZ_MODE[mode];
+    if (SM) {
+      var im = SM.num ? ' inputmode="decimal"' : '';
+      sizeHtml = '<div class="fld"><label>' + SM.label + '</label><div class="szgrid"><span></span><span>' + SM.la + '</span><span>' + SM.lb + '</span>' +
+        f.sizes.map(function (s) { var r = f.sz[s] || {}; return '<b>' + s + '</b><input' + im + ' data-szw="' + s + '" value="' + esc(r.w || '') + '"' + (SM.num ? '' : ' placeholder="예: 55~66"') + '><input' + im + ' data-szl="' + s + '" value="' + esc(r.l || '') + '"' + (SM.num ? '' : ' placeholder="예: 95~100"') + '>'; }).join('') +
         '</div><div class="opts">' + SIZES.filter(function (s) { return f.sizes.indexOf(s) < 0; }).map(function (s) { return '<button data-addsz="' + s + '">+ ' + s + '</button>'; }).join('') + '</div>' +
-        '<input id="f_memo" value="' + esc(f.memo) + '" placeholder="추가 메모 (예: 밑단 스트링으로 기장 조절)"></div>';
+        '<input id="f_memo" value="' + esc(f.memo) + '" placeholder="' + SM.ph + '"></div>';
     } else {
       sizeHtml = '<div class="fld"><label for="f_size">사이즈 정보 (줄바꿈 가능)</label><textarea id="f_size" placeholder="M: 가슴 62 · 총장 72&#10;L: 가슴 65 · 총장 74">' + esc(f.size) + '</textarea></div>';
     }
@@ -643,7 +651,7 @@
       '<div class="pick" style="max-height:330px;overflow-y:auto">' + cands.filter(function (x) { return f.link.indexOf(x.c) < 0; }).map(pickBtn).join('') + '</div></div>' +
       '<div class="fld"><label for="f_rename">고객에게 보일 이름 (비우면 전산 품명)</label><input id="f_rename" value="' + esc(f.rename) + '" placeholder="' + esc(p.nm) + '"></div>' +
       '<div class="fld"><label for="f_intro">한 줄 소개</label><textarea id="f_intro" placeholder="키보드의 마이크 버튼으로 말해도 돼요">' + esc(f.intro) + '</textarea></div>' +
-      '<div class="fld"><label>핏</label>' + opt('fit', bottom ? ['슬림', '레귤러', '세미와이드', '와이드'] : ['레귤러', '세미 오버', '오버', '반크롭', '크롭']) + '<input id="f_fit" value="' + esc(f.fit) + '" placeholder="직접 쓰기 (예: 어깨 드롭 오버핏)"></div>' +
+      '<div class="fld"><label>핏</label>' + opt('fit', bottom ? ['슬림', '레귤러', '세미와이드', '와이드', '벌룬'] : ['레귤러', '세미 오버', '오버', '루즈', '반크롭', '크롭']) + '<input id="f_fit" value="' + esc(f.fit) + '" placeholder="직접 쓰기 (예: 어깨 드롭 오버핏)"></div>' +
       '<div class="fld"><label>두께감</label>' + opt('thick', ['얇음', '보통', '도톰', '두꺼움', '약기모', '기모']) + '<input id="f_thick" value="' + esc(f.thick) + '"></div>' +
       sizeHtml +
       '<div class="fld"><label for="f_url">현대백화점 온라인 링크</label><input id="f_url" type="url" value="' + esc(f.url) + '" placeholder="https://"></div>' +
@@ -687,7 +695,7 @@
     document.getElementById('esave').onclick = function () {
       sync(); if (A.busy) return;
       A.busy = true; renderEdit();
-      var payload = { rename: f.rename.trim(), intro: f.intro.trim(), fit: f.fit.trim(), thick: f.thick.trim(), size: bottom ? buildSize(f) : f.size.trim(), url: f.url.trim(), link: f.link, ph: f.ph, hide: f.hide, main: f.main && f.main !== p.img ? f.main : '' };
+      var payload = { rename: f.rename.trim(), intro: f.intro.trim(), fit: f.fit.trim(), thick: f.thick.trim(), size: SZ_MODE[sizeMode(p)] ? buildSize(f, sizeMode(p)) : f.size.trim(), url: f.url.trim(), link: f.link, ph: f.ph, hide: f.hide, main: f.main && f.main !== p.img ? f.main : '' };
       post({ op: 'hpedit', code: p.c, f: payload }).then(function () {
         Object.assign(p, payload);  toast('저장했어요 · 홈페이지는 5분 안에 바뀌어요');
         A.busy = false; A.edit = null; A.pq = ''; A.askMain = ''; renderAdmin();
@@ -724,7 +732,7 @@
   function openEdit(c) {
     var p = findA(c); if (!p) return;
     A.edit = c; A.pq = ''; A.askMain = '';
-    var ps = parseSize(p.size);
+    var ps = SZ_MODE[sizeMode(p)] ? parseSize(p.size, sizeMode(p)) : { rows: {}, memo: '' };
     var sizes = SIZES.filter(function (s) { return (p.sz || []).indexOf(s) >= 0 || ps.rows[s]; });
     if (!sizes.length) sizes = ['S', 'M', 'L', 'XL'];
     A.form = { rename: p.rename, intro: p.intro, fit: p.fit, thick: p.thick, size: p.size, url: p.url, link: (p.link || []).slice(), ph: (p.ph || []).slice(), hide: p.hide, main: p.main || '',
