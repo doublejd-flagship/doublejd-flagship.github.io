@@ -541,51 +541,6 @@
   .lb small { font-size:12px; font-weight:500; padding:6px 0 6px 8px; margin:-6px 0; }
   .ask1 { min-height:42px; border-radius:12px; font-weight:500; }
   .fith b { font-size:16px; font-weight:600; }
-
-  /* ===== 코디해보기 v3: 사진 위에 정보 얹기 ===== */
-  .fit2 { background:transparent; }
-  .fit2::before { content:''; position:absolute; inset:-40px; z-index:-1; background:url(assets/store-bg.jpg) center 35%/cover no-repeat; filter:blur(6px) brightness(.55); }
-  .fit2 { isolation:isolate; overflow:hidden; }
-  .fit2 .fitin { padding-bottom:env(safe-area-inset-bottom); }
-  .fit2 .hcard { flex:none; margin:0 10px; }
-  .fith2 { flex:none; display:flex; align-items:center; justify-content:space-between; margin:8px 10px 0; padding:4px 6px 4px 2px; border-radius:16px; background:var(--card); border:1px solid var(--line); }
-  .fith2 b { font-size:15px; font-weight:600; }
-  .fith2 .pill { min-height:34px; font-size:12.5px; padding:0 12px; }
-  .fstage { flex:1; min-height:0; display:flex; flex-direction:column; gap:8px; margin:8px 10px 0; padding:10px 0; border-radius:var(--r-box); background:var(--card); border:1px solid var(--line); }
-  .fh { flex:1; min-height:0; display:flex; align-items:center; justify-content:center; gap:10px; padding:0 8px; }
-  .fbox { position:relative; height:100%; aspect-ratio:1/1; max-width:calc(100% - 92px); flex:none; border-radius:18px; overflow:hidden; background:var(--soft); touch-action:pan-y; user-select:none; }
-  .fbox img.main { width:100%; height:100%; object-fit:cover; display:block; pointer-events:none; }
-  .fbox img.ph0 { margin:auto; }
-  .fnav { width:36px; height:36px; flex:none; border-radius:50%; border:1px solid var(--stroke); background:rgba(255,255,255,.04); color:var(--ink); display:flex; align-items:center; justify-content:center; cursor:pointer; }
-  @media (hover: none) { .fnav { display:none; } .fbox { max-width:calc(100% - 8px); } }
-  .fcnt { position:absolute; left:10px; top:10px; font-size:11px; font-weight:500; background:rgba(0,0,0,.55); padding:3px 9px; border-radius:11px; pointer-events:none; }
-  .ftr { position:absolute; right:10px; top:10px; display:flex; gap:6px; }
-  .ib2 { width:34px; height:34px; border-radius:50%; background:rgba(0,0,0,.55); border:1px solid rgba(255,255,255,.22); color:#fff; display:flex; align-items:center; justify-content:center; cursor:pointer; text-decoration:none; padding:0; -webkit-backdrop-filter:blur(6px); backdrop-filter:blur(6px); }
-  .fov { position:absolute; left:0; right:0; bottom:0; display:flex; align-items:flex-end; gap:8px; padding:44px 10px 10px 12px; background:linear-gradient(transparent, rgba(0,0,0,.78)); }
-  .fnm { flex:1; min-width:0; display:flex; flex-direction:column; align-items:flex-start; gap:4px; background:none; border:0; padding:0; color:#fff; text-align:left; cursor:pointer; }
-  .fnm b { font-size:14px; font-weight:500; max-width:100%; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-  .fnm small { font-size:11.5px; color:#d0d0d6; }
-  .frec { flex:none; display:flex; flex-direction:column; align-items:flex-end; gap:4px; }
-  .frec small { font-size:10px; color:#d0d0d6; }
-  .frec > div { display:flex; gap:4px; }
-  .frec button { width:34px; height:42px; padding:0; border-radius:7px; overflow:hidden; border:1px solid rgba(255,255,255,.4); background:var(--soft); cursor:pointer; }
-  .frec button.on { border:2px solid var(--blue); }
-  .frec img { width:100%; height:100%; object-fit:cover; display:block; }
-  .fbox.rolling img.main { filter:blur(3px); opacity:.5; transition:filter .2s, opacity .2s; }
-  .fbar { flex:none; display:flex; gap:8px; margin:8px 10px 10px; }
-  .fbar .pill { flex:1; min-height:48px; font-size:14px; font-weight:500; background:var(--card); }
-  .fbar .pill.blue { background:#2f7fd0; border-color:#2f7fd0; }
-  .fbar .svbtn { flex:0 0 auto; padding:0 16px; gap:6px; }
-  .dot { font-style:normal; min-width:19px; height:19px; border-radius:10px; background:var(--pink); color:#fff; font-size:11px; font-weight:600; display:inline-flex; align-items:center; justify-content:center; padding:0 5px; }
-  .svsheet > div { max-height:84vh; }
-  .svh { display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; }
-  .svh b { font-size:18px; font-weight:600; }
-  .svgrid { display:grid; grid-template-columns:repeat(4, minmax(0, 1fr)); gap:10px 8px; overflow-y:auto; min-height:0; padding:2px; }
-  .sv2 { display:flex; flex-direction:column; gap:2px; padding:0; border:1px solid var(--line); border-radius:12px; overflow:hidden; background:var(--soft); cursor:pointer; }
-  .sv2.on { outline:2px solid var(--blue); outline-offset:1px; }
-  .sv2 span { display:block; aspect-ratio:1/1; overflow:hidden; background:var(--soft); }
-  .sv2 img { width:100%; height:100%; object-fit:cover; display:block; }
-  @media (max-width:380px) { .svgrid { grid-template-columns:repeat(3, minmax(0, 1fr)); } }
 </style>
 </head>
 <body>
@@ -943,37 +898,39 @@
     var saved = loadSaved(), key = t.c + '+' + b.c, on = saved.indexOf(key) >= 0;
     function half(p, which, i, n, rec, recLabel, curOther) {
       var rolling = st.rolling === which || st.rolling === 'all';
-      var r = rec.length ? '<div class="frec"><small>' + recLabel + '</small><div>' + rec.map(function (x) {
+      var r = '<div class="recs">' + (rec.length ? '<small>' + recLabel + '</small>' : '') + rec.map(function (x) {
         return '<button data-rec="' + (which === 't' ? 'b' : 't') + ':' + esc(x.c) + '" class="' + (x.c === curOther ? 'on' : '') + '" aria-label="' + esc(name(x)) + '">' + imgTag(x.img, 160, name(x)) + '</button>';
-      }).join('') + '</div></div>' : '';
-      return '<div class="fh"><button class="fnav" data-mv="' + which + ':-1" aria-label="이전">' + chev('l') + '</button>' +
-        '<div class="fbox stage' + (rolling ? ' rolling' : '') + '" data-half="' + which + '">' + imgTag(p.img, 900, name(p), 'main') +
-        '<span class="fcnt">' + (i + 1) + ' / ' + n + '</span>' +
-        '<div class="ftr"><button class="ib2" data-rnd="' + which + '" aria-label="' + (which === 't' ? '상의' : '하의') + ' 랜덤">' + ICON_DICE + '</button>' +
-        '<a class="ib2" href="' + smsOne(p) + '" aria-label="이 상품 문의">' + ICON_MSG + '</a></div>' +
-        '<div class="fov"><button class="fnm" data-p="' + esc(p.c) + '">' + badge(p.it) + '<b>' + esc(name(p)) + '</b><small>상세보기 ›</small></button>' + r + '</div>' +
+      }).join('') + '</div>';
+      return '<div class="half"><div class="hcol"><div class="stage' + (rolling ? ' rolling' : '') + '" data-half="' + which + '">' + imgTag(p.img, 900, name(p), 'main') +
+        '<button class="rnd" data-rnd="' + which + '">' + ICON_DICE + '랜덤</button><span class="cnt">' + (i + 1) + ' / ' + n + '</span>' +
+        '<button class="nav l" data-mv="' + which + ':-1" aria-label="이전">' + chev('l') + '</button>' +
+        '<button class="nav r" data-mv="' + which + ':1" aria-label="다음">' + chev('r') + '</button>' +
         (rolling ? '<div class="roll"><span>' + ICON_DICE + '</span></div>' : '') + '</div>' +
-        '<button class="fnav" data-mv="' + which + ':1" aria-label="다음">' + chev('r') + '</button></div>';
+        '<div class="lbrow"><button class="lb" data-p="' + esc(p.c) + '">' + nameLine(p) + '<small>상세보기 ›</small></button>' +
+        '<a class="ask1" href="' + smsOne(p) + '">' + ICON_MSG + '상품 문의</a></div></div>' + r + '</div>';
     }
-    layer.innerHTML = '<div class="fit fit2"><div class="fitin">' +
-      '<div class="topwrap hcard"><header class="top"><div class="trow"><a class="brand hb" href="#/" aria-label="더블제이디 현대백화점 천호점 메인으로"><span class="av"><img src="assets/store-sign.jpg" alt=""></span><span class="bt"><img src="assets/logo-white.png" alt="DOUBLEJD"><span>현대백화점 천호점 B1</span></span></a>' +
-      '<div class="hact"><a class="icb" href="#/search" aria-label="상품 검색">' + ICON_SEARCH + '</a></div></div></header></div>' +
-      '<div class="fith2"><a class="ib" href="#/" aria-label="메인으로">' + chev('l') + '</a><b>코디해보기</b><button class="pill sm" data-rnd="all">' + ICON_DICE + '전체 랜덤</button></div>' +
-      '<div class="fstage">' +
-      half(t, 't', st.fitT, L.tops.length, recs(t, isBot, 3), '추천 하의', b.c) +
-      half(b, 'b', st.fitB, L.bots.length, recs(b, isTop, 3), '추천 상의', t.c) + '</div>' +
-      '<div class="fbar"><a class="pill" href="' + smsSet(t, b) + '">' + ICON_MSG + '문자 문의</a>' +
-      '<button class="pill' + (on ? '' : ' blue') + '" id="save">' + (on ? '저장됨 ✓' : '코디 저장') + '</button>' +
-      '<button class="pill svbtn" id="svopen">저장' + (saved.length ? ' <i class="dot">' + saved.length + '</i>' : '') + '</button></div>' +
+    var svl = saved.map(function (k) {
+      var a = k.split('+'), x = byCode[a[0]], y = byCode[a[1]];
+      if (!x || !y) return '';
+      return '<button class="sv' + (k === key ? ' on' : '') + '" data-load="' + esc(k) + '" aria-label="' + esc(name(x) + ' + ' + name(y)) + '"><span>' + imgTag(x.img, 160, '') + '</span><span>' + imgTag(y.img, 160, '') + '</span></button>';
+    }).join('');
+    layer.innerHTML = '<div class="fit"><div class="fitin">' + head(true) +
+      half(t, 't', st.fitT, L.tops.length, recs(t, isBot, 3), '추천<br>하의', b.c) +
+      half(b, 'b', st.fitB, L.bots.length, recs(b, isTop, 3), '추천<br>상의', t.c) +
+      '<div class="bar"><a class="pill sm" href="' + smsSet(t, b) + '">' + ICON_MSG + '문자 문의</a><button class="pill sm' + (on ? '' : ' blue') + '" id="save">' + (on ? '저장됨' : '코디 저장') + '</button></div>' +
+      '<div class="saved"><div class="hd"><b>저장한 코디' + (saved.length ? ' ' + saved.length : '') + '</b>' + (saved.length ? '<button id="clear">비우기</button>' : '') + '</div>' +
+      (svl ? '<div class="svl hs" id="svl">' + svl + '</div>' : '<div class="svempty">마음에 드는 조합을 저장하면 여기에 쌓여요.</div>') + '</div>' +
       '</div></div>';
     document.body.style.overflow = 'hidden';
+    var sv = document.getElementById('svl');
+    if (sv && scrollEnd) sv.scrollLeft = sv.scrollWidth;
     document.getElementById('save').onclick = function () {
       var s = loadSaved(), i = s.indexOf(key), added = i < 0;
       if (added) s.push(key); else s.splice(i, 1);
-      storeSaved(s); renderFit();
-      toast(added ? '코디를 저장했어요' : '저장에서 뺐어요');
+      storeSaved(s); renderFit(null, added);
     };
-    document.getElementById('svopen').onclick = openSaved;
+    var cl = document.getElementById('clear');
+    if (cl) cl.onclick = function () { if (confirm('저장한 코디 ' + loadSaved().length + '개를 모두 지울까요?')) { storeSaved([]); renderFit(); } };
     [].forEach.call(layer.querySelectorAll('.stage'), function (el) {
       var x0 = null;
       el.addEventListener('touchstart', function (e) { x0 = e.touches[0].clientX; }, { passive: true });
@@ -983,27 +940,6 @@
         if (Math.abs(dx) >= 40) move(el.dataset.half, dx < 0 ? 1 : -1);
       });
     });
-  }
-  // 저장한 코디: 상의 위·하의 아래로 세워서 보여 주는 시트
-  function openSaved() {
-    var saved = loadSaved().slice().reverse();
-    var cur = (function () { var L = fitLists(), t = L.tops[st.fitT], b = L.bots[st.fitB]; return t && b ? t.c + '+' + b.c : ''; })();
-    var items = saved.map(function (k) {
-      var a = k.split('+'), x = byCode[a[0]], y = byCode[a[1]];
-      if (!x || !y) return '';
-      return '<button class="sv2' + (k === cur ? ' on' : '') + '" data-load="' + esc(k) + '" aria-label="' + esc(name(x) + ' + ' + name(y)) + '"><span>' + imgTag(x.img, 240, '') + '</span><span>' + imgTag(y.img, 240, '') + '</span></button>';
-    }).join('');
-    var g = document.createElement('div'); g.className = 'guide svsheet';
-    g.innerHTML = '<div role="dialog" aria-modal="true" aria-label="저장한 코디"><div class="svh"><b>저장한 코디' + (saved.length ? ' ' + saved.length : '') + '</b>' + (saved.length ? '<button class="txtbtn" data-svclr="1">모두 지우기</button>' : '') + '</div>' +
-      (items ? '<div class="svgrid">' + items + '</div>' : '<p>마음에 드는 조합에서 [코디 저장]을 누르면 여기에 모여요.</p>') +
-      '<button class="pill" data-svclose="1" style="min-height:46px;margin-top:10px">닫기</button></div>';
-    g.addEventListener('click', function (e) {
-      var t = e.target;
-      if (t === g || t.closest('[data-svclose]')) { g.remove(); return; }
-      if (t.closest('[data-svclr]')) { if (confirm('저장한 코디 ' + loadSaved().length + '개를 모두 지울까요?')) { storeSaved([]); g.remove(); renderFit(); } return; }
-      if (t.closest('[data-load]')) setTimeout(function () { g.remove(); }, 0);
-    });
-    document.body.appendChild(g);
   }
   function move(which, d) { if (which === 't') st.fitT += d; else st.fitB += d; renderFit(); }
   function roll(which) {
@@ -1503,7 +1439,7 @@
   // 작은 사진에 마우스를 대면 크게 보기 (마우스가 있는 PC에서만)
   (function () {
     if (!window.matchMedia || !matchMedia('(hover: hover) and (pointer: fine)').matches) return;
-    var SMALL = '.rr .th img, .row2 .th img, .phs img, .recs img, .frec img, .sv img, .sv2 img, .mini .ph img';   // 추천 고르기(.pick)는 사진이 커서 제외
+    var SMALL = '.rr .th img, .row2 .th img, .phs img, .recs img, .sv img, .mini .ph img';   // 추천 고르기(.pick)는 사진이 커서 제외
     var z = null;
     function hide() { if (z) { z.remove(); z = null; } }
     function place(e) {
