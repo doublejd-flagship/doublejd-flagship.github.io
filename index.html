@@ -890,8 +890,11 @@
     return '<div class="evbox"><div class="row hs evrow">' + cards + '</div>' + (list.length ? '' : empty(msg)) + '</div>';
   }
   function loadEvents() {
-    fetch(API + (API.indexOf('?') >= 0 ? '&' : '?') + 'hp=ev', { cache: 'no-store' })
-      .then(function (r) { return r.json(); })
+    var ck = 'dj_cache_v1_ev', c = null;
+    try { c = JSON.parse(localStorage.getItem(ck) || 'null'); } catch (e) {}
+    var fresh = c && c.d && c.d.ok && Date.now() - c.t < 12 * 3600 * 1000;
+    (fresh ? Promise.resolve(c.d) : fetch(API + (API.indexOf('?') >= 0 ? '&' : '?') + 'hp=ev', { cache: 'no-store' }).then(function (r) { return r.json(); })
+      .then(function (d) { if (d && d.ok) { try { localStorage.setItem(ck, JSON.stringify({ t: Date.now(), d: d })); } catch (e) {} } return d; }))
       .then(function (d) { EV = d && d.ok ? d : { ok: false }; if (EV.ok) { EV.gift = EV.gift || []; EV.popup = EV.popup || []; } })
       .catch(function () { EV = { ok: false }; })
       .then(function () { if (D && document.getElementById('hometop')) renderTop(); evVisit(); });
@@ -1198,7 +1201,7 @@
   function post(payload) {
     return fetch(API, { method: 'POST', redirect: 'follow', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(Object.assign({ key: A.key }, payload)) })
       .then(function (r) { return r.json(); })
-      .then(function (j) { if (!j.ok) throw new Error(j.error === 'key' ? '비밀번호가 달라요' : (j.error || '저장 실패')); return j; });
+      .then(function (j) { if (!j.ok) throw new Error(j.error === 'key' ? '비밀번호가 달라요' : (j.error || '저장 실패')); if (payload.op !== 'hpadmin') cacheDrop(); return j; });
   }
   function admHead(title) {
     return '<header class="top"><div class="brand"><div class="brow"><a href="#/" aria-label="고객용 페이지로"><img src="assets/logo-white.png" alt="DOUBLEJD"></a>' +
@@ -1572,7 +1575,7 @@
     if (d.hroll) { hroll(); return; }
     if (d.admhome) { A.igOpen = false; A.edit = null; A.pq = ''; A.askMain = ''; if (location.hash !== '#/admin') location.hash = '#/admin'; else renderAdmin(); return; }
     if (d.p) { if (document.body.dataset.r === 'search' && st.sq) saveRecent(st.sq); location.hash = '#/p/' + d.p; return; }
-    if (d.cat) { st.cat = d.cat; st.sub = ''; st.more = false; renderFilters(); renderContent(); var bb = document.getElementById('bestbox'); if (bb && t.closest('#catbar') && bb.getBoundingClientRect().top < 0) bb.scrollIntoView({ behavior: 'smooth', block: 'start' });   // 고정된 상태에서 누르면 순위 처음으로 return; }
+    if (d.cat) { st.cat = d.cat; st.sub = ''; st.more = false; renderFilters(); renderContent(); var bb = document.getElementById('bestbox'); if (bb && t.closest('#catbar') && bb.getBoundingClientRect().top < 0) bb.scrollIntoView({ behavior: 'smooth', block: 'start' }); /* 고정된 상태에서 누르면 순위 처음으로 */ return; }
     if (d.sub !== undefined) { st.sub = d.sub; st.more = false; renderFilters(); renderContent(); return; }
     if (d.best) { st.best = d.best; st.more = false; renderContent(); return; }
     if (d.more) { st.more = !st.more; renderContent(); return; }
@@ -1682,17 +1685,33 @@
   // 새 자료가 오면 보고 있는 화면은 그대로 두고 목록만 바꿈
   function refresh(data) {
     if (!D) return start(data);
-    if (data.at === D.at && data.items.length === D.items.length) return;
+    if (JSON.stringify(data) === JSON.stringify(D)) return;
     D = prep(data);
-    if (document.getElementById('content')) { renderFilters(); renderContent(); }
+    if (document.getElementById('content')) { renderTop(); renderFilters(); renderContent(); wishBadge(); }
   }
-  function fail(msg) { if (D) return; document.getElementById('app').innerHTML = '<header class="top"><a class="brand" href="#/"><img src="assets/logo-white.png" alt="DOUBLEJD"><span>현대백화점 천호점</span></a></header>' + empty(msg); }
+  function fail(msg) { if (D && document.getElementById('content')) return; document.getElementById('app').innerHTML = '<header class="top"><a class="brand" href="#/"><img src="assets/logo-white.png" alt="DOUBLEJD"><span>현대백화점 천호점</span></a></header>' + empty(msg); }
   if ((location.hash || '').indexOf('#/admin') === 0) route();
-  // 열 때마다 시트에서 최신 자료를 받아 옴 (그동안 '불러오는 중' 화면)
-  fetch(API + (API.indexOf('?') >= 0 ? '&' : '?') + 'hp=1', { cache: 'no-store' })
-    .then(function (r) { return r.json(); })
-    .then(function (d) { if (!d || !d.ok) throw new Error(); start(d); loadEvents(); })
-    .catch(function () { fail('상품을 불러오지 못했어요. 잠시 뒤 다시 열어 주세요.'); });
+  // ---------- 상품 자료: 이 기기에 저장해 두고 12시간마다 새로 받음 ----------
+  //  저장본이 있으면 '불러오는 중' 없이 바로 보여 주고, 12시간이 지났으면 뒤에서 새로 받아 조용히 바꿈
+  //  처음 열 때(저장본 없음)만 '불러오는 중'. 관리자 페이지에서 저장하면 이 기기의 저장본은 지움
+  var CACHE_KEY = 'dj_cache_v1', CACHE_MS = 12 * 3600 * 1000;
+  function cacheGet() { try { var c = JSON.parse(localStorage.getItem(CACHE_KEY) || 'null'); return c && c.d && c.d.ok ? c : null; } catch (e) { return null; } }
+  function cacheSet(d) { try { localStorage.setItem(CACHE_KEY, JSON.stringify({ t: Date.now(), d: d })); } catch (e) {} }
+  function cacheDrop() { try { localStorage.removeItem(CACHE_KEY); localStorage.removeItem(CACHE_KEY + '_ev'); } catch (e) {} }
+  function fetchData() {
+    return fetch(API + (API.indexOf('?') >= 0 ? '&' : '?') + 'hp=1', { cache: 'no-store' })
+      .then(function (r) { return r.json(); })
+      .then(function (d) { if (!d || !d.ok) throw new Error(); cacheSet(d); return d; });
+  }
+  var cached = cacheGet();
+  if (cached) {
+    try { start(cached.d); } catch (e) { console.error(e); cacheDrop(); D = null; fetchData().then(start).catch(function () { fail('상품을 불러오지 못했어요. 잠시 뒤 다시 열어 주세요.'); }); }
+    loadEvents();
+    if (Date.now() - cached.t > CACHE_MS) fetchData().then(refresh).catch(function () {});
+  } else {
+    fetchData().then(function (d) { start(d); loadEvents(); })
+      .catch(function (e) { console.error(e); fail('상품을 불러오지 못했어요. 잠시 뒤 다시 열어 주세요.'); });
+  }
 })();
 </script>
 </body>
