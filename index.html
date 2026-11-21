@@ -745,8 +745,8 @@
       app.innerHTML =
         '<div class="topwrap hcard"><header class="top"><div class="trow"><a class="brand hb" href="#/" aria-label="더블제이디 현대백화점 천호점"><span class="av"><img src="assets/store-sign.jpg" alt=""></span><span class="bt"><img src="assets/logo-white.png" alt="DOUBLEJD"><span>현대백화점 천호점 B1</span></span></a>' +
         '<div class="hact"><button class="inst" id="inst" hidden>' + ICON_DL + '<span>앱 설치</span></button>' + wishBtn() + '<a class="icb" href="#/search" aria-label="상품 검색">' + ICON_SEARCH + '</a></div></div></header></div>' +
-        '<nav class="catbar" id="catbar" aria-label="품목"><div class="chips hs" id="cats"></div></nav>' +
         '<div id="hometop"></div>' +
+        '<nav class="catbar" id="catbar" aria-label="품목"><div class="chips hs" id="cats"></div></nav>' +
         '<div class="box" id="bestbox"><div class="chips sub hs" id="subs"></div><div id="content"></div></div><div id="content2"></div>';
     }
     renderTop(); renderFilters(); renderContent(); instInit(); tabBar();
@@ -1572,7 +1572,7 @@
     if (d.hroll) { hroll(); return; }
     if (d.admhome) { A.igOpen = false; A.edit = null; A.pq = ''; A.askMain = ''; if (location.hash !== '#/admin') location.hash = '#/admin'; else renderAdmin(); return; }
     if (d.p) { if (document.body.dataset.r === 'search' && st.sq) saveRecent(st.sq); location.hash = '#/p/' + d.p; return; }
-    if (d.cat) { st.cat = d.cat; st.sub = ''; st.more = false; renderFilters(); renderContent(); var bb = document.getElementById('bestbox'); if (bb && t.closest('#catbar')) bb.scrollIntoView({ behavior: 'smooth', block: 'start' }); return; }
+    if (d.cat) { st.cat = d.cat; st.sub = ''; st.more = false; renderFilters(); renderContent(); var bb = document.getElementById('bestbox'); if (bb && t.closest('#catbar') && bb.getBoundingClientRect().top < 0) bb.scrollIntoView({ behavior: 'smooth', block: 'start' });   // 고정된 상태에서 누르면 순위 처음으로 return; }
     if (d.sub !== undefined) { st.sub = d.sub; st.more = false; renderFilters(); renderContent(); return; }
     if (d.best) { st.best = d.best; st.more = false; renderContent(); return; }
     if (d.more) { st.more = !st.more; renderContent(); return; }
