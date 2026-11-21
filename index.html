@@ -1077,7 +1077,7 @@
     var all = items.slice().sort(newOrder);
     h = '<div class="box" id="allbox">' + secHead(secNo('all'), 'EVERYTHING @ B1', label ? esc(label) + ' 전체' : '매장 상품 전체', '<small>' + all.length + '개</small>');
     h += (all.length ? '<div class="grid">' + all.map(function (p) { return card(p, { isNew: true }); }).join('') + '</div>' : empty('조건에 맞는 상품이 없어요.')) + '</div><div class="foot">';
-    h += '<a class="visitcard" href="#/visit"><img src="assets/b1-map.png" alt=""><span><b>찾아오시는 길</b><small>천호역 3·4번 출구에서 백화점 지하로 바로 연결 · 지하1층 영스트리트</small></span>' + chev('r') + '</a>';
+    h += '<a class="visitcard" href="#/visit"><img src="assets/b1-map-v2.png" alt=""><span><b>찾아오시는 길</b><small>천호역 3·4번 출구에서 백화점 지하로 바로 연결 · 지하1층 영스트리트</small></span>' + chev('r') + '</a>';
     h += '<p class="note">매장 재고는 수시로 바뀌어요. 방문 전 매장에 문의해 주세요.' + (atText(D.at) ? '<br>' + atText(D.at) + ' 기준' : '') + '</p>';
     h += '</div>';
     document.getElementById('content2').innerHTML = h;
@@ -1130,11 +1130,11 @@
       '<button class="x" id="close" aria-label="닫기"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>' +
       '<div class="body" style="padding-top:22px">' +
       '<h1 class="title" style="margin:0">찾아오시는 길</h1>' +
-      '<p class="vlead">현대백화점 천호점 <b>지하1층 영스트리트</b>, 크록스 옆이에요.</p>' +
-      '<a href="assets/b1-map.png" target="_blank" rel="noopener"><img class="vmap" src="assets/b1-map.png" alt="지하1층 약도 — 더블제이디 위치 표시"></a>' +
+      '<p class="vlead">현대백화점 천호점 <b>지하1층 영스트리트</b>, 아이스토어 앞이에요.</p>' +
+      '<a href="assets/b1-map-v2.png" target="_blank" rel="noopener"><img class="vmap" src="assets/b1-map-v2.png" alt="지하1층 약도 — 더블제이디 위치 표시"></a>' +
       '<div class="vbox"><b>지하철 <em>가장 편해요</em></b><p>5·8호선 <b>천호역 3·4번 출구</b>에서 백화점 지하2층으로 바로 연결돼요. 에스컬레이터로 한 층 올라오시면 지하1층이에요.</p></div>' +
       '<div class="vbox"><b>버스</b><p><b>천호역2번출구·현대백화점</b>, <b>천호역3번출구·현대백화점</b> 정류장<br>간선 340 · 지선 3318, 3321, 3324, 3411<br><span class="mute">천호역 주변 정류장: 130, 341, 342, 3214, 3316, 4318 등</span></p></div>' +
-      '<div class="vbox"><b>자가용</b><p>서울 강동구 천호대로 1005<br>주차 최초 30분 무료 · 3만원 이상 구매 1시간 · 5만원 이상 2시간 · 10만원 이상 3시간<br><span class="mute">주차관리실 02-2225-8713</span></p></div>' +
+      '<div class="vbox"><b>주차</b><p>서울 강동구 천호대로 1005<br>주차 최초 30분 무료 · 3만원 이상 구매 1시간 · 5만원 이상 2시간 · 10만원 이상 3시간<br><span class="mute">주차관리실 02-2225-8713</span></p></div>' +
       '<div class="ask"><a class="pill" href="https://map.naver.com/p/search/' + q + '" target="_blank" rel="noopener">네이버 지도</a><a class="pill" href="https://map.kakao.com/?q=' + q + '" target="_blank" rel="noopener">카카오맵</a></div>' +
       '<div class="store"><img src="assets/store-card.jpg" alt="더블제이디 현대백화점 천호점 · 02-2225-8934">' +
       '<div class="ask"><a class="pill" href="tel:' + STORE.tel.replace(/-/g, '') + '">전화 문의</a><a class="pill blue" href="' + smsLink('[더블제이디 천호점 문의]\n') + '">문자 문의</a></div></div>' +
@@ -1375,7 +1375,7 @@
       if (pp) parts.push('<span class="tk">POP-UP</span><b>' + esc(pp.t) + '</b>');
     }
     var o = openInfo();
-    parts.unshift('<span class="tk">DOUBLEJD FLAGSHIP*</span><b>*자칭 · 현대백화점 천호점 지하 1층</b>');
+    parts.unshift('<span class="tk">DBJD</span><b>현대백화점 천호점 B1</b>');
     parts.push('<span class="tk">' + (o.on ? 'OPEN NOW' : 'SEE YOU SOON') + '</span><b>' + o.t + '</b>');
     var line = parts.join('<span class="star">★</span>') + '<span class="star">★</span>';
     el.innerHTML = '<div class="tkin">' + line + line + '</div>';
@@ -1450,7 +1450,7 @@
   var LOOK_MS = 6000;
   function renderLook(i) {
     clearTimeout(lookTimer);
-    var sets = homeSets(false).slice(0, 12), layer = document.getElementById('layer');
+    var sets = homeSets(false), layer = document.getElementById('layer');
     if (!sets.length) { location.replace('#/'); return; }
     i = Math.max(0, Math.min(sets.length - 1, i | 0));
     var x = byCode[sets[i][0]], y = byCode[sets[i][1]], key = x.c + '+' + y.c, saved = loadSaved().indexOf(key) >= 0;
@@ -1937,7 +1937,7 @@
     if (d.wclr) { if (confirm('찜한 상품 ' + wishCount() + '개를 모두 지울까요?')) { try { localStorage.removeItem('dj_wish'); } catch (er) {} renderWish(); wishBadge(); [].forEach.call(document.querySelectorAll('.wh.on'), function (x) { x.classList.remove('on'); }); } return; }
     if (d.askp) { e.preventDefault(); var ap = byCode[d.askp]; if (ap) location.href = smsOne(ap); return; }
     if (d.story) { openStory(d.story, d.sk); return; }
-    if (d.lk !== undefined) { var nl = +d.lk, ns = homeSets(false).slice(0, 12).length; if (nl < 0) nl = 0; if (nl >= ns) { location.replace('#/'); return; } location.replace('#/look/' + nl); return; }
+    if (d.lk !== undefined) { var nl = +d.lk, ns = homeSets(false).length; if (nl < 0) nl = 0; if (nl >= ns) { location.replace('#/'); return; } location.replace('#/look/' + nl); return; }
     if (d.lkclose) { location.replace('#/'); return; }
     if (d.lksave) { var sv = loadSaved(), si = sv.indexOf(d.lksave); if (si < 0) sv.push(d.lksave); else sv.splice(si, 1); storeSaved(sv); toast(si < 0 ? '코디를 저장했어요' : '저장에서 뺐어요'); renderLook(+(location.hash.split('/')[2] || 0)); return; }
     if (d.ask) { openAsk(); return; }
@@ -1954,7 +1954,7 @@
     if (d.more) { st.more = !st.more; renderContent(); return; }
     if (d.mv) { var a = d.mv.split(':'); move(a[0], +a[1]); return; }
     if (d.rnd) { roll(d.rnd); return; }
-    if (d.hset) { location.hash = '#/fit/' + d.hset; return; }
+    if (d.hset) { var hs = homeSets(false), hi = 0; hs.forEach(function (k, i) { if (k[0] + '+' + k[1] === d.hset) hi = i; }); location.hash = '#/look/' + hi; return; }
     if (d.rec) { var rc = d.rec.split(':'), L2 = fitLists(); if (rc[0] === 'b') setFit(L2, null, rc[1]); else setFit(L2, rc[1], null); renderFit(); return; }
     if (d.load) { var k = d.load.split('+'); setFit(fitLists(), k[0], k[1]); renderFit(); return; }
     if (d.acat) { A.cat = d.acat; renderAdmin(); return; }
