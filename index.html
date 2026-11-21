@@ -798,6 +798,36 @@
   .sw i[style*="#151515"] { border-color:rgba(255,255,255,.55); }
   @media (max-width:420px) { .hcard .inst { display:none !important; } }
   @media (max-width:380px) { .hb { gap:8px; } .hb .av { width:32px; height:32px; } .lgrow img { height:12px; } .fsk { font-size:8.5px; } .hcard header.top { padding-left:12px; padding-right:12px; } }
+
+  /* ===== v6 ===== */
+  .fsk { font-family:'Pretendard Variable', sans-serif; font-weight:800; font-size:10px; letter-spacing:-.01em; padding:3px 6px; }
+  .wxlab { display:flex; align-items:baseline; gap:8px; }
+  .wxlab span { font-family:'DJDisplay', sans-serif; font-size:15px; letter-spacing:.06em; color:var(--pink); }
+  .wxlab em { font-style:normal; font-family:'Pretendard Variable', sans-serif; font-size:12.5px; font-weight:500; letter-spacing:-.01em; color:var(--sub); }
+  .cnr { display:flex; align-items:center; justify-content:space-between; gap:6px; width:100%; min-width:0; }
+  .cnr .sw { flex:none; margin:0; flex-wrap:nowrap; }
+  .cnr .sw i { width:10px; height:10px; }
+  .cnr > b { flex:1; min-width:0; }
+  .t3 .cn { gap:6px; }
+  .t3 .cnr .sw i { width:8px; height:8px; }
+  .t3 .cnr .sw { gap:3px; }
+  .t3 .cnr > b { font-size:12.5px; -webkit-line-clamp:2; }
+  .askp.mini { width:28px; height:28px; padding:0; justify-content:center; border-radius:50%; flex:none; align-self:flex-start; }
+  .askp.mini svg { width:13px; height:13px; }
+  .rxl { display:flex; align-items:center; gap:8px; min-width:0; width:100%; }
+  .rxl .nl { flex:0 1 auto; min-width:0; width:auto; }
+  .rxl .sw { flex:none; flex-wrap:nowrap; }
+  .vev .chips.evt { padding-bottom:12px; }
+  .lkttl { font-size:34px; }
+  .lksub { font-size:12px; color:#c9c9cf; margin-top:6px; letter-spacing:.02em; }
+
+  .t3 .sw { display:flex; }
+  .rxl .nl { flex-wrap:wrap; row-gap:4px; }
+  .rxl .nl b { white-space:normal; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; word-break:keep-all; overflow-wrap:anywhere; }
+  .rxl .sw { gap:3px; } .rxl .sw i { width:9px; height:9px; }
+  .rr { gap:10px; }
+  .rr .th { width:46px; height:58px; }
+  .rxl .nl { flex-direction:column; align-items:flex-start; gap:4px; }
 </style>
 </head>
 <body>
@@ -865,7 +895,7 @@
   function card(p, opt) {
     opt = opt || {};
     return '<button class="card" data-p="' + esc(p.c) + '"><div class="ph">' + imgTag(p.img, 400, name(p)) + (opt.isNew && isNew(p) ? '<span class="nw">NEW</span>' : '') + heart(p.c) + '</div>' +
-      '<span class="cn">' + badge(p.it) + '<b>' + esc(name(p)) + '</b>' + swatches(p) + '</span></button>';
+      '<span class="cn"><span class="cnr">' + badge(p.it) + swatches(p) + '</span><b>' + esc(name(p)) + '</b></span></button>';
   }
   // ---------- 찜 (관심 상품, 이 기기에만 저장) ----------
   var ICON_HEART = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg>';
@@ -928,7 +958,7 @@
     var app = document.getElementById('app');
     if (!document.getElementById('content')) {
       app.innerHTML =
-        '<div class="topwrap hcard"><header class="top"><div class="trow"><a class="brand hb" href="#/" aria-label="더블제이디 현대백화점 천호점"><span class="av"><img src="assets/store-sign.jpg" alt=""></span><span class="bt"><span class="lgrow"><img src="assets/logo-white.png" alt="DOUBLEJD"><i class="fsk">FLAGSHIP*</i></span><b class="hstore">현대백화점 천호점</b>' + openLine() + '</span></a>' +
+        '<div class="topwrap hcard"><header class="top"><div class="trow"><a class="brand hb" href="#/" aria-label="더블제이디 현대백화점 천호점"><span class="av"><img src="assets/store-sign.jpg" alt=""></span><span class="bt"><span class="lgrow"><img src="assets/logo-white.png" alt="DOUBLEJD"><i class="fsk">플래그십(자칭)</i></span><b class="hstore">현대백화점 천호점</b>' + openLine() + '</span></a>' +
         '<div class="hact"><button class="inst" id="inst" hidden>' + ICON_DL + '<span>앱 설치</span></button>' + wishBtn() + '<a class="icb" href="#/search" aria-label="상품 검색">' + ICON_SEARCH + '</a></div></div></header></div>' +
         '<div class="ticker" id="ticker" aria-hidden="true"></div><div class="stories hs" id="stories"></div>' +
         '<div id="hometop"></div>' +
@@ -1030,12 +1060,12 @@
     if (pop.length) {
       h += '<div class="top3">' + pop.slice(0, 3).map(function (p, i) {
         return '<button class="t3" data-p="' + esc(p.c) + '"><span class="ph">' + imgTag(p.img, 400, name(p)) + '<i class="rn">' + (i + 1) + mv(p) + '</i>' + heart(p.c) + '</span>' +
-          '<span class="cn">' + badge(p.it) + '<b>' + esc(name(p)) + '</b>' + swatches(p) + '</span><span class="askp" role="button" tabindex="0" data-askp="' + esc(p.c) + '">' + ICON_SMS + '문의</span></button>';
+          '<span class="cn"><span class="cnr">' + badge(p.it) + swatches(p) + '</span><span class="cnr"><b>' + esc(name(p)) + '</b><span class="askp mini" role="button" tabindex="0" data-askp="' + esc(p.c) + '" aria-label="이 상품 문의">' + ICON_SMS + '</span></span></span></button>';
       }).join('') + '</div>';
       var rest = pop.slice(3, st.more ? 200 : LIMIT);
       if (rest.length) h += '<ol class="rank">' + rest.map(function (p, i) {
         return '<li><button class="rr" data-p="' + esc(p.c) + '"><span class="no">' + (i + 4) + mv(p) + '</span>' +
-          '<span class="th">' + imgTag(p.img, 200, name(p)) + '</span><span class="rx">' + nameLine(p) + swatches(p) + '</span>' +
+          '<span class="th">' + imgTag(p.img, 200, name(p)) + '</span><span class="rx"><span class="rxl">' + nameLine(p) + swatches(p) + '</span></span>' +
           '<span class="ract">' + heart(p.c, 'rh') + '<span class="askp ic" role="button" tabindex="0" data-askp="' + esc(p.c) + '" aria-label="이 상품 문의">' + ICON_SMS + '</span></span></button></li>';
       }).join('') + '</ol>';
       if (pop.length > LIMIT) h += '<div class="morebox"><button class="pill" data-more="1">' + (st.more ? '접기' : '순위 더 보기') + '</button></div>';
@@ -1232,7 +1262,7 @@
         '<button class="fnav" data-mv="' + which + ':1" aria-label="다음">' + chev('r') + '</button></div>';
     }
     var fitHtml = '<div class="fit fit2"><div class="fitin">' +
-      '<div class="topwrap hcard"><header class="top"><div class="trow"><a class="brand hb" href="#/" aria-label="더블제이디 현대백화점 천호점 메인으로"><span class="av"><img src="assets/store-sign.jpg" alt=""></span><span class="bt"><span class="lgrow"><img src="assets/logo-white.png" alt="DOUBLEJD"><i class="fsk">FLAGSHIP*</i></span><b class="hstore">현대백화점 천호점</b>' + openLine() + '</span></a>' +
+      '<div class="topwrap hcard"><header class="top"><div class="trow"><a class="brand hb" href="#/" aria-label="더블제이디 현대백화점 천호점 메인으로"><span class="av"><img src="assets/store-sign.jpg" alt=""></span><span class="bt"><span class="lgrow"><img src="assets/logo-white.png" alt="DOUBLEJD"><i class="fsk">플래그십(자칭)</i></span><b class="hstore">현대백화점 천호점</b>' + openLine() + '</span></a>' +
       '<div class="hact">' + wishBtn() + '<a class="icb" href="#/search" aria-label="상품 검색">' + ICON_SEARCH + '</a></div></div></header></div>' +
       '<div class="fith2"><a class="ib" href="#/" aria-label="메인으로">' + chev('l') + '</a><b>코디해보기</b><button class="pill sm" data-rnd="all">' + ICON_DICE + '전체 랜덤</button></div>' +
       '<div class="fstage">' +
@@ -1411,7 +1441,7 @@
   }
   function wxSection() {
     var w = wxPick(); if (!w) return '';
-    return '<div class="box wxbox" id="wxbox"><div class="wxlab">TODAY\'S FIT · 오늘 날씨 추천</div><div class="wxh"><b class="wxt">' + WX.temp + '°</b><div><strong>오늘 천호동 ' + WX_TXT(WX.code) + ' · ' + WX.lo + '° / ' + WX.hi + '°</strong><span>' + w.msg + '</span></div></div>' +
+    return '<div class="box wxbox" id="wxbox"><div class="wxlab"><span>TODAY\'S FIT</span><em>오늘 날씨 추천</em></div><div class="wxh"><b class="wxt">' + WX.temp + '°</b><div><strong>오늘 천호동 ' + WX_TXT(WX.code) + ' · ' + WX.lo + '° / ' + WX.hi + '°</strong><span>' + w.msg + '</span></div></div>' +
       '<div class="row hs">' + w.list.map(function (p) { return card(p); }).join('') + '</div></div>';
   }
 
@@ -1430,7 +1460,7 @@
       '<div class="lkprog">' + sets.map(function (_, k) { return '<i class="' + (k < i ? 'done' : k === i ? 'now' : '') + '"><em></em></i>'; }).join('') + '</div>' +
       '<div class="lkhd"><span class="av"><img src="assets/store-sign.jpg" alt=""></span><b>천호점 추천 코디</b><small>' + (i + 1) + ' / ' + sets.length + '</small><button class="lkx" data-lkclose="1" aria-label="닫기">✕</button></div>' +
       '<button class="lknav l" data-lk="' + (i - 1) + '" aria-label="이전 코디"></button><button class="lknav r" data-lk="' + (i + 1) + '" aria-label="다음 코디"></button>' +
-      '<div class="lkb"><span class="stk pink">LOOK ' + no + '</span><div class="lkttl">FLAGSHIP* <span>CHEONHO</span></div>' +
+      '<div class="lkb"><span class="stk pink">LOOK ' + no + '</span><div class="lkttl">FLAGSHIP-ISH</div><div class="lksub">(SELF-PROCLAIMED) · 천호점 직원이 맞춘 코디</div>' +
       '<div class="lkit">' + [x, y].map(function (p) { return '<button data-p="' + esc(p.c) + '"><span>' + imgTag(p.img, 160, '') + '</span><span>' + badge(p.it) + '<b>' + esc(name(p)) + '</b></span></button>'; }).join('') + '</div>' +
       '<div class="lkbtn"><button class="pill" data-lksave="' + esc(key) + '">' + (saved ? '저장됨 ✓' : '♡ 코디 저장') + '</button><a class="pill light" href="#/fit/' + esc(key) + '">코디해보기에서 보기</a></div></div></div>';
     document.body.style.overflow = 'hidden';
