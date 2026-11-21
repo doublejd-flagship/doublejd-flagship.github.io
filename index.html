@@ -1162,7 +1162,7 @@
     h += '<div class="fov"><h1 class="fnm">' + badge(p.it) + '<b>' + esc(name(p)) + '</b>' + (p.tag ? '<small>' + won(p.tag) + '</small>' : '') + '</h1>' +
       (links.length ? '<div class="frec"><small>추천 조합</small><div>' + links.slice(0, 3).map(function (x) { return '<button data-p="' + esc(x.c) + '" aria-label="' + esc(name(x)) + '">' + imgTag(x.img, 160, name(x)) + '</button>'; }).join('') + '</div></div>' : '') + '</div>';
     h += '</div></div><div class="body">';
-    h += '<div class="dhead"><div class="meta">품번 ' + esc(p.c) + (p.se ? ' · ' + esc(p.se) : '') + '</div></div>';
+    h += '<div class="dhead"><div class="meta">품번 ' + esc(p.c) + '</div></div>';
     var facts = (p.ro && p.ro <= 10 ? '<span class="fk rk">천호점 ' + p.ro + '위</span>' : '') + (p.ra && p.ra <= 10 ? '<span class="fk rk">전국 ' + p.ra + '위</span>' : '') +
       (p.fit ? '<span class="fk"><em>핏</em>' + esc(p.fit) + '</span>' : '') + (p.thick ? '<span class="fk"><em>두께감</em>' + esc(p.thick) + '</span>' : '');
     if (facts) h += '<div class="facts">' + facts + '</div>';
@@ -1441,7 +1441,7 @@
   }
   function wxSection() {
     var w = wxPick(); if (!w) return '';
-    return '<div class="box wxbox" id="wxbox"><div class="wxlab"><span>TODAY\'S FIT</span><em>오늘 날씨 추천</em></div><div class="wxh"><b class="wxt">' + WX.temp + '°</b><div><strong>오늘 천호동 ' + WX_TXT(WX.code) + ' · ' + WX.lo + '° / ' + WX.hi + '°</strong><span>' + w.msg + '</span></div></div>' +
+    return '<div class="box wxbox" id="wxbox"><div class="wxlab"><span>TODAY\'S FIT</span><em>날씨 맞춤 추천</em></div><div class="wxh"><b class="wxt">' + WX.temp + '°</b><div><strong>지금 천호동 ' + WX_TXT(WX.code) + ' · 최저 ' + WX.lo + '° / 최고 ' + WX.hi + '°</strong><span>' + w.msg + '</span></div></div>' +
       '<div class="row hs">' + w.list.map(function (p) { return card(p); }).join('') + '</div></div>';
   }
 
