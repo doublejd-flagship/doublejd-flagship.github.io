@@ -452,7 +452,7 @@
 
   /* 하단 탭 (홈·찾기에서만) */
   .tabbar { position:fixed; left:0; right:0; bottom:0; z-index:40; display:none; background:rgba(11,11,13,.92); -webkit-backdrop-filter:blur(20px) saturate(1.3); backdrop-filter:blur(20px) saturate(1.3); border-top:1px solid var(--line); padding-bottom:env(safe-area-inset-bottom); }
-  body[data-r="home"] .tabbar, body[data-r="search"] .tabbar, body:not([data-r]) .tabbar { display:block; }
+  body[data-r="home"] .tabbar, body[data-r="search"] .tabbar, body[data-r="wish"] .tabbar, body:not([data-r]) .tabbar { display:block; }
   .tabbar > div { max-width:560px; margin:0 auto; display:flex; }
   .tabbar a, .tabbar button { flex:1; height:var(--tab-h); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px; font-size:10.5px; font-weight:500; color:#7a7a82; text-decoration:none; background:none; border:0; cursor:pointer; letter-spacing:0; }
   .tabbar .on { color:#fff; }
@@ -541,6 +541,108 @@
   .lb small { font-size:12px; font-weight:500; padding:6px 0 6px 8px; margin:-6px 0; }
   .ask1 { min-height:42px; border-radius:12px; font-weight:500; }
   .fith b { font-size:16px; font-weight:600; }
+
+  /* ===== 코디해보기 v3: 사진 위에 정보 얹기 ===== */
+  .fit2 { background:transparent; }
+  .fit2::before { content:''; position:absolute; inset:-40px; z-index:-1; background:url(assets/store-bg.jpg) center 35%/cover no-repeat; filter:blur(6px) brightness(.55); }
+  .fit2 { isolation:isolate; overflow:hidden; }
+  .fit2 .fitin { padding-bottom:env(safe-area-inset-bottom); }
+  .fit2 .hcard { flex:none; margin:0 10px; }
+  .fith2 { flex:none; display:flex; align-items:center; justify-content:space-between; margin:8px 10px 0; padding:4px 6px 4px 2px; border-radius:16px; background:var(--card); border:1px solid var(--line); }
+  .fith2 b { font-size:15px; font-weight:600; }
+  .fith2 .pill { min-height:34px; font-size:12.5px; padding:0 12px; }
+  .fstage { flex:1; min-height:0; display:flex; flex-direction:column; gap:8px; margin:8px 10px 0; padding:10px 0; border-radius:var(--r-box); background:var(--card); border:1px solid var(--line); }
+  .fh { flex:1; min-height:0; display:flex; align-items:center; justify-content:center; gap:10px; padding:0 8px; }
+  .fbox { position:relative; height:100%; aspect-ratio:1/1; max-width:calc(100% - 92px); flex:none; border-radius:18px; overflow:hidden; background:var(--soft); touch-action:pan-y; user-select:none; }
+  .fbox img.main { width:100%; height:100%; object-fit:cover; display:block; pointer-events:none; }
+  .fbox img.ph0 { margin:auto; }
+  .fnav { width:36px; height:36px; flex:none; border-radius:50%; border:1px solid var(--stroke); background:rgba(255,255,255,.04); color:var(--ink); display:flex; align-items:center; justify-content:center; cursor:pointer; }
+  @media (hover: none) { .fnav { display:none; } .fbox { max-width:calc(100% - 8px); } }
+  .fcnt { position:absolute; left:10px; top:10px; font-size:11px; font-weight:500; background:rgba(0,0,0,.55); padding:3px 9px; border-radius:11px; pointer-events:none; }
+  .ftr { position:absolute; right:10px; top:10px; display:flex; gap:6px; }
+  .ib2 { width:34px; height:34px; border-radius:50%; background:rgba(0,0,0,.55); border:1px solid rgba(255,255,255,.22); color:#fff; display:flex; align-items:center; justify-content:center; cursor:pointer; text-decoration:none; padding:0; -webkit-backdrop-filter:blur(6px); backdrop-filter:blur(6px); }
+  .fov { position:absolute; left:0; right:0; bottom:0; display:flex; align-items:flex-end; gap:8px; padding:44px 10px 10px 12px; background:linear-gradient(transparent, rgba(0,0,0,.78)); }
+  .fnm { flex:1; min-width:0; display:flex; flex-direction:column; align-items:flex-start; gap:4px; background:none; border:0; padding:0; color:#fff; text-align:left; cursor:pointer; }
+  .fnm b { font-size:14px; font-weight:500; max-width:100%; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .fnm small { font-size:11.5px; color:#d0d0d6; }
+  .frec { flex:none; display:flex; flex-direction:column; align-items:flex-end; gap:4px; }
+  .frec small { font-size:10px; color:#d0d0d6; }
+  .frec > div { display:flex; gap:4px; }
+  .frec button { width:34px; height:42px; padding:0; border-radius:7px; overflow:hidden; border:1px solid rgba(255,255,255,.4); background:var(--soft); cursor:pointer; }
+  .frec button.on { border:2px solid var(--blue); }
+  .frec img { width:100%; height:100%; object-fit:cover; display:block; }
+  .fbox.rolling img.main { filter:blur(3px); opacity:.5; transition:filter .2s, opacity .2s; }
+  .fbar { flex:none; display:flex; gap:8px; margin:8px 10px 10px; }
+  .fbar .pill { flex:1; min-height:48px; font-size:14px; font-weight:500; background:var(--card); }
+  .fbar .pill.blue { background:#2f7fd0; border-color:#2f7fd0; }
+  .fbar .svbtn { flex:0 0 auto; padding:0 16px; gap:6px; }
+  .dot { font-style:normal; min-width:19px; height:19px; border-radius:10px; background:var(--pink); color:#fff; font-size:11px; font-weight:600; display:inline-flex; align-items:center; justify-content:center; padding:0 5px; }
+  .svsheet > div { max-height:84vh; }
+  .svh { display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; }
+  .svh b { font-size:18px; font-weight:600; }
+  .svgrid { display:grid; grid-template-columns:repeat(4, minmax(0, 1fr)); gap:10px 8px; overflow-y:auto; min-height:0; padding:2px; }
+  .sv2 { display:flex; flex-direction:column; gap:2px; padding:0; border:1px solid var(--line); border-radius:12px; overflow:hidden; background:var(--soft); cursor:pointer; }
+  .sv2.on { outline:2px solid var(--blue); outline-offset:1px; }
+  .sv2 span { display:block; aspect-ratio:1/1; overflow:hidden; background:var(--soft); }
+  .sv2 img { width:100%; height:100%; object-fit:cover; display:block; }
+  @media (max-width:380px) { .svgrid { grid-template-columns:repeat(3, minmax(0, 1fr)); } }
+
+  /* ===== 찜 ===== */
+  .wh { position:absolute; right:7px; top:7px; z-index:2; width:32px; height:32px; border-radius:50%; display:flex; align-items:center; justify-content:center; color:#fff; background:rgba(0,0,0,.38); cursor:pointer; -webkit-backdrop-filter:blur(6px); backdrop-filter:blur(6px); transition:transform .15s; }
+  .wh svg { width:17px; height:17px; }
+  .wh.on { color:var(--pink); }
+  .wh.on svg { fill:var(--pink); }
+  .wh:active { transform:scale(.88); }
+  .wh.ib2 { position:static; width:34px; height:34px; }
+  .t3 .wh { width:28px; height:28px; right:5px; top:5px; } .t3 .wh svg { width:15px; height:15px; }
+  .wbtn { position:relative; }
+  .wbtn .dot { position:absolute; right:-4px; top:-4px; min-width:17px; height:17px; font-size:10px; padding:0 4px; }
+  .wbtn .dot[hidden] { display:none; }
+  .wfoot { display:flex; flex-direction:column; align-items:center; gap:10px; padding:26px 16px 0; }
+  .wfoot .pill { width:100%; min-height:50px; font-size:14.5px; }
+  body[data-r="wish"] .toast { bottom:calc(var(--tab-h) + 18px + env(safe-area-inset-bottom)); }
+
+  /* ===== 상품 상세 v3: 둥근 사진 + 사진 위 정보 ===== */
+  .shotwrap { padding:58px 14px 0; display:flex; justify-content:center; }
+  .shotbox { position:relative; width:100%; max-width:min(100%, 54vh); aspect-ratio:1/1; border-radius:20px; overflow:hidden; background:var(--soft); }
+  .shotbox .shots { height:100%; background:transparent; }
+  .shotbox .shots .ph { aspect-ratio:auto; height:100%; border-radius:0; }
+  @media (min-width:600px) { .shotbox .shots .ph { height:100%; } }
+  .shotbox .dots { position:absolute; left:0; right:0; bottom:auto; top:16px; padding:0; display:flex; justify-content:center; gap:5px; pointer-events:none; }
+  .shotbox .dots i { background:rgba(255,255,255,.45); } .shotbox .dots i.on { background:#fff; }
+  .shotbox .fov { padding-top:56px; }
+  h1.fnm { margin:0; font-weight:inherit; cursor:default; }
+  .shotbox .fnm b { font-size:16px; white-space:normal; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; }
+  .shotbox .fnm small { font-size:13px; color:#fff; font-weight:500; }
+  .shotbox .frec button { width:40px; height:50px; }
+  .dsheet .x { top:10px; right:12px; width:38px; height:38px; }
+  .dsheet .body { padding-top:14px; }
+
+  .toast { white-space:nowrap; }
+  body[data-r="detail"] .toast { bottom:calc(88px + env(safe-area-inset-bottom)); }
+  body[data-r="fit"] .toast { bottom:calc(76px + env(safe-area-inset-bottom)); }
+  .hact { gap:6px; }
+  @media (max-width:430px) { .inst span { display:none; } .inst { width:38px; height:38px; min-height:0; padding:0; justify-content:center; border-radius:50%; } }
+
+  /* 오시는 길 아래 백화점 행사 */
+  .vev { display:flex; flex-direction:column; gap:12px; padding-top:18px; border-top:1px solid var(--line); }
+  .vevh { display:flex; justify-content:space-between; align-items:center; }
+  .vevh b { font-size:16px; font-weight:600; }
+  .vev .chips, .vev .row { padding-left:0; padding-right:0; scroll-padding-inline:0; }
+  .vev .chips.evt { padding-top:0; padding-bottom:2px; }
+  .vev .row.evrow .evc { flex:0 0 calc((100% - 10px) / 1.6); }
+  @media (min-width:520px) { .vev .row.evrow .evc { flex-basis:calc((100% - 20px) / 2.5); } }
+  .vev .empty, .vev .evnone { margin:6px 0; }
+
+  /* 마우스를 댔을 때 크게 보기: 추천 코디는 조금 작게 + 품목·품명을 사진 위에 */
+  .zoom.sm { width:230px; }
+  .zinfo { position:absolute; left:0; right:0; bottom:0; display:flex; flex-direction:column; align-items:flex-start; gap:4px; padding:40px 12px 12px; background:linear-gradient(transparent, rgba(0,0,0,.78)); color:#fff; }
+  .zinfo b { font-size:14px; font-weight:500; line-height:1.4; }
+  .zinfo small { font-size:12px; color:#e2e2e6; }
+  .zoom.sm .zinfo b { font-size:13px; }
+
+  .bd { color:color-mix(in srgb, var(--c) 40%, #fff); }
+  .zinfo .bd, .fov .bd { color:#fff; background:color-mix(in srgb, var(--c) 75%, rgba(0,0,0,.3)); border-color:transparent; }
 </style>
 </head>
 <body>
@@ -607,9 +709,26 @@
   }
   function card(p, opt) {
     opt = opt || {};
-    return '<button class="card" data-p="' + esc(p.c) + '"><div class="ph">' + imgTag(p.img, 400, name(p)) + (opt.isNew && isNew(p) ? '<span class="nw">NEW</span>' : '') + '</div>' +
+    return '<button class="card" data-p="' + esc(p.c) + '"><div class="ph">' + imgTag(p.img, 400, name(p)) + (opt.isNew && isNew(p) ? '<span class="nw">NEW</span>' : '') + heart(p.c) + '</div>' +
       '<span class="cn">' + badge(p.it) + '<b>' + esc(name(p)) + '</b></span></button>';
   }
+  // ---------- 찜 (관심 상품, 이 기기에만 저장) ----------
+  var ICON_HEART = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg>';
+  function loadWish() { try { var v = JSON.parse(localStorage.getItem('dj_wish') || '[]'); return Array.isArray(v) ? v : []; } catch (e) { return []; } }
+  function isWish(c) { return loadWish().indexOf(c) >= 0; }
+  function heart(c, cls) { return '<span class="wh' + (cls ? ' ' + cls : '') + (isWish(c) ? ' on' : '') + '" role="button" tabindex="0" aria-label="찜하기" data-wish="' + esc(c) + '">' + ICON_HEART + '</span>'; }
+  function toggleWish(c) {
+    var w = loadWish(), i = w.indexOf(c), on = i < 0;
+    if (on) w.unshift(c); else w.splice(i, 1);
+    try { localStorage.setItem('dj_wish', JSON.stringify(w.slice(0, 200))); } catch (e) {}
+    [].forEach.call(document.querySelectorAll('[data-wish="' + c + '"]'), function (el) { el.classList.toggle('on', on); });
+    wishBadge();
+    toast(on ? '찜했어요 ♡' : '찜에서 뺐어요');
+    if (document.body.dataset.r === 'wish') renderWish();
+  }
+  function wishCount() { return loadWish().filter(function (c) { return byCode[c]; }).length; }
+  function wishBtn() { var n = wishCount(); return '<a class="icb wbtn" href="#/wish" aria-label="찜한 상품">' + ICON_HEART + '<i class="dot wdot"' + (n ? '' : ' hidden') + '>' + n + '</i></a>'; }
+  function wishBadge() { var n = wishCount(); [].forEach.call(document.querySelectorAll('.wdot'), function (d) { d.textContent = n; d.hidden = !n; }); }
   function atText(at) {
     var m = String(at || '').match(/^\d{4}-(\d{2})-(\d{2})(?:\s+(\d{2}:\d{2}))?/);
     return m ? (+m[1]) + '월 ' + (+m[2]) + '일' + (m[3] ? ' ' + m[3] : '') : '';
@@ -625,7 +744,7 @@
     if (!document.getElementById('content')) {
       app.innerHTML =
         '<div class="topwrap hcard"><header class="top"><div class="trow"><a class="brand hb" href="#/" aria-label="더블제이디 현대백화점 천호점"><span class="av"><img src="assets/store-sign.jpg" alt=""></span><span class="bt"><img src="assets/logo-white.png" alt="DOUBLEJD"><span>현대백화점 천호점 B1</span></span></a>' +
-        '<div class="hact"><button class="inst" id="inst" hidden>' + ICON_DL + '<span>앱 설치</span></button><a class="icb" href="#/search" aria-label="상품 검색">' + ICON_SEARCH + '</a></div></div></header></div>' +
+        '<div class="hact"><button class="inst" id="inst" hidden>' + ICON_DL + '<span>앱 설치</span></button>' + wishBtn() + '<a class="icb" href="#/search" aria-label="상품 검색">' + ICON_SEARCH + '</a></div></div></header></div>' +
         '<nav class="catbar" id="catbar" aria-label="품목"><div class="chips hs" id="cats"></div></nav>' +
         '<div id="hometop"></div>' +
         '<div class="box" id="bestbox"><div class="chips sub hs" id="subs"></div><div id="content"></div></div><div id="content2"></div>';
@@ -672,7 +791,7 @@
   function igDate(d) { var m = String(d || '').match(/^\d{4}-(\d{2})-(\d{2})/); return m ? (+m[1]) + '.' + (+m[2]) : ''; }
   function igSection() {
     if (!D.ig || !D.ig.length) return '';
-    return '<div class="box">' + secHead(secNo('ig'), 'INSTAGRAM', '더블제이디 천호점 소식', '<a class="evall" href="' + IG_HOME + '" target="_blank" rel="noopener">인스타 ›</a>') +
+    return '<div class="box">' + secHead(secNo('ig'), 'INSTAGRAM', '이야기', '<a class="evall" href="' + IG_HOME + '" target="_blank" rel="noopener">인스타 ›</a>') +
       '<div class="row hs igrow">' + D.ig.map(function (x) {
         return '<a class="igc" href="' + esc(x.u) + '" target="_blank" rel="noopener"><span class="ip">' + imgTag(x.id, 500, x.t || '천호점 인스타 게시물') + '<i class="ic">' + ICON_IG + '</i></span>' +
           '<b>' + (x.t ? esc(x.t) : '&nbsp;') + '</b><small>' + (igDate(x.d) || '&nbsp;') + '</small>' + '</a>';
@@ -686,10 +805,10 @@
     h += (news.length ? '<div class="row hs">' + news.map(function (p) { return card(p, { isNew: true }); }).join('') + '</div>' : empty('상품을 준비 중이에요.')) + '</div>' + igSection();
     var sets = homeSets(false);
     if (sets.length) {
-      h += '<div class="box">' + secHead(secNo('sty'), 'STYLING', '천호점 추천 코디', '<button class="pill sm" data-hroll="1">' + ICON_DICE + '랜덤</button>') +
+      h += '<div class="box">' + secHead(secNo('sty'), 'STYLING', '추천 코디', '<button class="pill sm" data-hroll="1">' + ICON_DICE + '랜덤</button>') +
         '<div class="hroll' + (st.hrolling ? ' rolling' : '') + '"><div class="svl hs home" id="hsets">' + sets.map(function (k) {
           var x = byCode[k[0]], y = byCode[k[1]];
-          return '<button class="sv" data-hset="' + esc(k[0] + '+' + k[1]) + '" aria-label="' + esc(name(x) + ' + ' + name(y)) + '"><span>' + imgTag(x.img, 300, '') + '</span><span>' + imgTag(y.img, 300, '') + '</span></button>';
+          return '<button class="sv" data-hset="' + esc(k[0] + '+' + k[1]) + '" aria-label="' + esc(name(x) + ' + ' + name(y)) + '"><span data-zc="' + esc(x.c) + '">' + imgTag(x.img, 300, '') + '</span><span data-zc="' + esc(y.c) + '">' + imgTag(y.img, 300, '') + '</span></button>';
         }).join('') + '</div>' + (st.hrolling ? '<div class="roll"><span>' + ICON_DICE + '</span></div>' : '') + '</div></div>';
     }
     h += '<div class="box">' + evSection() + '</div>';
@@ -720,7 +839,7 @@
     };
     if (pop.length) {
       h += '<div class="top3">' + pop.slice(0, 3).map(function (p, i) {
-        return '<button class="t3" data-p="' + esc(p.c) + '"><span class="ph">' + imgTag(p.img, 400, name(p)) + '<i class="rn">' + (i + 1) + '</i></span>' +
+        return '<button class="t3" data-p="' + esc(p.c) + '"><span class="ph">' + imgTag(p.img, 400, name(p)) + '<i class="rn">' + (i + 1) + '</i>' + heart(p.c) + '</span>' +
           '<span class="cn">' + badge(p.it) + '<b>' + esc(name(p)) + '</b></span>' + mv(p) + '</button>';
       }).join('') + '</div>';
       var rest = pop.slice(3, st.more ? 200 : LIMIT);
@@ -749,13 +868,16 @@
   var EV_GIFT = /\d+\s*만\s*원\s*이상/;
   function evSection() {
     var more = '<a class="evall" href="' + EV_PAGE + '" target="_blank" rel="noopener">더보기 ›</a>';
-    var head = secHead(secNo('ev'), 'EVENT', '천호점 행사 안내', more);
-    if (!EV) return head + '<div class="chips sub evt" style="visibility:hidden"><span class="sb">&nbsp;</span></div>' + evBox([], '천호점 행사를 불러오는 중…');
-    if (!EV.ok) return head + '<div style="padding:0 16px"><a class="pill" style="width:100%;min-height:48px" href="' + EV_PAGE + '" target="_blank" rel="noopener">천호점 행사 안내 보기</a></div>';
-    if (!EV.popup.length && !EV.gift.length) return head + '<p class="evnone">지금 진행 중인 행사가 없어요. <a href="' + EV_PAGE + '" target="_blank" rel="noopener">현대백화점 행사 보기 ›</a></p>';
+    var head = secHead(secNo('ev'), 'EVENT', '백화점 행사 안내', more);
+    return head + evBody();
+  }
+  function evBody() {
+    if (!EV) return '<div class="chips sub evt" style="visibility:hidden"><span class="sb">&nbsp;</span></div>' + evBox([], '백화점 행사를 불러오는 중…');
+    if (!EV.ok) return '<div style="padding:0 16px"><a class="pill" style="width:100%;min-height:48px" href="' + EV_PAGE + '" target="_blank" rel="noopener">현대백화점 천호점 행사 안내 보기</a></div>';
+    if (!EV.popup.length && !EV.gift.length) return '<p class="evnone">지금 진행 중인 행사가 없어요. <a href="' + EV_PAGE + '" target="_blank" rel="noopener">현대백화점 행사 보기 ›</a></p>';
     var tabs = [['popup', '팝업 스토어'], ['buy', '백화점카드 사은품'], ['gift', '사은행사 전체']];
     var list = st.ev === 'popup' ? EV.popup : (st.ev === 'gift' ? EV.gift : EV.gift.filter(function (x) { return EV_GIFT.test(x.t); }));
-    var h = head + '<div class="chips sub hs evt">' + tabs.map(function (t) { return '<button class="sb' + (st.ev === t[0] ? ' on' : '') + '" data-ev="' + t[0] + '">' + t[1] + '</button>'; }).join('') + '</div>';
+    var h = '<div class="chips sub hs evt">' + tabs.map(function (t) { return '<button class="sb' + (st.ev === t[0] ? ' on' : '') + '" data-ev="' + t[0] + '">' + t[1] + '</button>'; }).join('') + '</div>';
     h += evBox(list, st.ev === 'popup' ? '지금 진행 중인 팝업 스토어가 없어요.' : '지금 진행 중인 사은행사가 없어요.');
     return h;
   }
@@ -772,7 +894,9 @@
       .then(function (r) { return r.json(); })
       .then(function (d) { EV = d && d.ok ? d : { ok: false }; if (EV.ok) { EV.gift = EV.gift || []; EV.popup = EV.popup || []; } })
       .catch(function () { EV = { ok: false }; })
-      .then(function () { if (D && document.getElementById('hometop')) renderTop(); });
+      .then(function () { if (D && document.getElementById('hometop')) renderTop(); evVisit(); });
+  }
+  function evVisit() { var v = document.getElementById('vev'); if (v) v.innerHTML = evBody();
   }
 
   // ---------- 오시는 길 ----------
@@ -791,6 +915,7 @@
       '<div class="ask"><a class="pill" href="https://map.naver.com/p/search/' + q + '" target="_blank" rel="noopener">네이버 지도</a><a class="pill" href="https://map.kakao.com/?q=' + q + '" target="_blank" rel="noopener">카카오맵</a></div>' +
       '<div class="store"><img src="assets/store-card.jpg" alt="더블제이디 현대백화점 천호점 · 02-2225-8934">' +
       '<div class="ask"><a class="pill" href="tel:' + STORE.tel.replace(/-/g, '') + '">전화 문의</a><a class="pill blue" href="' + smsLink('[더블제이디 천호점 문의]\n') + '">문자 문의</a></div></div>' +
+      '<div class="vev"><div class="vevh"><b>백화점 행사 안내</b><a class="evall" href="' + EV_PAGE + '" target="_blank" rel="noopener">더보기 ›</a></div><div id="vev">' + evBody() + '</div></div>' +
       '<p class="meta">주차·교통 정보는 현대백화점 안내 기준이에요. <a href="https://www.ehyundai.com/newPortal/DP/WC/WC000000_V.do?branchCd=B00126000" target="_blank" rel="noopener">현대백화점 위치/주차 안내</a></p>' +
       '</div></div></div>';
     layer.innerHTML = h;
@@ -807,10 +932,14 @@
     var canFit = isTop(p) || isBot(p);
     var h = '<div class="ov" id="ov"><div class="sheet dsheet" role="dialog" aria-modal="true" aria-label="' + esc(name(p)) + '">';
     h += '<button class="x" id="close" aria-label="닫기"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>';
-    h += '<div class="shotwrap"><div class="shots hs" id="shots">' + (shots.length ? shots.map(function (id) { return '<div class="ph">' + imgTag(id, 1000, name(p)) + '</div>'; }).join('') : '<div class="ph">' + imgTag('') + '</div>') + '</div>';
-    if (shots.length > 1) h += '<div class="dots" id="dots">' + shots.map(function (_, i) { return '<i class="' + (i ? '' : 'on') + '"></i>'; }).join('') + '</div><span class="cnt" id="cnt">1 / ' + shots.length + '</span>';
-    h += '</div><div class="body">';
-    h += '<div class="dhead"><div class="meta">' + esc(p.c) + '</div><h1 class="title">' + badge(p.it) + '<span>' + esc(name(p)) + '</span></h1>' + (p.tag ? '<div class="price">' + won(p.tag) + '</div>' : '') + '</div>';
+    var links = recs(p, function () { return true; }, 8);
+    h += '<div class="shotwrap"><div class="shotbox"><div class="shots hs" id="shots">' + (shots.length ? shots.map(function (id) { return '<div class="ph">' + imgTag(id, 1000, name(p)) + '</div>'; }).join('') : '<div class="ph">' + imgTag('') + '</div>') + '</div>';
+    if (shots.length > 1) h += '<span class="fcnt" id="cnt">1 / ' + shots.length + '</span><div class="dots" id="dots">' + shots.map(function (_, i) { return '<i class="' + (i ? '' : 'on') + '"></i>'; }).join('') + '</div>';
+    h += '<div class="ftr">' + heart(p.c, 'ib2') + '</div>';
+    h += '<div class="fov"><h1 class="fnm">' + badge(p.it) + '<b>' + esc(name(p)) + '</b>' + (p.tag ? '<small>' + won(p.tag) + '</small>' : '') + '</h1>' +
+      (links.length ? '<div class="frec"><small>추천 조합</small><div>' + links.slice(0, 3).map(function (x) { return '<button data-p="' + esc(x.c) + '" aria-label="' + esc(name(x)) + '">' + imgTag(x.img, 160, name(x)) + '</button>'; }).join('') + '</div></div>' : '') + '</div>';
+    h += '</div></div><div class="body">';
+    h += '<div class="dhead"><div class="meta">품번 ' + esc(p.c) + (p.se ? ' · ' + esc(p.se) : '') + '</div></div>';
     var facts = (p.ro && p.ro <= 10 ? '<span class="fk rk">천호점 ' + p.ro + '위</span>' : '') + (p.ra && p.ra <= 10 ? '<span class="fk rk">전국 ' + p.ra + '위</span>' : '') +
       (p.fit ? '<span class="fk"><em>핏</em>' + esc(p.fit) + '</span>' : '') + (p.thick ? '<span class="fk"><em>두께감</em>' + esc(p.thick) + '</span>' : '');
     if (facts) h += '<div class="facts">' + facts + '</div>';
@@ -821,7 +950,6 @@
     if (rows) h += '<dl class="info">' + rows + '</dl>';
     if (/^https?:\/\//.test(p.url)) h += '<a class="pill" style="min-height:48px" href="' + esc(p.url) + '" target="_blank" rel="noopener">더현대하이에서 온라인 구매 ›</a>';
     h += '<a class="storerow" href="#/visit"><span class="av"><img src="assets/store-sign.jpg" alt=""></span><span class="sx"><b>천호점에서 바로 입어볼 수 있어요</b><small>지하1층 영스트리트 · 월–목 10:30–20:00 · 금–일 ~20:30</small></span>' + chev('r') + '</a>';
-    var links = recs(p, function () { return true; }, 8);
     if (links.length) h += '<div class="sub">천호점 추천 조합</div><div class="mini hs">' + links.map(function (x) { return card(x); }).join('') + '</div>';
     var same = D.items.filter(function (x) { return x.c !== p.c && x.it === p.it; }).sort(newOrder).slice(0, 8);
     if (same.length) h += '<div class="sub">다른 ' + esc(p.it) + '</div><div class="mini hs">' + same.map(function (x) { return card(x); }).join('') + '</div>';
@@ -898,39 +1026,37 @@
     var saved = loadSaved(), key = t.c + '+' + b.c, on = saved.indexOf(key) >= 0;
     function half(p, which, i, n, rec, recLabel, curOther) {
       var rolling = st.rolling === which || st.rolling === 'all';
-      var r = '<div class="recs">' + (rec.length ? '<small>' + recLabel + '</small>' : '') + rec.map(function (x) {
+      var r = rec.length ? '<div class="frec"><small>' + recLabel + '</small><div>' + rec.map(function (x) {
         return '<button data-rec="' + (which === 't' ? 'b' : 't') + ':' + esc(x.c) + '" class="' + (x.c === curOther ? 'on' : '') + '" aria-label="' + esc(name(x)) + '">' + imgTag(x.img, 160, name(x)) + '</button>';
-      }).join('') + '</div>';
-      return '<div class="half"><div class="hcol"><div class="stage' + (rolling ? ' rolling' : '') + '" data-half="' + which + '">' + imgTag(p.img, 900, name(p), 'main') +
-        '<button class="rnd" data-rnd="' + which + '">' + ICON_DICE + '랜덤</button><span class="cnt">' + (i + 1) + ' / ' + n + '</span>' +
-        '<button class="nav l" data-mv="' + which + ':-1" aria-label="이전">' + chev('l') + '</button>' +
-        '<button class="nav r" data-mv="' + which + ':1" aria-label="다음">' + chev('r') + '</button>' +
+      }).join('') + '</div></div>' : '';
+      return '<div class="fh"><button class="fnav" data-mv="' + which + ':-1" aria-label="이전">' + chev('l') + '</button>' +
+        '<div class="fbox stage' + (rolling ? ' rolling' : '') + '" data-half="' + which + '">' + imgTag(p.img, 900, name(p), 'main') +
+        '<span class="fcnt">' + (i + 1) + ' / ' + n + '</span>' +
+        '<div class="ftr">' + heart(p.c, 'ib2') + '<button class="ib2" data-rnd="' + which + '" aria-label="' + (which === 't' ? '상의' : '하의') + ' 랜덤">' + ICON_DICE + '</button>' +
+        '<a class="ib2" href="' + smsOne(p) + '" aria-label="이 상품 문의">' + ICON_MSG + '</a></div>' +
+        '<div class="fov"><button class="fnm" data-p="' + esc(p.c) + '">' + badge(p.it) + '<b>' + esc(name(p)) + '</b><small>상세보기 ›</small></button>' + r + '</div>' +
         (rolling ? '<div class="roll"><span>' + ICON_DICE + '</span></div>' : '') + '</div>' +
-        '<div class="lbrow"><button class="lb" data-p="' + esc(p.c) + '">' + nameLine(p) + '<small>상세보기 ›</small></button>' +
-        '<a class="ask1" href="' + smsOne(p) + '">' + ICON_MSG + '상품 문의</a></div></div>' + r + '</div>';
+        '<button class="fnav" data-mv="' + which + ':1" aria-label="다음">' + chev('r') + '</button></div>';
     }
-    var svl = saved.map(function (k) {
-      var a = k.split('+'), x = byCode[a[0]], y = byCode[a[1]];
-      if (!x || !y) return '';
-      return '<button class="sv' + (k === key ? ' on' : '') + '" data-load="' + esc(k) + '" aria-label="' + esc(name(x) + ' + ' + name(y)) + '"><span>' + imgTag(x.img, 160, '') + '</span><span>' + imgTag(y.img, 160, '') + '</span></button>';
-    }).join('');
-    layer.innerHTML = '<div class="fit"><div class="fitin">' + head(true) +
-      half(t, 't', st.fitT, L.tops.length, recs(t, isBot, 3), '추천<br>하의', b.c) +
-      half(b, 'b', st.fitB, L.bots.length, recs(b, isTop, 3), '추천<br>상의', t.c) +
-      '<div class="bar"><a class="pill sm" href="' + smsSet(t, b) + '">' + ICON_MSG + '문자 문의</a><button class="pill sm' + (on ? '' : ' blue') + '" id="save">' + (on ? '저장됨' : '코디 저장') + '</button></div>' +
-      '<div class="saved"><div class="hd"><b>저장한 코디' + (saved.length ? ' ' + saved.length : '') + '</b>' + (saved.length ? '<button id="clear">비우기</button>' : '') + '</div>' +
-      (svl ? '<div class="svl hs" id="svl">' + svl + '</div>' : '<div class="svempty">마음에 드는 조합을 저장하면 여기에 쌓여요.</div>') + '</div>' +
+    layer.innerHTML = '<div class="fit fit2"><div class="fitin">' +
+      '<div class="topwrap hcard"><header class="top"><div class="trow"><a class="brand hb" href="#/" aria-label="더블제이디 현대백화점 천호점 메인으로"><span class="av"><img src="assets/store-sign.jpg" alt=""></span><span class="bt"><img src="assets/logo-white.png" alt="DOUBLEJD"><span>현대백화점 천호점 B1</span></span></a>' +
+      '<div class="hact">' + wishBtn() + '<a class="icb" href="#/search" aria-label="상품 검색">' + ICON_SEARCH + '</a></div></div></header></div>' +
+      '<div class="fith2"><a class="ib" href="#/" aria-label="메인으로">' + chev('l') + '</a><b>코디해보기</b><button class="pill sm" data-rnd="all">' + ICON_DICE + '전체 랜덤</button></div>' +
+      '<div class="fstage">' +
+      half(t, 't', st.fitT, L.tops.length, recs(t, isBot, 3), '추천 하의', b.c) +
+      half(b, 'b', st.fitB, L.bots.length, recs(b, isTop, 3), '추천 상의', t.c) + '</div>' +
+      '<div class="fbar"><a class="pill" href="' + smsSet(t, b) + '">' + ICON_MSG + '문자 문의</a>' +
+      '<button class="pill' + (on ? '' : ' blue') + '" id="save">' + (on ? '저장됨 ✓' : '코디 저장') + '</button>' +
+      '<button class="pill svbtn" id="svopen">저장' + (saved.length ? ' <i class="dot">' + saved.length + '</i>' : '') + '</button></div>' +
       '</div></div>';
     document.body.style.overflow = 'hidden';
-    var sv = document.getElementById('svl');
-    if (sv && scrollEnd) sv.scrollLeft = sv.scrollWidth;
     document.getElementById('save').onclick = function () {
       var s = loadSaved(), i = s.indexOf(key), added = i < 0;
       if (added) s.push(key); else s.splice(i, 1);
-      storeSaved(s); renderFit(null, added);
+      storeSaved(s); renderFit();
+      toast(added ? '코디를 저장했어요' : '저장에서 뺐어요');
     };
-    var cl = document.getElementById('clear');
-    if (cl) cl.onclick = function () { if (confirm('저장한 코디 ' + loadSaved().length + '개를 모두 지울까요?')) { storeSaved([]); renderFit(); } };
+    document.getElementById('svopen').onclick = openSaved;
     [].forEach.call(layer.querySelectorAll('.stage'), function (el) {
       var x0 = null;
       el.addEventListener('touchstart', function (e) { x0 = e.touches[0].clientX; }, { passive: true });
@@ -940,6 +1066,27 @@
         if (Math.abs(dx) >= 40) move(el.dataset.half, dx < 0 ? 1 : -1);
       });
     });
+  }
+  // 저장한 코디: 상의 위·하의 아래로 세워서 보여 주는 시트
+  function openSaved() {
+    var saved = loadSaved().slice().reverse();
+    var cur = (function () { var L = fitLists(), t = L.tops[st.fitT], b = L.bots[st.fitB]; return t && b ? t.c + '+' + b.c : ''; })();
+    var items = saved.map(function (k) {
+      var a = k.split('+'), x = byCode[a[0]], y = byCode[a[1]];
+      if (!x || !y) return '';
+      return '<button class="sv2' + (k === cur ? ' on' : '') + '" data-load="' + esc(k) + '" aria-label="' + esc(name(x) + ' + ' + name(y)) + '"><span data-zc="' + esc(x.c) + '">' + imgTag(x.img, 240, '') + '</span><span data-zc="' + esc(y.c) + '">' + imgTag(y.img, 240, '') + '</span></button>';
+    }).join('');
+    var g = document.createElement('div'); g.className = 'guide svsheet';
+    g.innerHTML = '<div role="dialog" aria-modal="true" aria-label="저장한 코디"><div class="svh"><b>저장한 코디' + (saved.length ? ' ' + saved.length : '') + '</b>' + (saved.length ? '<button class="txtbtn" data-svclr="1">모두 지우기</button>' : '') + '</div>' +
+      (items ? '<div class="svgrid">' + items + '</div>' : '<p>마음에 드는 조합에서 [코디 저장]을 누르면 여기에 모여요.</p>') +
+      '<button class="pill" data-svclose="1" style="min-height:46px;margin-top:10px">닫기</button></div>';
+    g.addEventListener('click', function (e) {
+      var t = e.target;
+      if (t === g || t.closest('[data-svclose]')) { g.remove(); return; }
+      if (t.closest('[data-svclr]')) { if (confirm('저장한 코디 ' + loadSaved().length + '개를 모두 지울까요?')) { storeSaved([]); g.remove(); renderFit(); } return; }
+      if (t.closest('[data-load]')) setTimeout(function () { g.remove(); }, 0);
+    });
+    document.body.appendChild(g);
   }
   function move(which, d) { if (which === 't') st.fitT += d; else st.fitB += d; renderFit(); }
   function roll(which) {
@@ -1002,6 +1149,19 @@
       }).join('') + '</div>';
     }
     el.innerHTML = h;
+  }
+
+  // ---------- 찜한 상품 (#/wish) ----------
+  function renderWish() {
+    var layer = document.getElementById('layer');
+    var list = loadWish().map(function (c) { return byCode[c]; }).filter(Boolean);
+    var body = list.length ? '<div class="grid">' + list.map(function (p) { return card(p, { isNew: true }); }).join('') + '</div>' +
+        '<div class="wfoot"><a class="pill dark" href="' + smsLink('[더블제이디 천호점 문의]\n찜한 상품\n' + list.slice(0, 15).map(function (p) { return '· ' + name(p) + ' (' + p.c + ')'; }).join('\n') + '\n') + '">' + ICON_SMS + '찜한 상품 ' + list.length + '개 한 번에 문의</a>' +
+        '<button class="txtbtn" data-wclr="1">모두 지우기</button></div>'
+      : empty('마음에 드는 상품의 ♡를 누르면 여기에 모여요. 이 기기에만 저장돼요.');
+    layer.innerHTML = '<div class="fit srch"><div class="fitin"><div class="fith sh"><a class="ib" href="#/" aria-label="메인으로">' + chev('l') + '</a><b style="flex:1;font-size:16px;font-weight:600">찜한 상품' + (list.length ? ' ' + list.length : '') + '</b></div>' +
+      '<div class="sbody" id="wbody" style="padding-top:6px">' + body + '</div></div></div>';
+    document.body.style.overflow = 'hidden';
   }
 
   // ---------- 하단 탭 ----------
@@ -1385,22 +1545,25 @@
   function back() { if (history.length > 1 && location.hash.indexOf('#/p/') === 0) history.back(); else location.hash = '#/'; }
   function route() {
     var h = location.hash || '#/', m;
-    var r = h.indexOf('#/admin') === 0 ? 'admin' : h === '#/visit' ? 'visit' : h.indexOf('#/p/') === 0 ? 'detail' : h.indexOf('#/fit') === 0 ? 'fit' : h === '#/search' ? 'search' : 'home';
+    var r = h.indexOf('#/admin') === 0 ? 'admin' : h === '#/visit' ? 'visit' : h.indexOf('#/p/') === 0 ? 'detail' : h.indexOf('#/fit') === 0 ? 'fit' : h === '#/search' ? 'search' : h === '#/wish' ? 'wish' : 'home';
     document.body.dataset.r = r; markTab();
     if (r === 'admin') { if (h === '#/admin') A.edit = null; renderAdmin(); return; }
     if (!D) return;
     if (r === 'visit') { renderVisit(); return; }
     if (r === 'search') { renderSearch(); return; }
+    if (r === 'wish') { renderWish(); return; }
     if ((m = h.match(/^#\/p\/(J[A-Z]{3}\d{2}[0-9A-Z]\d{2})/))) { renderDetail(m[1]); return; }
     if ((m = h.match(/^#\/fit(?:\/(J[A-Z]{3}\d{2}[0-9A-Z]\d{2}(?:\+J[A-Z]{3}\d{2}[0-9A-Z]\d{2})?))?/))) { renderFit(m[1]); return; }
     document.getElementById('layer').innerHTML = '';
     document.body.style.overflow = '';
   }
   document.addEventListener('click', function (e) {
-    var t = e.target.closest('[data-p],[data-cat],[data-sub],[data-best],[data-more],[data-mv],[data-rnd],[data-rec],[data-load],[data-acat],[data-ahide],[data-aedit],[data-opt],[data-pk],[data-delph],[data-main],[data-addsz],[data-hset],[data-admhome],[data-ev],[data-hroll],[data-allnew],[data-sq],[data-sqdel],[data-sqclr],[data-ask]');
+    var t = e.target.closest('[data-p],[data-cat],[data-sub],[data-best],[data-more],[data-mv],[data-rnd],[data-rec],[data-load],[data-acat],[data-ahide],[data-aedit],[data-opt],[data-pk],[data-delph],[data-main],[data-addsz],[data-hset],[data-admhome],[data-ev],[data-hroll],[data-allnew],[data-sq],[data-sqdel],[data-sqclr],[data-ask],[data-wish],[data-wclr]');
     if (!t) return;
     var d = t.dataset;
-    if (d.ev) { st.ev = d.ev; renderTop(); return; }
+    if (d.ev) { st.ev = d.ev; renderTop(); evVisit(); return; }
+    if (d.wish) { e.preventDefault(); e.stopPropagation(); toggleWish(d.wish); return; }
+    if (d.wclr) { if (confirm('찜한 상품 ' + wishCount() + '개를 모두 지울까요?')) { try { localStorage.removeItem('dj_wish'); } catch (er) {} renderWish(); wishBadge(); [].forEach.call(document.querySelectorAll('.wh.on'), function (x) { x.classList.remove('on'); }); } return; }
     if (d.ask) { openAsk(); return; }
     if (d.sqclr) { try { localStorage.removeItem('dj_recent'); } catch (er) {} renderSearchBody(); return; }
     if (d.sqdel) { try { localStorage.setItem('dj_recent', JSON.stringify(loadRecent().filter(function (x) { return x !== d.sqdel; }))); } catch (er) {} renderSearchBody(); return; }
@@ -1435,16 +1598,17 @@
     if (d.delph !== undefined) { var gone = A.form.ph.splice(+d.delph, 1)[0]; if (gone === A.form.main) A.form.main = ''; renderEdit(); return; }
   });
   window.addEventListener('hashchange', route);
+  document.addEventListener('keydown', function (e) { var t = e.target; if ((e.key === 'Enter' || e.key === ' ') && t.dataset && t.dataset.wish) { e.preventDefault(); toggleWish(t.dataset.wish); } });
 
   // 작은 사진에 마우스를 대면 크게 보기 (마우스가 있는 PC에서만)
   (function () {
     if (!window.matchMedia || !matchMedia('(hover: hover) and (pointer: fine)').matches) return;
-    var SMALL = '.rr .th img, .row2 .th img, .phs img, .recs img, .sv img, .mini .ph img';   // 추천 고르기(.pick)는 사진이 커서 제외
+    var SMALL = '.rr .th img, .row2 .th img, .phs img, .recs img, .frec img, .sv img, .sv2 img, .mini .ph img';   // 추천 고르기(.pick)는 사진이 커서 제외
     var z = null;
     function hide() { if (z) { z.remove(); z = null; } }
     function place(e) {
       if (!z) return;
-      var w = 300, h = 400, x = e.clientX + 18, y = e.clientY - h / 2;
+      var w = z.offsetWidth || 300, h = z.offsetHeight || 400, x = e.clientX + 18, y = e.clientY - h / 2;
       if (x + w > innerWidth - 8) x = e.clientX - w - 18;
       y = Math.max(8, Math.min(innerHeight - h - 8, y));
       z.style.left = x + 'px'; z.style.top = y + 'px';
@@ -1453,8 +1617,12 @@
       var t = e.target;
       if (!(t.tagName === 'IMG' && t.matches(SMALL) && t.dataset.id)) return;
       hide();
-      z = document.createElement('div'); z.className = 'zoom';
-      z.innerHTML = '<img alt="" src="' + img(t.dataset.id, 800) + '">';
+      z = document.createElement('div'); z.className = 'zoom' + (t.closest('.sv, .sv2') ? ' sm' : '');
+      var zc = t.closest('[data-zc]') || t.closest('[data-p]') || t.closest('[data-rec]');
+      var code = zc ? (zc.dataset.zc || zc.dataset.p || String(zc.dataset.rec || '').split(':')[1]) : '';
+      var zp = code && byCode[code];
+      z.innerHTML = '<img alt="" src="' + img(t.dataset.id, 800) + '">' +
+        (zp ? '<div class="zinfo">' + badge(zp.it) + '<b>' + esc(name(zp)) + '</b>' + (zp.tag ? '<small>' + won(zp.tag) + '</small>' : '') + '</div>' : '');
       document.body.appendChild(z); place(e);
     });
     document.addEventListener('mousemove', place);
@@ -1477,7 +1645,7 @@
     var b = document.getElementById('inst'); if (!b) return;
     if (standalone()) { b.hidden = true; return; }
     b.hidden = false;
-    b.lastChild.textContent = IS_MOBILE ? '앱으로 설치' : '즐겨찾기';
+    b.lastChild.textContent = IS_MOBILE ? '앱으로 설치' : '즐겨찾기'; b.title = b.lastChild.textContent; b.setAttribute('aria-label', b.lastChild.textContent);
     b.onclick = function () {
       if (instEvt) { instEvt.prompt(); instEvt.userChoice.then(function () { instEvt = null; }); return; }
       var t, m;
