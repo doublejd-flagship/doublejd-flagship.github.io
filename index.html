@@ -643,6 +643,109 @@
 
   .bd { color:color-mix(in srgb, var(--c) 40%, #fff); }
   .zinfo .bd, .fov .bd { color:#fff; background:color-mix(in srgb, var(--c) 75%, rgba(0,0,0,.3)); border-color:transparent; }
+
+  /* =====================================================================
+     감도 v4 — 영문 디스플레이 제목·스티커·소식 띠·스토리·그레인·룩북·날씨
+     ===================================================================== */
+  @font-face { font-family:'DJDisplay'; src:url(assets/anton.woff) format('woff'); font-display:swap; }
+  body { font-variant-numeric:tabular-nums; }
+  /* 섹션 제목: 굵은 영문 + 작은 한글 */
+  .sec .sht { display:flex; flex-direction:column; gap:6px; min-width:0; }
+  .dsp { font-family:'DJDisplay', 'Pretendard Variable', sans-serif; font-size:30px; line-height:.92; letter-spacing:.005em; text-transform:uppercase; color:#f4f4f5; display:flex; align-items:center; flex-wrap:wrap; gap:8px; }
+  .ksub { margin:0; font-size:13px !important; font-weight:500 !important; color:var(--sub); letter-spacing:-.01em !important; }
+  .ksub em { font-style:normal; color:var(--pink); font-weight:600; margin-right:6px; font-size:11px; letter-spacing:.06em; }
+  .box .sec { padding-top:24px; padding-bottom:16px; }
+  .stk { display:inline-block; font-family:'DJDisplay', 'Pretendard Variable', sans-serif; font-size:12px; line-height:1; letter-spacing:.07em; background:#ffb800; color:#111; padding:5px 8px 4px; border-radius:4px; transform:rotate(-4deg); box-shadow:2px 2px 0 #000; white-space:nowrap; text-transform:uppercase; }
+  .stk.pink { background:var(--pink); color:#fff; }
+  /* 헤더 영업 표시 */
+  .open { display:inline-flex; align-items:center; gap:6px; font-size:11.5px; color:var(--sub); }
+  .open i { width:7px; height:7px; border-radius:50%; background:#6b6b72; flex:none; }
+  .open.on i { background:#3ddc84; box-shadow:0 0 0 3px rgba(61,220,132,.18); }
+  /* 흐르는 소식 띠 */
+  .ticker { margin:12px -6px 0; height:36px; background:var(--pink); color:#0d0d0f; overflow:hidden; transform:rotate(-1.6deg); display:flex; align-items:center; box-shadow:0 6px 18px rgba(0,0,0,.35); }
+  .ticker:empty { display:none; }
+  .tkin { display:flex; align-items:center; white-space:nowrap; animation:tick 38s linear infinite; will-change:transform; }
+  .ticker .tk { font-family:'DJDisplay', sans-serif; font-size:16px; letter-spacing:.06em; margin:0 10px 0 6px; }
+  .ticker b { font-size:13px; font-weight:700; letter-spacing:-.01em; }
+  .ticker i { font-style:normal; margin:0 8px; opacity:.6; }
+  .ticker .star { margin:0 14px; font-size:13px; }
+  @keyframes tick { from { transform:translateX(0); } to { transform:translateX(-50%); } }
+  /* 스토리 바로가기 */
+  .stories { display:flex; gap:14px; padding:18px 16px 4px; overflow-x:auto; }
+  .stories:empty { display:none; }
+  .sty { flex:none; width:66px; display:flex; flex-direction:column; align-items:center; gap:6px; background:none; border:0; padding:0; color:#e2e2e6; font-size:11px; cursor:pointer; }
+  .sty span:last-child { max-width:70px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; text-shadow:0 1px 6px rgba(0,0,0,.8); }
+  .ring { width:66px; height:66px; border-radius:50%; padding:2.5px; background:conic-gradient(from 200deg, var(--pink), #ffb800, #6cb4ff, var(--pink)); }
+  .sty.seen .ring { background:rgba(255,255,255,.22); }
+  .ring img { width:100%; height:100%; border-radius:50%; object-fit:cover; display:block; border:2.5px solid #0d0d0f; background:#1a1a1d; }
+  /* 날씨 */
+  .wxbox { padding-top:4px; }
+  .wxh { display:flex; align-items:center; gap:14px; padding:18px 16px 14px; }
+  .wxt { font-family:'DJDisplay', sans-serif; font-weight:400; font-size:40px; line-height:1; color:var(--blue); }
+  .wxh strong { display:block; font-size:14px; font-weight:600; }
+  .wxh span { display:block; font-size:12.5px; color:var(--sub); margin-top:3px; }
+  /* 카드 색상 점·사이즈 */
+  .sw { display:flex; align-items:center; flex-wrap:wrap; gap:4px; margin-top:1px; }
+  .sw i { width:10px; height:10px; border-radius:50%; border:1px solid rgba(255,255,255,.3); flex:none; }
+  .sw em { font-style:normal; font-size:10.5px; color:var(--mute); margin:0 4px 0 2px; }
+  .szs { display:inline-flex; gap:3px; }
+  .szs b { font-size:9.5px; font-weight:500; color:#c9c9cf; border:1px solid rgba(255,255,255,.18); border-radius:4px; padding:0 4px; line-height:15px; }
+  .mini .sw, .t3 .sw { display:none; }
+  /* 빈 화면 곰 */
+  .empty img.bearimg { filter:drop-shadow(0 4px 12px rgba(0,0,0,.5)); opacity:1; width:54px; height:auto; animation:bob 2.6s ease-in-out infinite; }
+  /* 필름 그레인 */
+  .grain { position:fixed; inset:0; z-index:55; pointer-events:none; opacity:.08; mix-blend-mode:overlay; background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)'/%3E%3C/svg%3E"); }
+  body[data-r="admin"] .grain { display:none; }
+  /* 곰돌이 뺑글뺑글 (랜덤) */
+  .roll.bear { background:rgba(13,13,15,.35); }
+  .roll.bear img { width:78px; height:auto; animation:bearspin .72s cubic-bezier(.3,.7,.4,1) both; filter:drop-shadow(0 6px 16px rgba(0,0,0,.6)); }
+  @keyframes bearspin { 0% { transform:scale(.3) rotate(-200deg); opacity:0; } 25% { opacity:1; } 70% { transform:scale(1.12) rotate(540deg); } 100% { transform:scale(1) rotate(720deg); } }
+  /* 찜 터지는 효과 */
+  .wh { overflow:visible; }
+  .wh.pop svg { animation:hpop .45s cubic-bezier(.3,1.6,.5,1); }
+  .wh.pop::after { content:''; position:absolute; inset:-6px; border-radius:50%; border:2px solid var(--pink); animation:hring .55s ease-out forwards; pointer-events:none; }
+  @keyframes hpop { 0% { transform:scale(.6); } 60% { transform:scale(1.35); } 100% { transform:scale(1); } }
+  @keyframes hring { from { transform:scale(.5); opacity:1; } to { transform:scale(1.6); opacity:0; } }
+  /* 화면 전환 */
+  .ov .sheet { animation:sheetup .32s cubic-bezier(.2,.8,.2,1); }
+  .fit, .look { animation:fadein .22s ease-out; }
+  @keyframes sheetup { from { transform:translateY(40px); opacity:.4; } to { transform:none; opacity:1; } }
+  @keyframes fadein { from { opacity:0; } to { opacity:1; } }
+  /* 룩북 스토리 */
+  .look { position:fixed; inset:0; z-index:30; background:#000; display:flex; justify-content:center; }
+  .lkimg { position:absolute; inset:0; max-width:560px; margin:0 auto; display:flex; flex-direction:column; gap:2px; }
+  .lkimg > div { flex:1; min-height:0; overflow:hidden; background:#111; }
+  .lkimg > div:first-child { flex:1.15; }
+  .lkimg img { width:100%; height:100%; object-fit:cover; display:block; }
+  .lkprog { position:absolute; top:calc(env(safe-area-inset-top) + 10px); left:12px; right:12px; max-width:536px; margin:0 auto; display:flex; gap:4px; z-index:3; }
+  .lkprog i { flex:1; height:2.5px; border-radius:2px; background:rgba(255,255,255,.3); overflow:hidden; }
+  .lkprog i.done em, .lkprog i.now em { display:block; height:100%; background:#fff; }
+  .lkprog i.now em { animation:lkfill 6s linear forwards; }
+  @keyframes lkfill { from { width:0; } to { width:100%; } }
+  .lkhd { position:absolute; top:calc(env(safe-area-inset-top) + 22px); left:12px; right:12px; max-width:536px; margin:0 auto; display:flex; align-items:center; gap:8px; z-index:3; font-size:12.5px; text-shadow:0 1px 6px rgba(0,0,0,.7); }
+  .lkhd .av { width:30px; height:30px; border-radius:50%; overflow:hidden; border:1px solid rgba(255,255,255,.4); flex:none; }
+  .lkhd .av img { width:100%; height:100%; object-fit:cover; }
+  .lkhd b { font-weight:600; } .lkhd small { color:#d0d0d6; }
+  .lkx { margin-left:auto; width:36px; height:36px; border-radius:50%; border:0; background:rgba(0,0,0,.4); color:#fff; font-size:15px; cursor:pointer; }
+  .lknav { position:absolute; top:70px; bottom:42%; z-index:2; background:none; border:0; cursor:pointer; }
+  .lknav.l { left:0; width:32%; } .lknav.r { right:0; width:68%; }
+  .lkb { position:absolute; left:0; right:0; bottom:0; max-width:560px; margin:0 auto; z-index:3; padding:90px 16px calc(18px + env(safe-area-inset-bottom)); background:linear-gradient(transparent, rgba(0,0,0,.6) 30%, rgba(0,0,0,.92)); }
+  .lkttl { font-family:'DJDisplay', sans-serif; font-size:44px; line-height:.92; margin-top:12px; letter-spacing:.01em; }
+  .lkit { display:flex; gap:8px; margin-top:16px; }
+  .lkit button { flex:1; min-width:0; display:flex; align-items:center; gap:8px; padding:6px; border-radius:12px; border:0; background:rgba(255,255,255,.12); -webkit-backdrop-filter:blur(10px); backdrop-filter:blur(10px); color:#fff; text-align:left; cursor:pointer; }
+  .lkit button > span:first-child { width:40px; height:50px; border-radius:7px; overflow:hidden; flex:none; background:#222; }
+  .lkit img { width:100%; height:100%; object-fit:cover; display:block; }
+  .lkit button > span:last-child { display:flex; flex-direction:column; align-items:flex-start; gap:3px; min-width:0; }
+  .lkit b { font-size:12.5px; font-weight:500; max-width:100%; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .lkbtn { display:flex; gap:8px; margin-top:12px; }
+  .lkbtn .pill { flex:1; min-height:48px; font-size:14px; font-weight:500; background:rgba(0,0,0,.35); border-color:rgba(255,255,255,.35); }
+  .lkbtn .pill.light { flex:1.5; background:#fff; color:#0d0d0f; border-color:#fff; }
+  body[data-r="look"] .tabbar { display:none; }
+  /* 움직임 줄이기 */
+  @media (prefers-reduced-motion: reduce) {
+    .tkin { animation:none; } .roll.bear img, .wh.pop svg, .wh.pop::after, .ov .sheet, .fit, .look, .empty img.bearimg { animation:none !important; }
+    .lkprog i.now em { animation:none; width:100%; }
+  }
 </style>
 </head>
 <body>
@@ -710,7 +813,7 @@
   function card(p, opt) {
     opt = opt || {};
     return '<button class="card" data-p="' + esc(p.c) + '"><div class="ph">' + imgTag(p.img, 400, name(p)) + (opt.isNew && isNew(p) ? '<span class="nw">NEW</span>' : '') + heart(p.c) + '</div>' +
-      '<span class="cn">' + badge(p.it) + '<b>' + esc(name(p)) + '</b></span></button>';
+      '<span class="cn">' + badge(p.it) + '<b>' + esc(name(p)) + '</b>' + swatches(p) + '</span></button>';
   }
   // ---------- 찜 (관심 상품, 이 기기에만 저장) ----------
   var ICON_HEART = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg>';
@@ -721,7 +824,7 @@
     var w = loadWish(), i = w.indexOf(c), on = i < 0;
     if (on) w.unshift(c); else w.splice(i, 1);
     try { localStorage.setItem('dj_wish', JSON.stringify(w.slice(0, 200))); } catch (e) {}
-    [].forEach.call(document.querySelectorAll('[data-wish="' + c + '"]'), function (el) { el.classList.toggle('on', on); });
+    [].forEach.call(document.querySelectorAll('[data-wish="' + c + '"]'), function (el) { el.classList.toggle('on', on); el.classList.remove('pop'); if (on) { void el.offsetWidth; el.classList.add('pop'); setTimeout(function () { el.classList.remove('pop'); }, 700); } });
     wishBadge();
     toast(on ? '찜했어요 ♡' : '찜에서 뺐어요');
     if (document.body.dataset.r === 'wish') renderWish();
@@ -733,24 +836,49 @@
     var m = String(at || '').match(/^\d{4}-(\d{2})-(\d{2})(?:\s+(\d{2}:\d{2}))?/);
     return m ? (+m[1]) + '월 ' + (+m[2]) + '일' + (m[3] ? ' ' + m[3] : '') : '';
   }
-  function secHead(no, en, title, right) {
-    return '<div class="sec"><div><div class="lab"><em>' + no + '</em>' + en + '</div><h2>' + title + '</h2></div>' + (right || '') + '</div>';
+  function secHead(no, en, title, right, sticker) {
+    return '<div class="sec"><div class="sht"><div class="dsp">' + en + (sticker ? ' <span class="stk">' + sticker + '</span>' : '') + '</div><h2 class="ksub"><em>' + no + '</em>' + title + '</h2></div>' + (right || '') + '</div>';
   }
-  function empty(msg) { return '<div class="empty"><img src="assets/bear-line.png" alt="">' + msg + '</div>'; }
+  function empty(msg) { return '<div class="empty"><img class="bearimg" src="assets/bear-cap.png" alt="">' + msg + '</div>'; }
+
+  // ---------- 영업 중 표시 (월~목 10:30–20:00, 금~일 10:30–20:30) ----------
+  function openInfo() {
+    var n = new Date(), d = n.getDay(), m = n.getHours() * 60 + n.getMinutes();
+    var close = (d === 5 || d === 6 || d === 0) ? 20 * 60 + 30 : 20 * 60, open = 10 * 60 + 30;
+    var hm = function (x) { return Math.floor(x / 60) + ':' + ('0' + x % 60).slice(-2); };
+    if (m < open) return { on: false, t: '영업 전 · 10:30 오픈' };
+    if (m >= close) return { on: false, t: '영업 종료 · 내일 10:30 오픈' };
+    return { on: true, t: '영업 중 · ' + hm(close) + '까지' };
+  }
+  function openLine() { var o = openInfo(); return '<span class="open' + (o.on ? ' on' : '') + '"><i></i>' + o.t + ' · B1</span>'; }
+
+  // ---------- 색상 점 · 재고 사이즈 ----------
+  var COLOR_HEX = { BK:'#151515', WH:'#f4f4f4', IV:'#efe8d8', CR:'#eadfc6', BE:'#cdb48e', CA:'#b07b45', BR:'#6b4428', KH:'#6b6b3a', GN:'#3f7a46', BG:'#1f7f78', SB:'#9cc7e6', BL:'#3a63b8', NV:'#1f2a4a', PU:'#7b4fa8', PK:'#f0a3c0', RE:'#c8323a', WI:'#6e1f2b', OR:'#e8772e', YE:'#f2cf3a', MU:'#c9a227', GY:'#9a9a9a', LG:'#c9c9c9', CH:'#4a4a4f', MG:'#b8b8b8' };
+  var SIZE_ORDER = ['XS', 'S', 'M', 'L', 'XL', '2X', '3X', 'F', 'N'];
+  function swatches(p) {
+    var cols = (p.col || []).filter(function (c) { return c.s && c.s.length; });
+    if (!cols.length) return '';
+    var sz = {}; cols.forEach(function (c) { c.s.forEach(function (x) { sz[x] = 1; }); });
+    var szs = Object.keys(sz).sort(function (a, b) { return SIZE_ORDER.indexOf(a) - SIZE_ORDER.indexOf(b); });
+    return '<span class="sw">' + cols.slice(0, 5).map(function (c) { return '<i style="background:' + (COLOR_HEX[c.c] || '#888') + '" title="' + esc(c.n || c.c) + '"></i>'; }).join('') +
+      '<em>' + cols.length + '색</em>' + (szs.length ? '<span class="szs">' + szs.map(function (x) { return '<b>' + esc(x) + '</b>'; }).join('') + '</span>' : '') + '</span>';
+  }
 
   // ---------- 메인 ----------
   function renderHome() {
     var app = document.getElementById('app');
     if (!document.getElementById('content')) {
       app.innerHTML =
-        '<div class="topwrap hcard"><header class="top"><div class="trow"><a class="brand hb" href="#/" aria-label="더블제이디 현대백화점 천호점"><span class="av"><img src="assets/store-sign.jpg" alt=""></span><span class="bt"><img src="assets/logo-white.png" alt="DOUBLEJD"><span>현대백화점 천호점 B1</span></span></a>' +
+        '<div class="topwrap hcard"><header class="top"><div class="trow"><a class="brand hb" href="#/" aria-label="더블제이디 현대백화점 천호점"><span class="av"><img src="assets/store-sign.jpg" alt=""></span><span class="bt"><img src="assets/logo-white.png" alt="DOUBLEJD">' + openLine() + '</span></a>' +
         '<div class="hact"><button class="inst" id="inst" hidden>' + ICON_DL + '<span>앱 설치</span></button>' + wishBtn() + '<a class="icb" href="#/search" aria-label="상품 검색">' + ICON_SEARCH + '</a></div></div></header></div>' +
+        '<div class="ticker" id="ticker" aria-hidden="true"></div><div class="stories hs" id="stories"></div>' +
         '<div id="hometop"></div>' +
         '<nav class="catbar" id="catbar" aria-label="품목"><div class="chips hs" id="cats"></div></nav>' +
         '<div class="box" id="bestbox"><div class="chips sub hs" id="subs"></div><div id="content"></div></div><div id="content2"></div>';
     }
-    renderTop(); renderFilters(); renderContent(); instInit(); tabBar();
+    renderTop(); renderFilters(); renderContent(); instInit(); tabBar(); loadWx(); grain();
   }
+  function grain() { if (document.getElementById('grain')) return; var g = document.createElement('div'); g.id = 'grain'; g.className = 'grain'; g.setAttribute('aria-hidden', 'true'); document.body.appendChild(g); }
   function renderFilters() {
     document.getElementById('cats').innerHTML = CATS.map(function (c) { return '<button class="pill' + (c === st.cat ? ' on' : '') + '" data-cat="' + c + '">' + c + '</button>'; }).join('');
     var subs = document.getElementById('subs');
@@ -791,7 +919,7 @@
   function igDate(d) { var m = String(d || '').match(/^\d{4}-(\d{2})-(\d{2})/); return m ? (+m[1]) + '.' + (+m[2]) : ''; }
   function igSection() {
     if (!D.ig || !D.ig.length) return '';
-    return '<div class="box">' + secHead(secNo('ig'), 'INSTAGRAM', '이야기', '<a class="evall" href="' + IG_HOME + '" target="_blank" rel="noopener">인스타 ›</a>') +
+    return '<div class="box" id="igbox">' + secHead(secNo('ig'), 'INSTAGRAM', '이야기', '<a class="evall" href="' + IG_HOME + '" target="_blank" rel="noopener">인스타 ›</a>') +
       '<div class="row hs igrow">' + D.ig.map(function (x) {
         return '<a class="igc" href="' + esc(x.u) + '" target="_blank" rel="noopener"><span class="ip">' + imgTag(x.id, 500, x.t || '천호점 인스타 게시물') + '<i class="ic">' + ICON_IG + '</i></span>' +
           '<b>' + (x.t ? esc(x.t) : '&nbsp;') + '</b><small>' + (igDate(x.d) || '&nbsp;') + '</small>' + '</a>';
@@ -799,25 +927,27 @@
   }
   function renderTop() {
     var el = document.getElementById('hometop'); if (!el) return;
-    var h = '';
+    var h = wxSection();
     var news = D.items.slice().sort(newOrder).slice(0, 16);
-    h += '<div class="box">' + secHead(secNo('new'), 'NEW ARRIVALS', '신상품', '<button class="evall" data-allnew="1">전체 보기 ›</button>');
+    var drop = lastDrop();
+    h += '<div class="box" id="newbox">' + secHead(secNo('new'), 'NEW ARRIVALS', '신상품', '<button class="evall" data-allnew="1">전체 보기 ›</button>', drop ? 'DROP ' + drop : '');
     h += (news.length ? '<div class="row hs">' + news.map(function (p) { return card(p, { isNew: true }); }).join('') + '</div>' : empty('상품을 준비 중이에요.')) + '</div>' + igSection();
     var sets = homeSets(false);
     if (sets.length) {
-      h += '<div class="box">' + secHead(secNo('sty'), 'STYLING', '추천 코디', '<button class="pill sm" data-hroll="1">' + ICON_DICE + '랜덤</button>') +
+      h += '<div class="box" id="stybox">' + secHead(secNo('sty'), 'STYLING', '추천 코디', '<button class="pill sm" data-hroll="1">' + ICON_DICE + '랜덤</button>', D.homeAll.length + ' LOOKS') +
         '<div class="hroll' + (st.hrolling ? ' rolling' : '') + '"><div class="svl hs home" id="hsets">' + sets.map(function (k) {
           var x = byCode[k[0]], y = byCode[k[1]];
           return '<button class="sv" data-hset="' + esc(k[0] + '+' + k[1]) + '" aria-label="' + esc(name(x) + ' + ' + name(y)) + '"><span data-zc="' + esc(x.c) + '">' + imgTag(x.img, 300, '') + '</span><span data-zc="' + esc(y.c) + '">' + imgTag(y.img, 300, '') + '</span></button>';
-        }).join('') + '</div>' + (st.hrolling ? '<div class="roll"><span>' + ICON_DICE + '</span></div>' : '') + '</div></div>';
+        }).join('') + '</div>' + (st.hrolling ? ROLL_BEAR : '') + '</div></div>';
     }
-    h += '<div class="box">' + evSection() + '</div>';
+    h += '<div class="box" id="evbox">' + evSection() + '</div>';
     el.innerHTML = h;
+    renderTicker(); renderStories();
   }
   function hroll() {
     if (st.hrolling) return;
     st.hrolling = true; renderTop();
-    setTimeout(function () { st.hrolling = false; homeSets(true); renderTop(); var x = document.getElementById('hsets'); if (x) x.scrollLeft = 0; }, 650);
+    setTimeout(function () { st.hrolling = false; homeSets(true); renderTop(); var x = document.getElementById('hsets'); if (x) x.scrollLeft = 0; }, 720);
   }
 
   function renderContent() {
@@ -829,7 +959,7 @@
     var LIMIT = 10;
     h += secHead(secNo('best'), 'BEST', (label ? esc(label) + ' ' : '') + '인기 순위', '<div class="seg" role="group" aria-label="순위 기준">' +
          '<button data-best="own" class="' + (st.best === 'own' ? 'on' : '') + '">천호점</button>' +
-         '<button data-best="all" class="' + (st.best === 'all' ? 'on' : '') + '">전국</button></div>');
+         '<button data-best="all" class="' + (st.best === 'all' ? 'on' : '') + '">전국</button></div>', (function () { var m = String((D.rankAt || {})[st.best === 'own' ? 'own' : 'all'] || '').match(/-(\d{2})-(\d{2})$/); return m ? 'WEEK ~' + (+m[1]) + '.' + m[2] : ''; })());
     var pk = st.best === 'own' ? 'po' : 'pa', hasPrev = D.rankAt && D.rankAt[st.best === 'own' ? 'prevOwn' : 'prevAll'];
     var mv = function (p) {
       if (!hasPrev) return '';
@@ -899,7 +1029,7 @@
       .catch(function () { EV = { ok: false }; })
       .then(function () { if (D && document.getElementById('hometop')) renderTop(); evVisit(); });
   }
-  function evVisit() { var v = document.getElementById('vev'); if (v) v.innerHTML = evBody();
+  function evVisit() { renderTicker(); renderStories(); var v = document.getElementById('vev'); if (v) v.innerHTML = evBody();
   }
 
   // ---------- 오시는 길 ----------
@@ -951,7 +1081,6 @@
     if (p.size) rows += '<div><dt>' + (isTop(p) ? '추천 사이즈' : '사이즈 정보') + '</dt><dd>' + esc(p.size) + '</dd></div>';
     if (p.col && p.col.length) rows += '<div><dt>색상·사이즈</dt><dd class="colors">' + p.col.map(function (c) { return '<span style="color:var(--ink)">' + esc(c.n || c.c) + ' <span>' + esc(c.s.join(' · ') || '문의') + '</span></span>'; }).join('') + '</dd></div>';
     if (rows) h += '<dl class="info">' + rows + '</dl>';
-    if (/^https?:\/\//.test(p.url)) h += '<a class="pill" style="min-height:48px" href="' + esc(p.url) + '" target="_blank" rel="noopener">더현대하이에서 온라인 구매 ›</a>';
     h += '<a class="storerow" href="#/visit"><span class="av"><img src="assets/store-sign.jpg" alt=""></span><span class="sx"><b>천호점에서 바로 입어볼 수 있어요</b><small>지하1층 영스트리트 · 월–목 10:30–20:00 · 금–일 ~20:30</small></span>' + chev('r') + '</a>';
     if (links.length) h += '<div class="sub">천호점 추천 조합</div><div class="mini hs">' + links.map(function (x) { return card(x); }).join('') + '</div>';
     var same = D.items.filter(function (x) { return x.c !== p.c && x.it === p.it; }).sort(newOrder).slice(0, 8);
@@ -1003,6 +1132,7 @@
   var ICON_SMS = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 5h16v11H9l-5 4z"/></svg>';
   var ICON_DL = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg>';
   var ICON_DICE = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="3"/><circle cx="9" cy="9" r="1.2" fill="currentColor"/><circle cx="15" cy="15" r="1.2" fill="currentColor"/><circle cx="15" cy="9" r="1.2" fill="currentColor"/><circle cx="9" cy="15" r="1.2" fill="currentColor"/></svg>';
+  var ROLL_BEAR = '<div class="roll bear" aria-hidden="true"><img src="assets/bear-cap.png" alt=""></div>';
   var ICON_SEARCH = '<svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/></svg>';
   var TAB_ICON = {
     home: '<path d="M4 11l8-7 8 7v9h-5v-6H9v6H4z"/>',
@@ -1038,11 +1168,11 @@
         '<div class="ftr">' + heart(p.c, 'ib2') + '<button class="ib2" data-rnd="' + which + '" aria-label="' + (which === 't' ? '상의' : '하의') + ' 랜덤">' + ICON_DICE + '</button>' +
         '<a class="ib2" href="' + smsOne(p) + '" aria-label="이 상품 문의">' + ICON_MSG + '</a></div>' +
         '<div class="fov"><button class="fnm" data-p="' + esc(p.c) + '">' + badge(p.it) + '<b>' + esc(name(p)) + '</b><small>상세보기 ›</small></button>' + r + '</div>' +
-        (rolling ? '<div class="roll"><span>' + ICON_DICE + '</span></div>' : '') + '</div>' +
+        (rolling ? ROLL_BEAR : '') + '</div>' +
         '<button class="fnav" data-mv="' + which + ':1" aria-label="다음">' + chev('r') + '</button></div>';
     }
     layer.innerHTML = '<div class="fit fit2"><div class="fitin">' +
-      '<div class="topwrap hcard"><header class="top"><div class="trow"><a class="brand hb" href="#/" aria-label="더블제이디 현대백화점 천호점 메인으로"><span class="av"><img src="assets/store-sign.jpg" alt=""></span><span class="bt"><img src="assets/logo-white.png" alt="DOUBLEJD"><span>현대백화점 천호점 B1</span></span></a>' +
+      '<div class="topwrap hcard"><header class="top"><div class="trow"><a class="brand hb" href="#/" aria-label="더블제이디 현대백화점 천호점 메인으로"><span class="av"><img src="assets/store-sign.jpg" alt=""></span><span class="bt"><img src="assets/logo-white.png" alt="DOUBLEJD">' + openLine() + '</span></a>' +
       '<div class="hact">' + wishBtn() + '<a class="icb" href="#/search" aria-label="상품 검색">' + ICON_SEARCH + '</a></div></div></header></div>' +
       '<div class="fith2"><a class="ib" href="#/" aria-label="메인으로">' + chev('l') + '</a><b>코디해보기</b><button class="pill sm" data-rnd="all">' + ICON_DICE + '전체 랜덤</button></div>' +
       '<div class="fstage">' +
@@ -1102,9 +1232,122 @@
       if (which !== 't') st.fitB = pickNew(L.bots.length, st.fitB);
       st.rolling = '';
       if ((location.hash || '').indexOf('#/fit') === 0) renderFit();   // 그새 다른 화면으로 갔으면 그리지 않음
-    }, 650);
+    }, 720);
   }
   function chev(dir) { return '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="' + (dir === 'l' ? 'M15 5l-7 7 7 7' : 'M9 5l7 7-7 7') + '"/></svg>'; }
+
+  // ---------- 드롭 · 소식 띠 · 스토리 ----------
+  function lastDrop() {
+    var d = '';
+    D.items.forEach(function (p) { if (/^\d{4}-\d{2}-\d{2}$/.test(p.seen) && p.seen > d) d = p.seen; });
+    if (!d) return '';
+    var a = d.split('-');
+    return (+a[1]) + '.' + a[2];
+  }
+  function renderTicker() {
+    var el = document.getElementById('ticker'); if (!el) return;
+    var parts = [], drop = lastDrop();
+    var news = D.items.filter(isNew).sort(newOrder).slice(0, 5);
+    if (news.length) parts.push('<span class="tk">NEW DROP' + (drop ? ' ' + drop : '') + '</span>' + news.map(function (p) { return '<b>' + esc(name(p)) + '</b>'; }).join('<i>·</i>'));
+    var top = D.items.filter(function (p) { return p.ro === 1; })[0];
+    if (top) parts.push('<span class="tk">BEST</span><b>천호점 1위 ' + esc(name(top)) + '</b>');
+    if (EV && EV.ok) {
+      var g = (EV.gift || []).filter(function (x) { return EV_GIFT.test(x.t); })[0], pp = (EV.popup || [])[0];
+      if (g) parts.push('<span class="tk">GIFT</span><b>' + esc(g.t) + '</b>');
+      if (pp) parts.push('<span class="tk">POP-UP</span><b>' + esc(pp.t) + '</b>');
+    }
+    var o = openInfo();
+    parts.push('<span class="tk">' + (o.on ? 'OPEN NOW' : 'OPEN 10:30') + '</span><b>현대백화점 천호점 B1 · ' + o.t + '</b>');
+    var line = parts.join('<span class="star">★</span>') + '<span class="star">★</span>';
+    el.innerHTML = '<div class="tkin">' + line + line + '</div>';
+  }
+  function seenMap() { try { return JSON.parse(localStorage.getItem('dj_seen') || '{}') || {}; } catch (e) { return {}; } }
+  function markSeen(k) { var m = seenMap(); m[k] = 1; try { localStorage.setItem('dj_seen', JSON.stringify(m)); } catch (e) {} }
+  function storyList() {
+    var out = [], news = D.items.slice().sort(newOrder).filter(function (p) { return p.img; });
+    if (news.length) out.push({ k: 'new:' + lastDrop(), a: 'new', t: '신상', img: img(news[0].img, 200) });
+    var sets = homeSets(false);
+    if (sets.length) out.push({ k: 'look:' + D.homeAll.length, a: 'look', t: '추천 코디', img: img(byCode[sets[0][0]].img, 200) });
+    if (D.ig && D.ig.length) out.push({ k: 'ig:' + D.ig[0].u, a: 'ig', t: '이야기', img: img(D.ig[0].id, 200) });
+    var ev = EV && EV.ok ? ((EV.popup || [])[0] || (EV.gift || [])[0]) : null;
+    if (ev) out.push({ k: 'ev:' + ev.t, a: 'ev', t: '행사', img: ev.img });
+    var best = D.items.filter(function (p) { return p.ro > 0 && p.img; }).sort(function (a, b) { return a.ro - b.ro; })[0];
+    if (best) out.push({ k: 'best:' + best.c, a: 'best', t: '이번 주 1위', img: img(best.img, 200) });
+    out.push({ k: 'visit', a: 'visit', t: '매장', img: 'assets/store-card.jpg' });
+    return out;
+  }
+  function renderStories() {
+    var el = document.getElementById('stories'); if (!el) return;
+    var seen = seenMap();
+    el.innerHTML = storyList().map(function (x) {
+      return '<button class="sty' + (seen[x.k] ? ' seen' : '') + '" data-story="' + esc(x.a) + '" data-sk="' + esc(x.k) + '"><span class="ring"><img src="' + esc(x.img) + '" alt="" loading="lazy"></span><span>' + esc(x.t) + '</span></button>';
+    }).join('');
+  }
+  function openStory(a, k) {
+    markSeen(k); renderStories();
+    if (a === 'look') { location.hash = '#/look/0'; return; }
+    if (a === 'visit') { location.hash = '#/visit'; return; }
+    if (a === 'best') { st.cat = '전체'; st.sub = ''; st.best = 'own'; renderFilters(); renderContent(); }
+    var id = { 'new': 'newbox', ig: 'igbox', ev: 'evbox', best: 'bestbox' }[a], el = id && document.getElementById(id);
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  // ---------- 날씨 맞춤 추천 (open-meteo, 3시간마다) ----------
+  var WX = null;
+  var WX_TXT = function (c) { return c === 0 ? '맑음' : c <= 3 ? '구름' : c <= 48 ? '안개' : c <= 67 ? '비' : c <= 77 ? '눈' : c <= 82 ? '소나기' : c <= 86 ? '눈' : '뇌우'; };
+  function loadWx() {
+    var c = null;
+    try { c = JSON.parse(localStorage.getItem('dj_wx') || 'null'); } catch (e) {}
+    if (c && Date.now() - c.t < 3 * 3600 * 1000) { WX = c; return; }
+    fetch('https://api.open-meteo.com/v1/forecast?latitude=37.5387&longitude=127.1236&current=temperature_2m,weather_code&daily=temperature_2m_max,temperature_2m_min&timezone=Asia%2FSeoul&forecast_days=1')
+      .then(function (r) { return r.json(); })
+      .then(function (d) {
+        if (!d || !d.current) return;
+        WX = { t: Date.now(), temp: Math.round(d.current.temperature_2m), code: d.current.weather_code, lo: Math.round(d.daily.temperature_2m_min[0]), hi: Math.round(d.daily.temperature_2m_max[0]) };
+        try { localStorage.setItem('dj_wx', JSON.stringify(WX)); } catch (e) {}
+        if (document.getElementById('hometop')) renderTop();
+      }).catch(function () {});
+  }
+  function wxPick() {
+    if (!WX) return null;
+    var t = WX.temp, msg, want;
+    var has = function (p, list) { return list.indexOf(p.it) >= 0; }, th = function (p, list) { return list.indexOf(p.thick) >= 0; };
+    if (t <= 4) { msg = '많이 추워요 · 기모·패딩 위주로 골라봤어요'; want = function (p) { return th(p, ['기모', '약기모', '두꺼움', '도톰']) || has(p, ['패딩', '점퍼', '코트', '자켓', '베스트', '집업후드', '후드', '니트', '가디건']); }; }
+    else if (t <= 11) { msg = '쌀쌀해요 · 후드·니트로 레이어드 해보세요'; want = function (p) { return has(p, ['후드', '집업후드', '니트', '맨투맨', '가디건', '자켓']) || th(p, ['도톰', '약기모']); }; }
+    else if (t <= 19) { msg = '선선해요 · 맨투맨이나 셔츠 하나면 딱'; want = function (p) { return has(p, ['맨투맨', '긴팔', '긴팔셔츠', '가디건', '후드']); }; }
+    else if (t <= 25) { msg = '따뜻해요 · 가벼운 긴팔·셔츠 추천'; want = function (p) { return has(p, ['긴팔', '긴팔셔츠', '반팔']) || th(p, ['얇음']); }; }
+    else { msg = '더워요 · 반팔·반바지로 시원하게'; want = function (p) { return has(p, ['반팔', '반바지']) || th(p, ['얇음']); }; }
+    var list = D.items.filter(function (p) { return p.img && want(p); }).sort(function (a, b) { return (a.ro || 999) - (b.ro || 999) || newOrder(a, b); }).slice(0, 10);
+    return list.length >= 3 ? { msg: msg, list: list } : null;
+  }
+  function wxSection() {
+    var w = wxPick(); if (!w) return '';
+    return '<div class="box wxbox" id="wxbox"><div class="wxh"><b class="wxt">' + WX.temp + '°</b><div><strong>오늘 천호동 ' + WX_TXT(WX.code) + ' · ' + WX.lo + '° / ' + WX.hi + '°</strong><span>' + w.msg + '</span></div></div>' +
+      '<div class="row hs">' + w.list.map(function (p) { return card(p); }).join('') + '</div></div>';
+  }
+
+  // ---------- 룩북 스토리 (#/look/N) ----------
+  var lookTimer = 0;
+  var LOOK_MS = 6000;
+  function renderLook(i) {
+    clearTimeout(lookTimer);
+    var sets = homeSets(false).slice(0, 12), layer = document.getElementById('layer');
+    if (!sets.length) { location.replace('#/'); return; }
+    i = Math.max(0, Math.min(sets.length - 1, i | 0));
+    var x = byCode[sets[i][0]], y = byCode[sets[i][1]], key = x.c + '+' + y.c, saved = loadSaved().indexOf(key) >= 0;
+    var no = ('0' + (i + 1)).slice(-2);
+    layer.innerHTML = '<div class="look" id="look">' +
+      '<div class="lkimg"><div>' + imgTag(x.img, 900, name(x)) + '</div><div>' + imgTag(y.img, 900, name(y)) + '</div></div>' +
+      '<div class="lkprog">' + sets.map(function (_, k) { return '<i class="' + (k < i ? 'done' : k === i ? 'now' : '') + '"><em></em></i>'; }).join('') + '</div>' +
+      '<div class="lkhd"><span class="av"><img src="assets/store-sign.jpg" alt=""></span><b>천호점 추천 코디</b><small>' + (i + 1) + ' / ' + sets.length + '</small><button class="lkx" data-lkclose="1" aria-label="닫기">✕</button></div>' +
+      '<button class="lknav l" data-lk="' + (i - 1) + '" aria-label="이전 코디"></button><button class="lknav r" data-lk="' + (i + 1) + '" aria-label="다음 코디"></button>' +
+      '<div class="lkb"><span class="stk pink">LOOK ' + no + '</span><div class="lkttl">DOUBLEJD<br>CHEONHO</div>' +
+      '<div class="lkit">' + [x, y].map(function (p) { return '<button data-p="' + esc(p.c) + '"><span>' + imgTag(p.img, 160, '') + '</span><span>' + badge(p.it) + '<b>' + esc(name(p)) + '</b></span></button>'; }).join('') + '</div>' +
+      '<div class="lkbtn"><button class="pill" data-lksave="' + esc(key) + '">' + (saved ? '저장됨 ✓' : '♡ 코디 저장') + '</button><a class="pill light" href="#/fit/' + esc(key) + '">코디해보기에서 보기</a></div></div></div>';
+    document.body.style.overflow = 'hidden';
+    if (!REDUCE) lookTimer = setTimeout(function () { if (location.hash === '#/look/' + i) { if (i + 1 < sets.length) location.replace('#/look/' + (i + 1)); else location.replace('#/'); } }, LOOK_MS);
+  }
+  var REDUCE = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   // ---------- 찾기 (#/search) ----------
   function loadRecent() { try { var v = JSON.parse(localStorage.getItem('dj_recent') || '[]'); return Array.isArray(v) ? v : []; } catch (e) { return []; } }
@@ -1417,7 +1660,6 @@
       '<div class="fld"><label>핏</label>' + opt('fit', bottom ? ['슬림', '레귤러', '세미와이드', '와이드', '벌룬'] : ['레귤러', '세미 오버', '오버', '루즈', '반크롭', '크롭']) + '<input id="f_fit" value="' + esc(f.fit) + '" placeholder="직접 쓰기 (예: 어깨 드롭 오버핏)"></div>' +
       '<div class="fld"><label>두께감</label>' + opt('thick', ['얇음', '보통', '도톰', '두꺼움', '약기모', '기모']) + '<input id="f_thick" value="' + esc(f.thick) + '"></div>' +
       sizeHtml +
-      '<div class="fld"><label for="f_url">현대백화점 온라인 링크</label><input id="f_url" type="url" value="' + esc(f.url) + '" placeholder="https://"></div>' +
       '<div class="fld"><label>사진 (대표 사진이 목록·코디에 쓰여요)</label>' + photoHtml + ask +
       '<label class="pill" style="min-height:44px;cursor:pointer">사진 찍기 / 고르기<input id="f_ph" type="file" accept="image/*" multiple style="display:none"></label>' +
       '<div class="drop" id="drop" tabindex="0">여기를 누르고 붙여넣기(Ctrl+V) · 사진을 끌어다 놓기</div>' +
@@ -1429,7 +1671,7 @@
     layer.innerHTML = h;
     document.getElementById('admscroll').scrollTop = y;
     var sync = function () {
-      ['rename', 'intro', 'fit', 'thick', 'size', 'url', 'memo'].forEach(function (k) { var el = document.getElementById('f_' + k); if (el) f[k] = el.value; });
+      ['rename', 'intro', 'fit', 'thick', 'size', 'memo'].forEach(function (k) { var el = document.getElementById('f_' + k); if (el) f[k] = el.value; });
       layer.querySelectorAll('[data-szw]').forEach(function (el) { (f.sz[el.dataset.szw] = f.sz[el.dataset.szw] || {}).w = el.value.trim(); });
       layer.querySelectorAll('[data-szl]').forEach(function (el) { (f.sz[el.dataset.szl] = f.sz[el.dataset.szl] || {}).l = el.value.trim(); });
     };
@@ -1458,7 +1700,7 @@
     document.getElementById('esave').onclick = function () {
       sync(); if (A.busy) return;
       A.busy = true; renderEdit();
-      var payload = { rename: f.rename.trim(), intro: f.intro.trim(), fit: f.fit.trim(), thick: f.thick.trim(), size: SZ_MODE[sizeMode(p)] ? buildSize(f, sizeMode(p)) : f.size.trim(), url: f.url.trim(), link: f.link, ph: f.ph, hide: f.hide, main: f.main && f.main !== p.img ? f.main : '' };
+      var payload = { rename: f.rename.trim(), intro: f.intro.trim(), fit: f.fit.trim(), thick: f.thick.trim(), size: SZ_MODE[sizeMode(p)] ? buildSize(f, sizeMode(p)) : f.size.trim(), link: f.link, ph: f.ph, hide: f.hide, main: f.main && f.main !== p.img ? f.main : '' };
       var before = (p.link || []).slice();
       post({ op: 'hpedit', code: p.c, f: payload }).then(function () {
         Object.assign(p, payload);
@@ -1548,25 +1790,31 @@
   function back() { if (history.length > 1 && location.hash.indexOf('#/p/') === 0) history.back(); else location.hash = '#/'; }
   function route() {
     var h = location.hash || '#/', m;
-    var r = h.indexOf('#/admin') === 0 ? 'admin' : h === '#/visit' ? 'visit' : h.indexOf('#/p/') === 0 ? 'detail' : h.indexOf('#/fit') === 0 ? 'fit' : h === '#/search' ? 'search' : h === '#/wish' ? 'wish' : 'home';
+    var r = h.indexOf('#/admin') === 0 ? 'admin' : h === '#/visit' ? 'visit' : h.indexOf('#/p/') === 0 ? 'detail' : h.indexOf('#/fit') === 0 ? 'fit' : h === '#/search' ? 'search' : h === '#/wish' ? 'wish' : h.indexOf('#/look') === 0 ? 'look' : 'home';
     document.body.dataset.r = r; markTab();
     if (r === 'admin') { if (h === '#/admin') A.edit = null; renderAdmin(); return; }
     if (!D) return;
     if (r === 'visit') { renderVisit(); return; }
     if (r === 'search') { renderSearch(); return; }
     if (r === 'wish') { renderWish(); return; }
+    if (r === 'look') { renderLook(+(h.split('/')[2] || 0)); return; }
+    clearTimeout(lookTimer);
     if ((m = h.match(/^#\/p\/(J[A-Z]{3}\d{2}[0-9A-Z]\d{2})/))) { renderDetail(m[1]); return; }
     if ((m = h.match(/^#\/fit(?:\/(J[A-Z]{3}\d{2}[0-9A-Z]\d{2}(?:\+J[A-Z]{3}\d{2}[0-9A-Z]\d{2})?))?/))) { renderFit(m[1]); return; }
     document.getElementById('layer').innerHTML = '';
     document.body.style.overflow = '';
   }
   document.addEventListener('click', function (e) {
-    var t = e.target.closest('[data-p],[data-cat],[data-sub],[data-best],[data-more],[data-mv],[data-rnd],[data-rec],[data-load],[data-acat],[data-ahide],[data-aedit],[data-opt],[data-pk],[data-delph],[data-main],[data-addsz],[data-hset],[data-admhome],[data-ev],[data-hroll],[data-allnew],[data-sq],[data-sqdel],[data-sqclr],[data-ask],[data-wish],[data-wclr]');
+    var t = e.target.closest('[data-p],[data-cat],[data-sub],[data-best],[data-more],[data-mv],[data-rnd],[data-rec],[data-load],[data-acat],[data-ahide],[data-aedit],[data-opt],[data-pk],[data-delph],[data-main],[data-addsz],[data-hset],[data-admhome],[data-ev],[data-hroll],[data-allnew],[data-sq],[data-sqdel],[data-sqclr],[data-ask],[data-wish],[data-wclr],[data-story],[data-lk],[data-lkclose],[data-lksave]');
     if (!t) return;
     var d = t.dataset;
     if (d.ev) { st.ev = d.ev; renderTop(); evVisit(); return; }
     if (d.wish) { e.preventDefault(); e.stopPropagation(); toggleWish(d.wish); return; }
     if (d.wclr) { if (confirm('찜한 상품 ' + wishCount() + '개를 모두 지울까요?')) { try { localStorage.removeItem('dj_wish'); } catch (er) {} renderWish(); wishBadge(); [].forEach.call(document.querySelectorAll('.wh.on'), function (x) { x.classList.remove('on'); }); } return; }
+    if (d.story) { openStory(d.story, d.sk); return; }
+    if (d.lk !== undefined) { var nl = +d.lk, ns = homeSets(false).slice(0, 12).length; if (nl < 0) nl = 0; if (nl >= ns) { location.replace('#/'); return; } location.replace('#/look/' + nl); return; }
+    if (d.lkclose) { location.replace('#/'); return; }
+    if (d.lksave) { var sv = loadSaved(), si = sv.indexOf(d.lksave); if (si < 0) sv.push(d.lksave); else sv.splice(si, 1); storeSaved(sv); toast(si < 0 ? '코디를 저장했어요' : '저장에서 뺐어요'); renderLook(+(location.hash.split('/')[2] || 0)); return; }
     if (d.ask) { openAsk(); return; }
     if (d.sqclr) { try { localStorage.removeItem('dj_recent'); } catch (er) {} renderSearchBody(); return; }
     if (d.sqdel) { try { localStorage.setItem('dj_recent', JSON.stringify(loadRecent().filter(function (x) { return x !== d.sqdel; }))); } catch (er) {} renderSearchBody(); return; }
