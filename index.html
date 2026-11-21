@@ -746,6 +746,58 @@
     .tkin { animation:none; } .roll.bear img, .wh.pop svg, .wh.pop::after, .ov .sheet, .fit, .look, .empty img.bearimg { animation:none !important; }
     .lkprog i.now em { animation:none; width:100%; }
   }
+
+  /* ===== v5 다듬기 ===== */
+  .cn b { min-height:0; }
+  .cn .sw { margin-top:0; }
+  .sw i { width:11px; height:11px; }
+  /* 헤더: 로고 + FLAGSHIP* + 현대백화점 천호점 */
+  .hb .bt { gap:3px; }
+  .lgrow { display:flex; align-items:center; gap:7px; }
+  .fsk { font-style:normal; font-family:'DJDisplay', sans-serif; font-size:10.5px; letter-spacing:.08em; background:#ffb800; color:#111; padding:3px 5px 2px; border-radius:3px; transform:rotate(-6deg); box-shadow:1.5px 1.5px 0 #000; line-height:1; }
+  .hstore { font-size:14.5px; font-weight:700; color:#fff; letter-spacing:-.02em; margin-top:3px; }
+  .hcard .open { font-size:11px; }
+  .dsp { font-size:28px; }
+  .wxlab { font-family:'DJDisplay', 'Pretendard Variable', sans-serif; font-size:13px; letter-spacing:.08em; color:var(--pink); padding:18px 16px 0; }
+  .wxh { padding-top:8px; }
+  /* 인기: 순위 변동은 숫자 옆, 문의·찜 버튼 */
+  .t3 .rn { display:flex; align-items:flex-end; gap:5px; }
+  .rn .mv { font-style:normal; font-size:10px; letter-spacing:0; text-shadow:none; background:rgba(0,0,0,.6); padding:2px 5px; border-radius:6px; margin-bottom:3px; font-family:'Pretendard Variable', sans-serif; font-weight:700; }
+  .rn .mv.eq { display:none; }
+  .rn .mv.new { border:0; background:var(--pink); color:#fff; }
+  .askp { display:inline-flex; align-items:center; gap:5px; align-self:flex-start; font-size:11.5px; font-weight:500; color:#d8d8dd; border:1px solid var(--stroke); border-radius:14px; padding:5px 10px; cursor:pointer; }
+  .askp svg { width:13px; height:13px; }
+  .askp:hover { border-color:rgba(255,255,255,.4); }
+  .rr .no { display:flex; flex-direction:column; align-items:center; gap:4px; width:30px; flex:none; }
+  .rr .no .mv { font-size:10px; }
+  .rr .no .mv.new { padding:0 3px; font-size:8.5px; }
+  .rr .rx { gap:5px; }
+  .ract { display:flex; align-items:center; gap:6px; flex:none; }
+  .wh.rh { position:static; width:36px; height:36px; background:rgba(255,255,255,.05); border:1px solid var(--stroke); -webkit-backdrop-filter:none; backdrop-filter:none; }
+  .askp.ic { width:36px; height:36px; padding:0; justify-content:center; border-radius:50%; background:rgba(255,255,255,.05); }
+  .askp.ic svg { width:16px; height:16px; }
+  /* 룩북: 사진을 덜 채우고 잘리지 않게(흐린 배경 위에 전체 사진) */
+  .lkimg { padding:calc(env(safe-area-inset-top) + 66px) 16px 296px; gap:10px; }
+  .lkimg > div, .lkimg > div:first-child { flex:1; position:relative; border-radius:18px; background:#111; }
+  .lkbg { position:absolute; inset:-30px; background-size:cover; background-position:center; filter:blur(26px) brightness(.55) saturate(1.1); }
+  .lkimg img { position:relative; object-fit:contain; }
+  .lkb { padding-top:28px; background:linear-gradient(transparent, rgba(0,0,0,.85) 22%, #000); }
+  .lkttl { font-size:30px; margin-top:10px; }
+  .lkttl span { color:var(--pink); }
+  .lknav { bottom:300px; }
+
+  .hb { gap:10px; }
+  .hb .av { width:38px; height:38px; }
+  .hb .bt img, .lgrow img { height:13px; }
+  .fsk { font-size:9.5px; }
+  .hact { gap:5px; }
+  .icb { width:34px; height:34px; }
+  .icb svg { width:17px; height:17px; }
+  @media (max-width:430px) { .inst { width:34px; height:34px; } }
+  .t3 .cn { flex:1; }
+  .sw i[style*="#151515"] { border-color:rgba(255,255,255,.55); }
+  @media (max-width:420px) { .hcard .inst { display:none !important; } }
+  @media (max-width:380px) { .hb { gap:8px; } .hb .av { width:32px; height:32px; } .lgrow img { height:12px; } .fsk { font-size:8.5px; } .hcard header.top { padding-left:12px; padding-right:12px; } }
 </style>
 </head>
 <body>
@@ -842,12 +894,20 @@
   function empty(msg) { return '<div class="empty"><img class="bearimg" src="assets/bear-cap.png" alt="">' + msg + '</div>'; }
 
   // ---------- 영업 중 표시 (월~목 10:30–20:00, 금~일 10:30–20:30) ----------
+  //  백화점 달력(EV.cal: closed 휴점일 / ext 연장영업 분)이 있으면 그대로 따르고, 없으면 요일 규칙
+  function ymd(dt) { return dt.getFullYear() + ('0' + (dt.getMonth() + 1)).slice(-2) + ('0' + dt.getDate()).slice(-2); }
   function openInfo() {
-    var n = new Date(), d = n.getDay(), m = n.getHours() * 60 + n.getMinutes();
-    var close = (d === 5 || d === 6 || d === 0) ? 20 * 60 + 30 : 20 * 60, open = 10 * 60 + 30;
+    var n = new Date(), d = n.getDay(), m = n.getHours() * 60 + n.getMinutes(), today = ymd(n);
+    var tm = new Date(n.getTime() + 86400000), cal = EV && EV.ok && EV.cal ? EV.cal : null;
+    var closedDay = function (k) { return !!(cal && cal.closed && cal.closed.indexOf(k) >= 0); };
+    var open = 10 * 60 + 30, close = 20 * 60;
+    if (cal && cal.ext && cal.ext[today] != null) close += cal.ext[today];
+    else if (d === 5 || d === 6 || d === 0) close += 30;
     var hm = function (x) { return Math.floor(x / 60) + ':' + ('0' + x % 60).slice(-2); };
+    var next = closedDay(ymd(tm)) ? '내일 휴점' : '내일 10:30 오픈';
+    if (closedDay(today)) return { on: false, t: '오늘 백화점 휴점일 · ' + next };
     if (m < open) return { on: false, t: '영업 전 · 10:30 오픈' };
-    if (m >= close) return { on: false, t: '영업 종료 · 내일 10:30 오픈' };
+    if (m >= close) return { on: false, t: '영업 종료 · ' + next };
     return { on: true, t: '영업 중 · ' + hm(close) + '까지' };
   }
   function openLine() { var o = openInfo(); return '<span class="open' + (o.on ? ' on' : '') + '"><i></i>' + o.t + ' · B1</span>'; }
@@ -860,8 +920,7 @@
     if (!cols.length) return '';
     var sz = {}; cols.forEach(function (c) { c.s.forEach(function (x) { sz[x] = 1; }); });
     var szs = Object.keys(sz).sort(function (a, b) { return SIZE_ORDER.indexOf(a) - SIZE_ORDER.indexOf(b); });
-    return '<span class="sw">' + cols.slice(0, 5).map(function (c) { return '<i style="background:' + (COLOR_HEX[c.c] || '#888') + '" title="' + esc(c.n || c.c) + '"></i>'; }).join('') +
-      '<em>' + cols.length + '색</em>' + (szs.length ? '<span class="szs">' + szs.map(function (x) { return '<b>' + esc(x) + '</b>'; }).join('') + '</span>' : '') + '</span>';
+    return '<span class="sw" aria-label="색상 ' + cols.length + '가지">' + cols.slice(0, 6).map(function (c) { return '<i style="background:' + (COLOR_HEX[c.c] || '#888') + '" title="' + esc(c.n || c.c) + '"></i>'; }).join('') + '</span>';
   }
 
   // ---------- 메인 ----------
@@ -869,12 +928,12 @@
     var app = document.getElementById('app');
     if (!document.getElementById('content')) {
       app.innerHTML =
-        '<div class="topwrap hcard"><header class="top"><div class="trow"><a class="brand hb" href="#/" aria-label="더블제이디 현대백화점 천호점"><span class="av"><img src="assets/store-sign.jpg" alt=""></span><span class="bt"><img src="assets/logo-white.png" alt="DOUBLEJD">' + openLine() + '</span></a>' +
+        '<div class="topwrap hcard"><header class="top"><div class="trow"><a class="brand hb" href="#/" aria-label="더블제이디 현대백화점 천호점"><span class="av"><img src="assets/store-sign.jpg" alt=""></span><span class="bt"><span class="lgrow"><img src="assets/logo-white.png" alt="DOUBLEJD"><i class="fsk">FLAGSHIP*</i></span><b class="hstore">현대백화점 천호점</b>' + openLine() + '</span></a>' +
         '<div class="hact"><button class="inst" id="inst" hidden>' + ICON_DL + '<span>앱 설치</span></button>' + wishBtn() + '<a class="icb" href="#/search" aria-label="상품 검색">' + ICON_SEARCH + '</a></div></div></header></div>' +
         '<div class="ticker" id="ticker" aria-hidden="true"></div><div class="stories hs" id="stories"></div>' +
         '<div id="hometop"></div>' +
         '<nav class="catbar" id="catbar" aria-label="품목"><div class="chips hs" id="cats"></div></nav>' +
-        '<div class="box" id="bestbox"><div class="chips sub hs" id="subs"></div><div id="content"></div></div><div id="content2"></div>';
+        '<div class="box" id="bestbox"><div class="chips sub hs" id="subs"></div><div id="content"></div></div><div id="hometop2"></div><div id="content2"></div>';
     }
     renderTop(); renderFilters(); renderContent(); instInit(); tabBar(); loadWx(); grain();
   }
@@ -907,10 +966,10 @@
   }
   // 섹션 번호: 있는 섹션만 차례로 01, 02, …
   function secNo(key) {
-    var ks = ['new'];
-    if (D.ig && D.ig.length) ks.push('ig');
+    var ks = ['new', 'best'];
     if (homeSets(false).length) ks.push('sty');
-    ks.push('ev', 'best', 'all');
+    if (D.ig && D.ig.length) ks.push('ig');
+    ks.push('ev', 'all');
     var i = ks.indexOf(key) + 1;
     return (i < 10 ? '0' : '') + i;
   }
@@ -919,7 +978,7 @@
   function igDate(d) { var m = String(d || '').match(/^\d{4}-(\d{2})-(\d{2})/); return m ? (+m[1]) + '.' + (+m[2]) : ''; }
   function igSection() {
     if (!D.ig || !D.ig.length) return '';
-    return '<div class="box" id="igbox">' + secHead(secNo('ig'), 'INSTAGRAM', '이야기', '<a class="evall" href="' + IG_HOME + '" target="_blank" rel="noopener">인스타 ›</a>') +
+    return '<div class="box" id="igbox">' + secHead(secNo('ig'), 'SHOW-OFF ZONE', '자랑', '<a class="evall" href="' + IG_HOME + '" target="_blank" rel="noopener">인스타 ›</a>') +
       '<div class="row hs igrow">' + D.ig.map(function (x) {
         return '<a class="igc" href="' + esc(x.u) + '" target="_blank" rel="noopener"><span class="ip">' + imgTag(x.id, 500, x.t || '천호점 인스타 게시물') + '<i class="ic">' + ICON_IG + '</i></span>' +
           '<b>' + (x.t ? esc(x.t) : '&nbsp;') + '</b><small>' + (igDate(x.d) || '&nbsp;') + '</small>' + '</a>';
@@ -930,18 +989,19 @@
     var h = wxSection();
     var news = D.items.slice().sort(newOrder).slice(0, 16);
     var drop = lastDrop();
-    h += '<div class="box" id="newbox">' + secHead(secNo('new'), 'NEW ARRIVALS', '신상품', '<button class="evall" data-allnew="1">전체 보기 ›</button>', drop ? 'DROP ' + drop : '');
-    h += (news.length ? '<div class="row hs">' + news.map(function (p) { return card(p, { isNew: true }); }).join('') + '</div>' : empty('상품을 준비 중이에요.')) + '</div>' + igSection();
+    h += '<div class="box" id="newbox">' + secHead(secNo('new'), 'FRESH DROP', '신상품', '<button class="evall" data-allnew="1">전체 보기 ›</button>', drop ? 'DROP ' + drop : '');
+    h += (news.length ? '<div class="row hs">' + news.map(function (p) { return card(p, { isNew: true }); }).join('') + '</div>' : empty('상품을 준비 중이에요.')) + '</div>';
+    el.innerHTML = h; h = '';
     var sets = homeSets(false);
     if (sets.length) {
-      h += '<div class="box" id="stybox">' + secHead(secNo('sty'), 'STYLING', '추천 코디', '<button class="pill sm" data-hroll="1">' + ICON_DICE + '랜덤</button>', D.homeAll.length + ' LOOKS') +
+      h += '<div class="box" id="stybox">' + secHead(secNo('sty'), 'FLAGSHIP* STYLING', '추천 코디', '<button class="pill sm" data-hroll="1">' + ICON_DICE + '랜덤</button>', D.homeAll.length + ' LOOKS') +
         '<div class="hroll' + (st.hrolling ? ' rolling' : '') + '"><div class="svl hs home" id="hsets">' + sets.map(function (k) {
           var x = byCode[k[0]], y = byCode[k[1]];
           return '<button class="sv" data-hset="' + esc(k[0] + '+' + k[1]) + '" aria-label="' + esc(name(x) + ' + ' + name(y)) + '"><span data-zc="' + esc(x.c) + '">' + imgTag(x.img, 300, '') + '</span><span data-zc="' + esc(y.c) + '">' + imgTag(y.img, 300, '') + '</span></button>';
         }).join('') + '</div>' + (st.hrolling ? ROLL_BEAR : '') + '</div></div>';
     }
-    h += '<div class="box" id="evbox">' + evSection() + '</div>';
-    el.innerHTML = h;
+    h += igSection() + '<div class="box" id="evbox">' + evSection() + '</div>';
+    var el2 = document.getElementById('hometop2'); if (el2) el2.innerHTML = h;
     renderTicker(); renderStories();
   }
   function hroll() {
@@ -957,7 +1017,7 @@
     var rk = st.best === 'own' ? 'ro' : 'ra';
     var pop = items.filter(function (p) { return p[rk] > 0; }).sort(function (a, b) { return a[rk] - b[rk]; });
     var LIMIT = 10;
-    h += secHead(secNo('best'), 'BEST', (label ? esc(label) + ' ' : '') + '인기 순위', '<div class="seg" role="group" aria-label="순위 기준">' +
+    h += secHead(secNo('best'), 'HOT IN CHEONHO', (label ? esc(label) + ' ' : '') + '인기', '<div class="seg" role="group" aria-label="순위 기준">' +
          '<button data-best="own" class="' + (st.best === 'own' ? 'on' : '') + '">천호점</button>' +
          '<button data-best="all" class="' + (st.best === 'all' ? 'on' : '') + '">전국</button></div>', (function () { var m = String((D.rankAt || {})[st.best === 'own' ? 'own' : 'all'] || '').match(/-(\d{2})-(\d{2})$/); return m ? 'WEEK ~' + (+m[1]) + '.' + m[2] : ''; })());
     var pk = st.best === 'own' ? 'po' : 'pa', hasPrev = D.rankAt && D.rankAt[st.best === 'own' ? 'prevOwn' : 'prevAll'];
@@ -969,23 +1029,23 @@
     };
     if (pop.length) {
       h += '<div class="top3">' + pop.slice(0, 3).map(function (p, i) {
-        return '<button class="t3" data-p="' + esc(p.c) + '"><span class="ph">' + imgTag(p.img, 400, name(p)) + '<i class="rn">' + (i + 1) + '</i>' + heart(p.c) + '</span>' +
-          '<span class="cn">' + badge(p.it) + '<b>' + esc(name(p)) + '</b></span>' + mv(p) + '</button>';
+        return '<button class="t3" data-p="' + esc(p.c) + '"><span class="ph">' + imgTag(p.img, 400, name(p)) + '<i class="rn">' + (i + 1) + mv(p) + '</i>' + heart(p.c) + '</span>' +
+          '<span class="cn">' + badge(p.it) + '<b>' + esc(name(p)) + '</b>' + swatches(p) + '</span><span class="askp" role="button" tabindex="0" data-askp="' + esc(p.c) + '">' + ICON_SMS + '문의</span></button>';
       }).join('') + '</div>';
       var rest = pop.slice(3, st.more ? 200 : LIMIT);
       if (rest.length) h += '<ol class="rank">' + rest.map(function (p, i) {
-        return '<li><button class="rr" data-p="' + esc(p.c) + '"><span class="no">' + (i + 4) + '</span>' +
-          '<span class="th">' + imgTag(p.img, 200, name(p)) + '</span><span class="rx">' + nameLine(p) + mv(p) + '</span>' +
-          '<svg class="go" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></button></li>';
+        return '<li><button class="rr" data-p="' + esc(p.c) + '"><span class="no">' + (i + 4) + mv(p) + '</span>' +
+          '<span class="th">' + imgTag(p.img, 200, name(p)) + '</span><span class="rx">' + nameLine(p) + swatches(p) + '</span>' +
+          '<span class="ract">' + heart(p.c, 'rh') + '<span class="askp ic" role="button" tabindex="0" data-askp="' + esc(p.c) + '" aria-label="이 상품 문의">' + ICON_SMS + '</span></span></button></li>';
       }).join('') + '</ol>';
       if (pop.length > LIMIT) h += '<div class="morebox"><button class="pill" data-more="1">' + (st.more ? '접기' : '순위 더 보기') + '</button></div>';
       var period = D.rankAt && D.rankAt[st.best === 'own' ? 'own' : 'all'];
-      h += '<p class="per">' + (st.best === 'own' ? '천호점' : '전국') + ' 최근 1주 판매 기준' + (period ? ' · ' + esc(period) + '까지' : '') + (hasPrev ? ' · ▲▼는 직전 집계 대비' : '') + '</p>';
+      h += '<p class="per">' + (st.best === 'own' ? '천호점' : '전국') + ' 최근 1주 판매 기준' + (period ? ' · ' + esc(period) + '까지' : '') + (hasPrev ? ' · ▲▼ 직전 집계 대비' : '') + '</p>';
     } else h += empty('이번 주 순위가 아직 없어요.');
 
     document.getElementById('content').innerHTML = h;
     var all = items.slice().sort(newOrder);
-    h = '<div class="box" id="allbox">' + secHead(secNo('all'), 'ALL ITEMS', label ? esc(label) + ' 전체' : '매장 상품 전체', '<small>' + all.length + '개</small>');
+    h = '<div class="box" id="allbox">' + secHead(secNo('all'), 'EVERYTHING @ B1', label ? esc(label) + ' 전체' : '매장 상품 전체', '<small>' + all.length + '개</small>');
     h += (all.length ? '<div class="grid">' + all.map(function (p) { return card(p, { isNew: true }); }).join('') + '</div>' : empty('조건에 맞는 상품이 없어요.')) + '</div><div class="foot">';
     h += '<a class="visitcard" href="#/visit"><img src="assets/b1-map.png" alt=""><span><b>찾아오시는 길</b><small>천호역 3·4번 출구에서 백화점 지하로 바로 연결 · 지하1층 영스트리트</small></span>' + chev('r') + '</a>';
     h += '<p class="note">매장 재고는 수시로 바뀌어요. 방문 전 매장에 문의해 주세요.' + (atText(D.at) ? '<br>' + atText(D.at) + ' 기준' : '') + '</p>';
@@ -998,7 +1058,7 @@
   var EV_GIFT = /\d+\s*만\s*원\s*이상/;
   function evSection() {
     var more = '<a class="evall" href="' + EV_PAGE + '" target="_blank" rel="noopener">더보기 ›</a>';
-    var head = secHead(secNo('ev'), 'EVENT', '백화점 행사 안내', more);
+    var head = secHead(secNo('ev'), 'DEPT. STORE NEWS', '백화점 행사 안내', more);
     return head + evBody();
   }
   function evBody() {
@@ -1171,8 +1231,8 @@
         (rolling ? ROLL_BEAR : '') + '</div>' +
         '<button class="fnav" data-mv="' + which + ':1" aria-label="다음">' + chev('r') + '</button></div>';
     }
-    layer.innerHTML = '<div class="fit fit2"><div class="fitin">' +
-      '<div class="topwrap hcard"><header class="top"><div class="trow"><a class="brand hb" href="#/" aria-label="더블제이디 현대백화점 천호점 메인으로"><span class="av"><img src="assets/store-sign.jpg" alt=""></span><span class="bt"><img src="assets/logo-white.png" alt="DOUBLEJD">' + openLine() + '</span></a>' +
+    var fitHtml = '<div class="fit fit2"><div class="fitin">' +
+      '<div class="topwrap hcard"><header class="top"><div class="trow"><a class="brand hb" href="#/" aria-label="더블제이디 현대백화점 천호점 메인으로"><span class="av"><img src="assets/store-sign.jpg" alt=""></span><span class="bt"><span class="lgrow"><img src="assets/logo-white.png" alt="DOUBLEJD"><i class="fsk">FLAGSHIP*</i></span><b class="hstore">현대백화점 천호점</b>' + openLine() + '</span></a>' +
       '<div class="hact">' + wishBtn() + '<a class="icb" href="#/search" aria-label="상품 검색">' + ICON_SEARCH + '</a></div></div></header></div>' +
       '<div class="fith2"><a class="ib" href="#/" aria-label="메인으로">' + chev('l') + '</a><b>코디해보기</b><button class="pill sm" data-rnd="all">' + ICON_DICE + '전체 랜덤</button></div>' +
       '<div class="fstage">' +
@@ -1182,6 +1242,8 @@
       '<button class="pill' + (on ? '' : ' blue') + '" id="save">' + (on ? '저장됨 ✓' : '코디 저장') + '</button>' +
       '<button class="pill svbtn" id="svopen">저장' + (saved.length ? ' <i class="dot">' + saved.length + '</i>' : '') + '</button></div>' +
       '</div></div>';
+    var oldFit = layer.querySelector('.fit2'), fresh = !oldFit;
+    if (oldFit) patchFit(oldFit, fitHtml); else layer.innerHTML = fitHtml;
     document.body.style.overflow = 'hidden';
     document.getElementById('save').onclick = function () {
       var s = loadSaved(), i = s.indexOf(key), added = i < 0;
@@ -1190,7 +1252,7 @@
       toast(added ? '코디를 저장했어요' : '저장에서 뺐어요');
     };
     document.getElementById('svopen').onclick = openSaved;
-    [].forEach.call(layer.querySelectorAll('.stage'), function (el) {
+    if (fresh) [].forEach.call(layer.querySelectorAll('.stage'), function (el) {
       var x0 = null;
       el.addEventListener('touchstart', function (e) { x0 = e.touches[0].clientX; }, { passive: true });
       el.addEventListener('touchend', function (e) {
@@ -1199,6 +1261,32 @@
         if (Math.abs(dx) >= 40) move(el.dataset.half, dx < 0 ? 1 : -1);
       });
     });
+  }
+  // 코디 화면을 통째로 다시 그리지 않고 바뀐 곳만 바꿈 → 랜덤·넘기기 때 깜빡임 없음
+  //  큰 사진은 새 사진을 미리 받아 둔 뒤 src만 바꿈(받는 동안 지금 사진 유지)
+  function patchFit(oldFit, html) {
+    var tmp = document.createElement('div'); tmp.innerHTML = html;
+    var nf = tmp.firstChild, ob = oldFit.querySelectorAll('.fbox'), nb = nf.querySelectorAll('.fbox');
+    if (ob.length !== 2 || nb.length !== 2) { oldFit.parentNode.innerHTML = html; return; }
+    for (var k = 0; k < 2; k++) (function (o, n) {
+      var oi = o.querySelector('img.main'), ni = n.querySelector('img.main');
+      o.className = n.className;
+      [].slice.call(o.children).forEach(function (c) { if (c !== oi) c.remove(); });
+      [].slice.call(n.children).forEach(function (c) { if (c !== ni) o.appendChild(c); });
+      if (!oi || !ni) { if (oi) oi.remove(); if (ni) o.insertBefore(ni, o.firstChild); return; }
+      if (oi.getAttribute('src') === ni.getAttribute('src')) return;
+      var want = ni.getAttribute('src'), pre = new Image();
+      o.dataset.want = want;
+      pre.onload = pre.onerror = function () {
+        if (o.dataset.want !== want) return;
+        oi.removeAttribute('data-f'); oi.dataset.id = ni.dataset.id || ''; oi.alt = ni.alt; oi.src = want;
+      };
+      pre.src = want;
+    })(ob[k], nb[k]);
+    var obar = oldFit.querySelector('.fbar'), nbar = nf.querySelector('.fbar');
+    if (obar && nbar) obar.replaceWith(nbar);
+    var wd = oldFit.querySelector('.wdot'), nwd = nf.querySelector('.wdot');
+    if (wd && nwd) { wd.textContent = nwd.textContent; wd.hidden = nwd.hidden; }
   }
   // 저장한 코디: 상의 위·하의 아래로 세워서 보여 주는 시트
   function openSaved() {
@@ -1257,7 +1345,8 @@
       if (pp) parts.push('<span class="tk">POP-UP</span><b>' + esc(pp.t) + '</b>');
     }
     var o = openInfo();
-    parts.push('<span class="tk">' + (o.on ? 'OPEN NOW' : 'OPEN 10:30') + '</span><b>현대백화점 천호점 B1 · ' + o.t + '</b>');
+    parts.unshift('<span class="tk">DOUBLEJD FLAGSHIP*</span><b>*자칭 · 현대백화점 천호점 지하 1층</b>');
+    parts.push('<span class="tk">' + (o.on ? 'OPEN NOW' : 'SEE YOU SOON') + '</span><b>' + o.t + '</b>');
     var line = parts.join('<span class="star">★</span>') + '<span class="star">★</span>';
     el.innerHTML = '<div class="tkin">' + line + line + '</div>';
   }
@@ -1266,14 +1355,14 @@
   function storyList() {
     var out = [], news = D.items.slice().sort(newOrder).filter(function (p) { return p.img; });
     if (news.length) out.push({ k: 'new:' + lastDrop(), a: 'new', t: '신상', img: img(news[0].img, 200) });
+    var best = D.items.filter(function (p) { return p.ro > 0 && p.img; }).sort(function (a, b) { return a.ro - b.ro; })[0];
+    if (best) out.push({ k: 'best:' + best.c, a: 'best', t: '이번 주 인기', img: img(best.img, 200) });
     var sets = homeSets(false);
     if (sets.length) out.push({ k: 'look:' + D.homeAll.length, a: 'look', t: '추천 코디', img: img(byCode[sets[0][0]].img, 200) });
-    if (D.ig && D.ig.length) out.push({ k: 'ig:' + D.ig[0].u, a: 'ig', t: '이야기', img: img(D.ig[0].id, 200) });
+    if (D.ig && D.ig.length) out.push({ k: 'ig:' + D.ig[0].u, a: 'ig', t: '천호점 자랑', img: img(D.ig[0].id, 200) });
     var ev = EV && EV.ok ? ((EV.popup || [])[0] || (EV.gift || [])[0]) : null;
-    if (ev) out.push({ k: 'ev:' + ev.t, a: 'ev', t: '행사', img: ev.img });
-    var best = D.items.filter(function (p) { return p.ro > 0 && p.img; }).sort(function (a, b) { return a.ro - b.ro; })[0];
-    if (best) out.push({ k: 'best:' + best.c, a: 'best', t: '이번 주 1위', img: img(best.img, 200) });
-    out.push({ k: 'visit', a: 'visit', t: '매장', img: 'assets/store-card.jpg' });
+    if (ev) out.push({ k: 'ev:' + ev.t, a: 'ev', t: '백화점 소식', img: ev.img });
+    out.push({ k: 'visit', a: 'visit', t: '매장 위치', img: 'assets/store-card.jpg' });
     return out;
   }
   function renderStories() {
@@ -1322,7 +1411,7 @@
   }
   function wxSection() {
     var w = wxPick(); if (!w) return '';
-    return '<div class="box wxbox" id="wxbox"><div class="wxh"><b class="wxt">' + WX.temp + '°</b><div><strong>오늘 천호동 ' + WX_TXT(WX.code) + ' · ' + WX.lo + '° / ' + WX.hi + '°</strong><span>' + w.msg + '</span></div></div>' +
+    return '<div class="box wxbox" id="wxbox"><div class="wxlab">TODAY\'S FIT · 오늘 날씨 추천</div><div class="wxh"><b class="wxt">' + WX.temp + '°</b><div><strong>오늘 천호동 ' + WX_TXT(WX.code) + ' · ' + WX.lo + '° / ' + WX.hi + '°</strong><span>' + w.msg + '</span></div></div>' +
       '<div class="row hs">' + w.list.map(function (p) { return card(p); }).join('') + '</div></div>';
   }
 
@@ -1337,11 +1426,11 @@
     var x = byCode[sets[i][0]], y = byCode[sets[i][1]], key = x.c + '+' + y.c, saved = loadSaved().indexOf(key) >= 0;
     var no = ('0' + (i + 1)).slice(-2);
     layer.innerHTML = '<div class="look" id="look">' +
-      '<div class="lkimg"><div>' + imgTag(x.img, 900, name(x)) + '</div><div>' + imgTag(y.img, 900, name(y)) + '</div></div>' +
+      '<div class="lkimg">' + [x, y].map(function (p) { return '<div><span class="lkbg" style="background-image:url(' + img(p.img, 300) + ')"></span>' + imgTag(p.img, 900, name(p)) + '</div>'; }).join('') + '</div>' +
       '<div class="lkprog">' + sets.map(function (_, k) { return '<i class="' + (k < i ? 'done' : k === i ? 'now' : '') + '"><em></em></i>'; }).join('') + '</div>' +
       '<div class="lkhd"><span class="av"><img src="assets/store-sign.jpg" alt=""></span><b>천호점 추천 코디</b><small>' + (i + 1) + ' / ' + sets.length + '</small><button class="lkx" data-lkclose="1" aria-label="닫기">✕</button></div>' +
       '<button class="lknav l" data-lk="' + (i - 1) + '" aria-label="이전 코디"></button><button class="lknav r" data-lk="' + (i + 1) + '" aria-label="다음 코디"></button>' +
-      '<div class="lkb"><span class="stk pink">LOOK ' + no + '</span><div class="lkttl">DOUBLEJD<br>CHEONHO</div>' +
+      '<div class="lkb"><span class="stk pink">LOOK ' + no + '</span><div class="lkttl">FLAGSHIP* <span>CHEONHO</span></div>' +
       '<div class="lkit">' + [x, y].map(function (p) { return '<button data-p="' + esc(p.c) + '"><span>' + imgTag(p.img, 160, '') + '</span><span>' + badge(p.it) + '<b>' + esc(name(p)) + '</b></span></button>'; }).join('') + '</div>' +
       '<div class="lkbtn"><button class="pill" data-lksave="' + esc(key) + '">' + (saved ? '저장됨 ✓' : '♡ 코디 저장') + '</button><a class="pill light" href="#/fit/' + esc(key) + '">코디해보기에서 보기</a></div></div></div>';
     document.body.style.overflow = 'hidden';
@@ -1432,8 +1521,13 @@
       '<a class="askrow" href="tel:' + STORE.tel.replace(/-/g, '') + '">' + ICON_TEL + '<span><b>전화 문의</b><small>' + STORE.tel + ' · 영업시간 중</small></span></a>' +
       '<a class="askrow" href="' + smsLink('[더블제이디 천호점 문의]\n') + '">' + ICON_SMS + '<span><b>문자 문의</b><small>사진과 함께 보내 주셔도 돼요</small></span></a>' +
       '<a class="askrow" href="https://ig.me/m/doublejd_cheonho" target="_blank" rel="noopener">' + ICON_IG.replace('stroke="#fff"', 'stroke="currentColor"') + '<span><b>인스타 DM</b><small>@doublejd_cheonho</small></span></a>' +
+      (standalone() ? '' : '<a class="askrow" href="#" data-instgo="1">' + ICON_DL + '<span><b>' + (IS_MOBILE ? '앱으로 설치' : '즐겨찾기 추가') + '</b><small>홈 화면에서 바로 열 수 있어요</small></span></a>') +
       '<button class="pill" style="min-height:46px">닫기</button></div>';
-    g.addEventListener('click', function (e) { if (e.target === g || e.target.tagName === 'BUTTON' || e.target.closest('a')) g.remove(); });
+    g.addEventListener('click', function (e) {
+      var ig = e.target.closest('[data-instgo]');
+      if (ig) { e.preventDefault(); g.remove(); instClick(); return; }
+      if (e.target === g || e.target.tagName === 'BUTTON' || e.target.closest('a')) g.remove();
+    });
     document.body.appendChild(g);
   }
 
@@ -1805,12 +1899,13 @@
     document.body.style.overflow = '';
   }
   document.addEventListener('click', function (e) {
-    var t = e.target.closest('[data-p],[data-cat],[data-sub],[data-best],[data-more],[data-mv],[data-rnd],[data-rec],[data-load],[data-acat],[data-ahide],[data-aedit],[data-opt],[data-pk],[data-delph],[data-main],[data-addsz],[data-hset],[data-admhome],[data-ev],[data-hroll],[data-allnew],[data-sq],[data-sqdel],[data-sqclr],[data-ask],[data-wish],[data-wclr],[data-story],[data-lk],[data-lkclose],[data-lksave]');
+    var t = e.target.closest('[data-p],[data-cat],[data-sub],[data-best],[data-more],[data-mv],[data-rnd],[data-rec],[data-load],[data-acat],[data-ahide],[data-aedit],[data-opt],[data-pk],[data-delph],[data-main],[data-addsz],[data-hset],[data-admhome],[data-ev],[data-hroll],[data-allnew],[data-sq],[data-sqdel],[data-sqclr],[data-ask],[data-wish],[data-wclr],[data-story],[data-lk],[data-lkclose],[data-lksave],[data-askp]');
     if (!t) return;
     var d = t.dataset;
     if (d.ev) { st.ev = d.ev; renderTop(); evVisit(); return; }
     if (d.wish) { e.preventDefault(); e.stopPropagation(); toggleWish(d.wish); return; }
     if (d.wclr) { if (confirm('찜한 상품 ' + wishCount() + '개를 모두 지울까요?')) { try { localStorage.removeItem('dj_wish'); } catch (er) {} renderWish(); wishBadge(); [].forEach.call(document.querySelectorAll('.wh.on'), function (x) { x.classList.remove('on'); }); } return; }
+    if (d.askp) { e.preventDefault(); var ap = byCode[d.askp]; if (ap) location.href = smsOne(ap); return; }
     if (d.story) { openStory(d.story, d.sk); return; }
     if (d.lk !== undefined) { var nl = +d.lk, ns = homeSets(false).slice(0, 12).length; if (nl < 0) nl = 0; if (nl >= ns) { location.replace('#/'); return; } location.replace('#/look/' + nl); return; }
     if (d.lkclose) { location.replace('#/'); return; }
@@ -1897,7 +1992,10 @@
     if (standalone()) { b.hidden = true; return; }
     b.hidden = false;
     b.lastChild.textContent = IS_MOBILE ? '앱으로 설치' : '즐겨찾기'; b.title = b.lastChild.textContent; b.setAttribute('aria-label', b.lastChild.textContent);
-    b.onclick = function () {
+    b.onclick = instClick;
+  }
+  function instClick() {
+    {
       if (instEvt) { instEvt.prompt(); instEvt.userChoice.then(function () { instEvt = null; }); return; }
       var t, m;
       if (IS_INAPP) { t = '브라우저에서 열어 주세요'; m = '지금 앱 안의 브라우저로 보고 있어요.<br>오른쪽 위(또는 아래) <strong>⋮ / 공유 메뉴 → 다른 브라우저로 열기</strong>를 누른 뒤 다시 설치해 주세요.'; }
