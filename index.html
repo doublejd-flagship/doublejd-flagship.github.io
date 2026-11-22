@@ -957,6 +957,39 @@
   .holdrow.rest .hi { background:#2a2a30; color:#ffd84d; }
   .hchips button.off { opacity:.45; text-decoration:line-through; cursor:default; }
   .hchips button.off small { text-decoration:none; font-size:10.5px; }
+
+  /* ===== 261122 v10 ===== */
+  .sec .seg { flex:none; }
+  .sec .seg button { white-space:nowrap; word-break:keep-all; }
+  .fskw { position:relative; display:inline-flex; }
+  .lgrow .fskw img.hstk, .lgrow .fskw img.hstk.big { position:absolute; left:50%; top:calc(100% + 3px); margin:0; transform:translateX(-50%) rotate(-4deg); height:auto; width:76px; pointer-events:none; z-index:2; filter:drop-shadow(0 3px 6px rgba(0,0,0,.45)); }
+  .lgrow .fskw img.hstk.big { width:auto; height:50px; top:calc(100% + 1px); transform:translateX(-50%) rotate(6deg); }
+  @media (max-width:380px) { .lgrow .fskw img.hstk.big { height:44px; } .lgrow .fskw img.hstk { width:66px; } }
+  .stkpvh .hb { display:flex; } .stkpvh { min-height:96px; }
+  .lkimg > div .wh.lkh { position:absolute; top:8px; right:8px; z-index:6; }
+  .lknav { z-index:4; }
+  .stockrow { display:block !important; }
+  .stockrow dt { margin-bottom:8px; width:auto !important; }
+  .info .stk2 div { padding:0; border:0; font-size:inherit; line-height:1.3; }
+  .info .stk2 .sr { display:flex; } .info .stk2 .slg { display:flex; }
+  .stk2 { display:flex; flex-direction:column; gap:8px; }
+  .stk2 .sr { display:flex; align-items:flex-start; gap:10px; }
+  .stk2 .sc { flex:none; width:84px; display:flex; align-items:center; gap:6px; font-size:13px; color:var(--ink); padding-top:5px; }
+  .stk2 .sc i { width:11px; height:11px; border-radius:50%; border:1px solid rgba(255,255,255,.3); flex:none; }
+  .stk2 .sz { display:flex; flex-wrap:wrap; gap:6px; }
+  .bt2 { display:inline-flex; flex-direction:column; align-items:center; gap:3px; min-width:40px; padding:4px 6px 5px; border:1px solid var(--line); border-radius:5px; background:#17171a; position:relative; }
+  .bt2 b { font-size:12px; font-weight:600; color:var(--ink); }
+  .bat { display:flex; gap:2px; padding:2px; border:1px solid rgba(255,255,255,.3); border-radius:3px; position:relative; }
+  .bat::after { content:''; position:absolute; right:-4px; top:50%; width:2px; height:5px; margin-top:-2.5px; background:rgba(255,255,255,.3); border-radius:0 1px 1px 0; }
+  .bat i { width:5px; height:8px; border-radius:1px; background:rgba(255,255,255,.08); }
+  .bt2.r .bat i.on { background:#ff4d4d; } .bt2.y .bat i.on { background:#ffc21a; } .bt2.g .bat i.on { background:#3fd17a; }
+  .bt2.r b { color:var(--mute); text-decoration:line-through; }
+  .bt2 em { position:absolute; top:-7px; right:-6px; font-style:normal; font-size:9px; font-weight:700; color:#fff; background:#e5484d; border-radius:3px; padding:0 3px; line-height:13px; }
+  .slg { display:flex; flex-wrap:wrap; gap:10px; font-size:11px; color:var(--mute); margin-top:2px; }
+  .slg span { display:inline-flex; align-items:center; gap:2px; }
+  .slg span:after { content:''; } .slg i { width:4px; height:7px; border-radius:1px; }
+  .slg .r i { background:#ff4d4d; } .slg .y i { background:#ffc21a; } .slg .g i { background:#3fd17a; }
+  .slg span i:last-of-type { margin-right:3px; }
 </style>
 </head>
 <body>
@@ -1103,7 +1136,7 @@
     var app = document.getElementById('app');
     if (!document.getElementById('content')) {
       app.innerHTML =
-        '<div class="topwrap hcard"><header class="top"><div class="trow"><a class="brand hb" href="#/" aria-label="더블제이디 현대백화점 천호점"><span class="av"><img src="assets/store-sign.jpg" alt=""></span><span class="bt"><span class="lgrow"><img src="assets/logo-white.png" alt="DOUBLEJD"><i class="fsk">플래그십(자칭)</i></span><b class="hstore">현대백화점 천호점' + stkTag() + '</b>' + openLine() + '</span></a>' +
+        '<div class="topwrap hcard"><header class="top"><div class="trow"><a class="brand hb" href="#/" aria-label="더블제이디 현대백화점 천호점"><span class="av"><img src="assets/store-sign.jpg" alt=""></span><span class="bt"><span class="lgrow"><img src="assets/logo-white.png" alt="DOUBLEJD"><span class="fskw"><i class="fsk">플래그십(자칭)</i>' + stkTag() + '</span></span><b class="hstore">현대백화점 천호점</b>' + openLine() + '</span></a>' +
         '<div class="hact"><button class="inst" id="inst" hidden>' + ICON_DL + '<span>앱 설치</span></button>' + wishBtn() + '<a class="icb" href="#/search" aria-label="상품 검색">' + ICON_SEARCH + '</a></div></div></header></div>' +
         '<div class="ticker" id="ticker" aria-hidden="true"></div><div class="stories hs" id="stories"></div>' +
         '<div id="hometop"></div>' +
@@ -1315,8 +1348,7 @@
     var rows = '';
     if (p.size) rows += '<div><dt>' + (isTop(p) ? '추천 사이즈' : '사이즈 정보') + '</dt><dd>' + esc(p.size) + '</dd></div>';
     var cl = colorLines(p);
-    if (cl.length) rows += '<div><dt>색상·사이즈</dt><dd class="colors">' + cl.map(function (c) {
-      return '<span style="color:var(--ink)">' + esc(c.n || c.c) + ' <span>' + c.sz.map(function (z) { return z[1] ? esc(z[0]) : '<s class="so">' + esc(z[0]) + '</s>'; }).join(' · ') + (c.sz.some(function (z) { return !z[1]; }) ? ' <em class="sot">품절</em>' : '') + '</span></span>'; }).join('') + '</dd></div>';
+    if (cl.length) rows += '<div class="stockrow"><dt>재고 보유 현황</dt><dd>' + stockTable(p, cl) + '</dd></div>';
     if (rows) h += '<dl class="info">' + rows + '</dl>';
     if (p.so && p.so.length) h += '<button class="holdrow rest" data-rest="' + esc(p.c) + '"><span class="hi">' + ICON_BELL + '</span><span class="sx"><b>입고 알림 신청</b><small>품절된 색상·사이즈가 들어오면 문자로 알려 드려요</small></span>' + chev('r') + '</button>';
     if (holdCols(p).length) h += '<button class="holdrow" data-hold="' + esc(p.c) + '"><span class="hi">' + ICON_BAG + '</span><span class="sx"><b>매장에 맡아두기</b><small>색상·사이즈·방문일을 고르면 문자로 요청돼요</small></span>' + chev('r') + '</button>';
@@ -1388,6 +1420,17 @@
     });
     out.forEach(function (x) { x.sz.sort(function (a, b) { return SIZE_ORDER.indexOf(a[0]) - SIZE_ORDER.indexOf(b[0]); }); });
     return out.filter(function (x) { return x.sz.length; });
+  }
+  // 재고 보유 현황: 색상마다 사이즈별 배터리 — 품절 빨강 1칸 · 조금(1~2장) 노랑 2칸 · 보통(3~4장) 초록 3칸 · 넉넉(5장~) 초록 4칸
+  function stockTable(p, cl) {
+    var lvAll = p.lv || {};
+    return '<div class="stk2">' + cl.map(function (c) {
+      var lv = lvAll[c.c] || {};
+      return '<div class="sr"><span class="sc"><i style="background:' + (COLOR_HEX[c.c] || '#888') + '"></i>' + esc(c.n || c.c) + '</span><span class="sz">' + c.sz.map(function (z) {
+        var n = z[1] ? (lv[z[0]] || 1) + 1 : 1, cls = z[1] ? (n === 2 ? 'y' : 'g') : 'r';
+        return '<span class="bt2 ' + cls + '" title="' + esc(z[0]) + ' ' + (z[1] ? ['', '', '조금', '보통', '넉넉'][n] : '품절') + '"><b>' + esc(z[0]) + '</b><span class="bat">' + [0, 1, 2, 3].map(function (k) { return '<i' + (k < n ? ' class="on"' : '') + '></i>'; }).join('') + '</span>' + (z[1] ? '' : '<em>품절</em>') + '</span>';
+      }).join('') + '</span></div>';
+    }).join('') + '<div class="slg"><span class="r"><i></i>품절</span><span class="y"><i></i><i></i>조금</span><span class="g"><i></i><i></i><i></i>보통</span><span class="g"><i></i><i></i><i></i><i></i>넉넉</span></div></div>';
   }
   // 입고 알림: 품절 색상 → 사이즈 → 문자(직원이 들어오면 연락)
   function openRestock(c) {
@@ -1534,7 +1577,7 @@
         '<button class="fnav" data-mv="' + which + ':1" aria-label="다음">' + chev('r') + '</button></div>';
     }
     var fitHtml = '<div class="fit fit2"><div class="fitin">' +
-      '<div class="topwrap hcard"><header class="top"><div class="trow"><a class="brand hb" href="#/" aria-label="더블제이디 현대백화점 천호점 메인으로"><span class="av"><img src="assets/store-sign.jpg" alt=""></span><span class="bt"><span class="lgrow"><img src="assets/logo-white.png" alt="DOUBLEJD"><i class="fsk">플래그십(자칭)</i></span><b class="hstore">현대백화점 천호점' + stkTag() + '</b>' + openLine() + '</span></a>' +
+      '<div class="topwrap hcard"><header class="top"><div class="trow"><a class="brand hb" href="#/" aria-label="더블제이디 현대백화점 천호점 메인으로"><span class="av"><img src="assets/store-sign.jpg" alt=""></span><span class="bt"><span class="lgrow"><img src="assets/logo-white.png" alt="DOUBLEJD"><span class="fskw"><i class="fsk">플래그십(자칭)</i>' + stkTag() + '</span></span><b class="hstore">현대백화점 천호점</b>' + openLine() + '</span></a>' +
       '<div class="hact">' + wishBtn() + '<a class="icb" href="#/search" aria-label="상품 검색">' + ICON_SEARCH + '</a></div></div></header></div>' +
       '<div class="fith2"><a class="ib" href="#/" aria-label="메인으로">' + chev('l') + '</a><b>코디해보기</b><button class="pill sm" data-rnd="all">' + ICON_DICE + '전체 랜덤</button></div>' +
       '<div class="fstage">' +
@@ -1639,16 +1682,33 @@
     var parts = [], drop = lastDrop();
     var news = D.items.filter(isNew).sort(newOrder).slice(0, 5);
     if (news.length) parts.push('<span class="tk">NEW DROP' + (drop ? ' ' + drop : '') + '</span>' + news.map(function (p) { return '<b>' + esc(name(p)) + '</b>'; }).join('<i>·</i>'));
-    if (EV && EV.ok) {
-      var g = (EV.gift || []).filter(function (x) { return EV_GIFT.test(x.t); })[0], pp = (EV.popup || [])[0];
-      if (g) parts.push('<span class="tk">GIFT</span><b>' + esc(g.t) + '</b>');
-      if (pp) parts.push('<span class="tk">POP-UP</span><b>' + esc(pp.t) + '</b>');
+    var note = storeNotice();
+    if (note) parts.unshift('<span class="tk">NOTICE</span><b>' + esc(note) + '</b>');
+    if (EV && EV.ok) {   // 백화점카드 사은품과 팝업 스토어를 번갈아(각 4개까지)
+      var gs = (EV.gift || []).filter(function (x) { return EV_GIFT.test(x.t); }).slice(0, 4), ps = (EV.popup || []).slice(0, 4);
+      for (var k = 0; k < Math.max(gs.length, ps.length); k++) {
+        if (gs[k]) parts.push('<span class="tk">GIFT</span><b>' + esc(giftTitle(gs[k].t)) + '</b>');
+        if (ps[k]) parts.push('<span class="tk">POP-UP</span><b>' + esc(ps[k].t) + '</b>');
+      }
     }
-    var o = openInfo();
-    parts.unshift('<span class="tk">DBJD</span><b>현대백화점 천호점 B1</b>');
-    parts.push('<span class="tk">' + (o.on ? 'OPEN NOW' : 'SEE YOU SOON') + '</span><b>' + o.t + '</b>');
     var line = parts.join('<span class="star">★</span>') + '<span class="star">★</span>';
     el.innerHTML = '<div class="tkin">' + line + line + '</div>';
+  }
+  // '30만원 이상 구매 시…' → '백화점카드 30만원 이상 구매 시…'
+  function giftTitle(t) { t = String(t || ''); return /카드/.test(t) ? t : t.replace(/(\d[\d,.]*\s*만\s*원)/, '백화점카드 $1'); }
+  // 띠 안내: 영업시간은 평소엔 안 보이고, 7일 안에 휴점일·연장영업·공휴일이 있을 때만
+  var KR_HOLI = { '20261225': '성탄절', '20270101': '새해 첫날', '20270206': '설 연휴', '20270207': '설날', '20270208': '설 연휴', '20270209': '대체공휴일', '20270301': '삼일절', '20270505': '어린이날', '20270513': '부처님오신날', '20270606': '현충일', '20270815': '광복절', '20270816': '대체공휴일', '20270914': '추석 연휴', '20270915': '추석', '20270916': '추석 연휴', '20271003': '개천절', '20271004': '대체공휴일', '20271009': '한글날', '20271011': '대체공휴일', '20271225': '성탄절' };
+  function storeNotice() {
+    var cal = EV && EV.ok && EV.cal ? EV.cal : null, out = [], n = new Date();
+    var hm = function (x) { return Math.floor(x / 60) + ':' + ('0' + x % 60).slice(-2); };
+    for (var i = 0; i < 7; i++) {
+      var d = new Date(n.getTime() + i * 86400000), k = ymd(d), w = d.getDay();
+      var lb = i === 0 ? '오늘' : i === 1 ? '내일' : (d.getMonth() + 1) + '/' + d.getDate() + '(' + DOW[w] + ')';
+      if (cal && cal.closed && cal.closed.indexOf(k) >= 0) { out.push(lb + ' 백화점 휴점일'); continue; }
+      if (cal && cal.ext && cal.ext[k] != null && 20 * 60 + cal.ext[k] > (w === 5 || w === 6 || w === 0 ? 20 * 60 + 30 : 20 * 60)) { out.push(lb + ' 연장영업 ' + hm(20 * 60 + cal.ext[k]) + '까지'); continue; }   // 평소 마감보다 늦을 때만
+      if (KR_HOLI[k]) out.push(lb + ' ' + KR_HOLI[k] + ' 정상 영업');
+    }
+    return out.slice(0, 2).join(' · ');
   }
   function seenMap() { try { return JSON.parse(localStorage.getItem('dj_seen') || '{}') || {}; } catch (e) { return {}; } }
   function markSeen(k) { var m = seenMap(); m[k] = 1; try { localStorage.setItem('dj_seen', JSON.stringify(m)); } catch (e) {} }
@@ -1726,13 +1786,13 @@
     var x = byCode[sets[i][0]], y = byCode[sets[i][1]], key = x.c + '+' + y.c, saved = loadSaved().indexOf(key) >= 0;
     var no = ('0' + (i + 1)).slice(-2);
     layer.innerHTML = '<div class="look" id="look">' +
-      '<div class="lkimg">' + [x, y].map(function (p) { return '<div><span class="lkbg" style="background-image:url(' + img(p.img, 300) + ')"></span>' + imgTag(p.img, 900, name(p)) + '</div>'; }).join('') + '</div>' +
+      '<div class="lkimg">' + [x, y].map(function (p) { return '<div><span class="lkbg" style="background-image:url(' + img(p.img, 300) + ')"></span>' + imgTag(p.img, 900, name(p)) + heart(p.c, 'lkh') + '</div>'; }).join('') + '</div>' +
       '<div class="lkprog">' + sets.map(function (_, k) { return '<i class="' + (k < i ? 'done' : k === i ? 'now' : '') + '"><em></em></i>'; }).join('') + '</div>' +
       '<div class="lkhd"><span class="av"><img src="assets/store-sign.jpg" alt=""></span><b>천호점 추천 코디</b><small>' + (i + 1) + ' / ' + sets.length + '</small><button class="lkx" data-lkclose="1" aria-label="닫기">✕</button></div>' +
       '<button class="lknav l" data-lk="' + (i - 1) + '" aria-label="이전 코디"></button><button class="lknav r" data-lk="' + (i + 1) + '" aria-label="다음 코디"></button>' +
-      '<div class="lkb"><div class="lkt1"><span class="stk pink">LOOK ' + no + '</span><div class="lkttl">FLAGSHIP-ISH</div></div><div class="lksub">(SELF-PROCLAIMED) · 천호점 직원이 맞춘 코디</div>' +
+      '<div class="lkb"><div class="lkt1"><span class="stk pink">LOOK ' + no + '</span><div class="lkttl">FLAGSHIP-ISH</div></div><div class="lksub">(SELF-PROCLAIMED) · 천호점 크루 추천</div>' +
       '<div class="lkit">' + [x, y].map(function (p) { return '<button data-p="' + esc(p.c) + '"><span>' + imgTag(p.img, 160, '') + '</span><span>' + badge(p.it) + '<b>' + esc(name(p)) + '</b></span></button>'; }).join('') + '</div>' +
-      '<div class="lkbtn"><button class="pill" data-lksave="' + esc(key) + '">' + (saved ? '저장됨 ✓' : '♡ 코디 저장') + '</button><a class="pill light" href="#/fit/' + esc(key) + '">코디해보기에서 열기</a></div></div></div>';
+      '<div class="lkbtn"><button class="pill" data-lksave="' + esc(key) + '">' + (saved ? '저장됨 ✓' : '♡ 코디 저장') + '</button><a class="pill light" href="#/fit/' + esc(key) + '">코디해보기</a></div></div></div>';
     document.body.style.overflow = 'hidden';
     lookFit();
     if (!REDUCE) lookTimer = setTimeout(function () { if (location.hash === '#/look/' + i) { if (i + 1 < sets.length) location.replace('#/look/' + (i + 1)); else location.replace('#/'); } }, LOOK_MS);
@@ -1929,7 +1989,7 @@
       '<button class="stksw' + (K.on ? ' on' : '') + '" id="stkon"><i></i>' + (K.on ? '스티커 켜짐' : '스티커 꺼짐') + '</button>' +
       '<div class="stkg">' + opts.map(function (o) { return '<button class="' + (o[0] === K.id ? 'on' : '') + '" data-stkid="' + esc(o[0]) + '"><span><img src="' + esc(stkSrc(o[0])) + '" alt=""></span><small>' + esc(o[1]) + '</small></button>'; }).join('') +
       '<label class="stkup"><span>+</span><small>내 스티커 올리기<br>(배경 없는 PNG)</small><input type="file" accept="image/png,image/webp,image/*" id="stkfile" style="display:none"></label></div>' +
-      '<div class="stkpv"><small>미리보기</small><div class="hcard stkpvh"><b class="hstore">현대백화점 천호점' + (K.on ? '<img class="hstk' + (/bear/.test(K.id) || /^d:/.test(K.id) ? ' big' : '') + '" src="' + esc(stkSrc(K.id)) + '" alt="">' : '') + '</b></div></div>' +
+      '<div class="stkpv"><small>미리보기</small><div class="hcard stkpvh"><span class="hb"><span class="bt"><span class="lgrow"><img src="assets/logo-white.png" alt=""><span class="fskw"><i class="fsk">플래그십(자칭)</i>' + (K.on ? '<img class="hstk' + (/bear/.test(K.id) || /^d:/.test(K.id) ? ' big' : '') + '" src="' + esc(stkSrc(K.id)) + '" alt="">' : '') + '</span></span><b class="hstore">현대백화점 천호점</b><span class="open on"><i></i>영업 중 · 20:30까지 · B1</span></span></span></div></div>' +
       '<button class="pill dark" id="stksave" style="min-height:52px;font-size:15px">' + (A.busy ? '처리 중…' : '저장') + '</button>' +
       '<button class="pill" id="stkback" style="min-height:44px">목록으로</button></div>');
     document.getElementById('stkback').onclick = function () { A.stkOpen = null; renderAdmin(); };
