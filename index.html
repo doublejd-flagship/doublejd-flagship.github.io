@@ -991,56 +991,137 @@
   .slg .r i { background:#ff4d4d; } .slg .y i { background:#ffc21a; } .slg .g i { background:#3fd17a; }
   .slg span i:last-of-type { margin-right:3px; }
 
-  /* ===== 261126 밤의 백화점 ===== */
+  /* ===== 261126 밤의 백화점 v2 ===== */
   #nfx > * { position:fixed; z-index:9990; }
-  #nwarm, #ndark, #nbeam, #nglow, #ndust { inset:0; pointer-events:none; display:none; width:100%; height:100%; }
-  body.ntdark #nwarm, body.ntdark #ndark, body.ntdark #nbeam, body.ntdark #nglow, body.ntdark #ndust { display:block; }
-  #nwarm { mix-blend-mode:multiply; background:radial-gradient(circle at var(--fx,50%) var(--fy,50%), rgba(255,214,150,.55) 0, rgba(255,226,180,.85) calc(var(--fr,150px)*.7), #fff calc(var(--fr,150px)*1.05)); }
-  #ndark { background:radial-gradient(circle at var(--fx,50%) var(--fy,50%), rgba(0,0,0,0) 0, rgba(0,0,0,0) calc(var(--fr,150px)*.80), rgba(2,3,8,.30) calc(var(--fr,150px)*.93), rgba(2,3,8,.88) calc(var(--fr,150px) + 8px), rgba(2,3,8,.92) calc(var(--fr,150px)*1.45), rgba(1,1,4,.975) calc(var(--fr,150px)*2)); }
-  #nbeam { mix-blend-mode:screen; overflow:visible; }
+  #nfx > .nl { left:0; top:0; pointer-events:none; display:none; will-change:transform; }
+  #nbeam { inset:0; width:100%; height:100%; pointer-events:none; display:none; mix-blend-mode:screen; overflow:visible; }
+  body.ntdark #nfx > .nl, body.ntdark #nbeam { display:block; }
+  #nwarm { mix-blend-mode:multiply; background:radial-gradient(circle at 50% 50%, rgba(255,214,150,.55) 0, rgba(255,226,180,.85) calc(var(--fr,150px)*.7), #fff calc(var(--fr,150px)*1.05)); }
+  #ndark { background:radial-gradient(circle at 50% 50%, rgba(0,0,0,0) 0, rgba(0,0,0,0) calc(var(--fr,150px)*.80), rgba(2,3,8,.30) calc(var(--fr,150px)*.93), rgba(2,3,8,.88) calc(var(--fr,150px) + 8px), rgba(2,3,8,.92) calc(var(--fr,150px)*1.45), rgba(1,1,4,.975) calc(var(--fr,150px)*2)); }
   #nglow { mix-blend-mode:screen; background:
-      radial-gradient(circle at var(--fx,50%) var(--fy,50%), rgba(255,236,190,.26) 0, rgba(255,226,170,.10) calc(var(--fr,150px)*.35), rgba(255,220,160,0) calc(var(--fr,150px)*.62)),
-      radial-gradient(circle at var(--fx,50%) var(--fy,50%), rgba(255,230,180,0) calc(var(--fr,150px)*.82), rgba(255,236,200,.16) calc(var(--fr,150px)*.9), rgba(255,236,200,.05) calc(var(--fr,150px)*.97), rgba(255,236,200,0) calc(var(--fr,150px) + 4px)); }
+      radial-gradient(circle at 50% 50%, rgba(255,236,190,.26) 0, rgba(255,226,170,.10) calc(var(--fr,150px)*.35), rgba(255,220,160,0) calc(var(--fr,150px)*.62)),
+      radial-gradient(circle at 50% 50%, rgba(255,230,180,0) calc(var(--fr,150px)*.82), rgba(255,236,200,.16) calc(var(--fr,150px)*.9), rgba(255,236,200,.05) calc(var(--fr,150px)*.97), rgba(255,236,200,0) calc(var(--fr,150px) + 4px)); }
   #ndust { opacity:.28; background-image:radial-gradient(rgba(255,240,210,.9) .7px, transparent 1.2px), radial-gradient(rgba(255,240,210,.6) .6px, transparent 1px); background-size:37px 41px, 23px 29px; background-position:0 0, 11px 17px;
-    -webkit-mask:radial-gradient(circle at var(--fx,50%) var(--fy,50%), #000 0, rgba(0,0,0,.6) calc(var(--fr,150px)*.6), transparent calc(var(--fr,150px)*.95));
-            mask:radial-gradient(circle at var(--fx,50%) var(--fy,50%), #000 0, rgba(0,0,0,.6) calc(var(--fr,150px)*.6), transparent calc(var(--fr,150px)*.95)); }
-  /* 아래 안내 줄: 영업시간 밖이면 늘 (전등을 켜도) */
+    -webkit-mask:radial-gradient(circle at 50% 50%, #000 0, rgba(0,0,0,.6) calc(var(--fr,150px)*.6), transparent calc(var(--fr,150px)*.95));
+            mask:radial-gradient(circle at 50% 50%, #000 0, rgba(0,0,0,.6) calc(var(--fr,150px)*.6), transparent calc(var(--fr,150px)*.95)); }
+  /* 아래 안내 줄 */
   #nbar { --nb:calc(86px + env(safe-area-inset-bottom)); display:none; left:50%; transform:translateX(-50%); bottom:var(--nb); z-index:9993; pointer-events:none; font-size:12.5px; font-weight:600; line-height:1.3; color:#ffe9b5; background:rgba(20,16,8,.82); border:1px solid rgba(255,214,120,.35); padding:8px 14px; border-radius:20px; white-space:nowrap; box-shadow:0 0 24px rgba(255,200,90,.18); max-width:calc(100vw - 20px); overflow:hidden; text-overflow:ellipsis; }
   #nbar i { font-style:normal; margin-right:6px; }
   body.ntclosed #nbar { display:block; }
   body[data-r="home"] #nbar, body[data-r="search"] #nbar { --nb:calc(var(--tab-h) + 14px + env(safe-area-inset-bottom)); }
   body[data-r="look"] #nbar { bottom:auto; top:calc(env(safe-area-inset-top) + 62px); }
-  /* 손전등 든 곰돌이: 안내 줄 바로 위, 가로만 따라옴 */
-  #nbear { display:none; bottom:calc(var(--nb2, 86px) + 36px); left:50%; width:58px; margin-left:-29px; z-index:9992; pointer-events:none; }
-  #nbear img { width:100%; display:block; filter:drop-shadow(0 4px 10px rgba(0,0,0,.6)); }
-  body.ntdark:not([data-r="look"]) #nbear, #nbear.talk { display:block; }
+  /* 곰돌이 조이스틱: 안내 줄 바로 위 가운데 */
+  #nbear { display:none; --nb2:calc(86px + env(safe-area-inset-bottom)); bottom:calc(var(--nb2) + 38px); left:50%; width:64px; margin-left:-32px; z-index:9992; }
   body[data-r="home"] #nbear, body[data-r="search"] #nbear { --nb2:calc(var(--tab-h) + 14px + env(safe-area-inset-bottom)); }
-  body:not(.ntclosed) #nbear { --nb2:calc(var(--tab-h) - 30px); }
-  #nbear .say { position:absolute; bottom:100%; right:40%; margin-bottom:6px; white-space:nowrap; background:#fff; color:#111; font-size:13px; font-weight:700; padding:8px 12px; border-radius:12px 12px 2px 12px; box-shadow:0 6px 16px rgba(0,0,0,.4); opacity:0; transform:translateY(6px); transition:opacity .2s, transform .2s; }
-  #nbear.talk .say { opacity:1; transform:none; }
-  #nbear.talk { animation:bob 1.2s ease-in-out infinite; }
-  /* 전등 스위치 + 비상구 (우상단) */
-  #lsw { top:calc(env(safe-area-inset-top) + 8px); right:8px; z-index:9994; display:flex; flex-direction:column; align-items:center; gap:6px; }
-  body.ntadmin #lsw, body.ntadmin #nbar, body.ntadmin #nbear { display:none !important; }
-  #lswb { padding:0; border:0; background:none; cursor:pointer; }
-  #lsw .plate { display:flex; flex-direction:column; align-items:center; justify-content:space-between; width:28px; height:42px; padding:4px 0; border-radius:4px; background:linear-gradient(160deg, #f4f2ee, #d9d6cf); box-shadow:inset 0 0 0 1px rgba(255,255,255,.7), 0 2px 6px rgba(0,0,0,.5), 0 0 0 1px rgba(0,0,0,.25); }
-  #lsw .screw { width:3px; height:3px; border-radius:50%; background:#b8b4ac; box-shadow:inset 0 0 0 .5px #8a867e; }
-  #lsw .slot { width:10px; height:18px; border-radius:2px; background:#c9c5bd; box-shadow:inset 0 1px 2px rgba(0,0,0,.35); display:flex; justify-content:center; }
-  #lsw .lever { width:8px; height:10px; margin-top:8px; border-radius:2px; background:linear-gradient(#fff, #e4e1da); box-shadow:0 1px 2px rgba(0,0,0,.45); transition:margin-top .15s ease; }
-  #lswb.on .lever { margin-top:0; }
-  body.ntdark #lsw .plate { filter:brightness(.55); }
-  #lsw .cap { position:absolute; right:36px; top:6px; font-size:10px; line-height:1.25; font-weight:600; color:#ffe9b5; text-align:right; white-space:nowrap; opacity:0; pointer-events:none; transition:opacity .2s; text-shadow:0 1px 4px #000; }
-  body.ntclosed.ntdark #lsw .cap { opacity:.85; }
-  #nexit { padding:3px 4px 2px; border:1px solid #173a27; border-radius:3px; background:#07150e; color:#2b5c3f; font-size:8.5px; font-weight:800; letter-spacing:.05em; line-height:1; cursor:pointer; box-shadow:0 0 6px rgba(40,140,80,.18); }
-  #nexit b { font-size:9px; margin-right:1px; filter:grayscale(.6) brightness(.6); }
-  #nbub { position:absolute; top:4px; right:36px; width:max-content; max-width:200px; background:#fff; color:#111; font-size:12.5px; font-weight:700; line-height:1.4; padding:9px 12px; border-radius:12px 2px 12px 12px; box-shadow:0 8px 22px rgba(0,0,0,.45); opacity:0; transform:translateX(6px); pointer-events:none; transition:opacity .2s, transform .2s; }
+  body.ntdark:not([data-r="look"]) #nbear { display:block; }
+  #nbear .knob { display:block; position:relative; touch-action:none; cursor:grab; transition:transform .25s cubic-bezier(.3,1.6,.5,1); -webkit-user-select:none; user-select:none; }
+  #nbear.drag .knob { transition:none; cursor:grabbing; }
+  #nbear .knob img { width:100%; display:block; filter:drop-shadow(0 4px 10px rgba(0,0,0,.6)) hue-rotate(var(--caphue, 0deg)); pointer-events:none; }
+  #nbear .ring { position:absolute; left:50%; top:62%; width:108px; height:108px; margin:-54px 0 0 -54px; border-radius:50%; border:1.5px dashed rgba(255,226,160,.35); background:radial-gradient(circle, rgba(255,226,160,.08), transparent 70%); opacity:0; transition:opacity .2s; pointer-events:none; }
+  #nbear.drag .ring { opacity:1; }
+  body.ntdark:not(.ntsleep) #nbear:not(.drag) .knob { animation:nbhint 3.2s ease-in-out 1.2s 2; }
+  @keyframes nbhint { 0%,100% { transform:none; } 25% { transform:translateX(-7px) rotate(-6deg); } 50% { transform:translateY(-6px); } 75% { transform:translateX(7px) rotate(6deg); } }
+  #nbear .zz { display:none; position:absolute; right:-6px; top:-8px; font-style:normal; font-weight:800; color:#cfd8ff; font-size:15px; text-shadow:0 0 6px rgba(150,170,255,.6); }
+  #nbear .zz b { font-size:11px; margin-left:2px; }
+  body.ntsleep #nbear .zz { display:block; animation:zz 2.4s ease-in-out infinite; }
+  body.ntsleep #nbear .knob img { transform:rotate(-14deg); filter:drop-shadow(0 4px 10px rgba(0,0,0,.6)) brightness(.9) hue-rotate(var(--caphue, 0deg)); }
+  @keyframes zz { 0% { opacity:0; transform:translateY(4px); } 30%,70% { opacity:1; } 100% { opacity:0; transform:translate(6px,-10px); } }
+  /* 밝을 때 말하는 곰돌이는 오른쪽 아래 */
+  body:not(.ntdark) #nbear.talk { display:block; left:auto; right:14px; margin:0; --nb2:calc(var(--tab-h) - 24px); animation:bob 1.2s ease-in-out infinite; }
+  body:not(.ntdark) #nbear.talk .knob img { content:url(assets/bear-cap.png); }
+  body.ntadmin #nbear, body.ntadmin #nbar, body.ntadmin #lswg, body.ntadmin #nbub { display:none !important; }
+  #nbear .say { position:absolute; bottom:100%; right:30%; margin-bottom:6px; white-space:nowrap; background:#fff; color:#111; font-size:13px; font-weight:700; padding:8px 12px; border-radius:12px 12px 2px 12px; box-shadow:0 6px 16px rgba(0,0,0,.4); opacity:0; transform:translateY(6px); transition:opacity .2s, transform .2s; pointer-events:none; }
+  #nbear .say a { display:block; margin-top:4px; font-size:12px; color:#e5306e; text-decoration:none; }
+  #nbear.talk .say { opacity:1; transform:none; pointer-events:auto; }
+  /* 전등 스위치: 영업 표시 줄 끝 */
+  .lsw { display:inline-flex; flex-direction:column; align-items:center; justify-content:center; vertical-align:-5px; width:13px; height:19px; margin-left:8px; border-radius:2.5px; background:linear-gradient(160deg, #f4f2ee, #cfcbc3); box-shadow:inset 0 0 0 .5px rgba(255,255,255,.8), 0 1px 3px rgba(0,0,0,.5); cursor:pointer; position:relative; }
+  .lsw::before { content:''; position:absolute; inset:-12px -10px; }
+  .lsw .lever, #lswg .lever { display:block; width:5px; height:9px; border-radius:1.5px; background:linear-gradient(#fff, #e1ded6); box-shadow:0 1px 1.5px rgba(0,0,0,.5), inset 0 -1px 0 rgba(0,0,0,.08); transform:translateY(3px); transition:transform .15s; }
+  .lsw.on .lever, #lswg.on .lever { transform:translateY(-3px); }
+  #lswg { display:none; width:13px; height:19px; border-radius:2.5px; z-index:9994; cursor:pointer; align-items:center; justify-content:center; background:linear-gradient(160deg, #dff7e6, #a9d9b8); box-shadow:0 0 10px rgba(140,255,180,.75), 0 0 22px rgba(140,255,180,.35); }
+  #lswg::before { content:''; position:absolute; inset:-12px -10px; }
+  #lswg.show { display:inline-flex; }
+  #nbub { width:max-content; max-width:220px; background:#fff; color:#111; font-size:12.5px; font-weight:700; line-height:1.4; padding:9px 12px; border-radius:12px 2px 12px 12px; box-shadow:0 8px 22px rgba(0,0,0,.45); opacity:0; transform:translateY(-4px); pointer-events:none; transition:opacity .2s, transform .2s; z-index:9995; }
   #nbub small { display:block; font-size:11.5px; font-weight:600; color:#555; margin-top:3px; }
   #nbub b { color:#e5484d; font-size:13px; }
   #nbub.on { opacity:1; transform:none; }
-  /* 오른쪽 위 버튼 자리 비우기 */
-  .hact { margin-right:34px; }
-  .lkx { margin-right:34px; }
-  .stkpvh .hact { margin-right:0; }
+  /* 셔터 */
+  .topwrap .shut { position:absolute; left:0; right:0; top:0; height:52%; z-index:5; pointer-events:none; border-radius:0 0 8px 8px; overflow:hidden; display:flex; align-items:flex-end; justify-content:center;
+    background:repeating-linear-gradient(180deg, #8d9096 0 3px, #6f7278 3px 6px, #5b5e63 6px 7px); box-shadow:0 6px 14px rgba(0,0,0,.45); animation:shutdown 1.4s cubic-bezier(.3,.8,.3,1) both; }
+  .topwrap .shut::after { content:''; position:absolute; left:0; right:0; bottom:0; height:7px; background:linear-gradient(#4b4e53, #2f3135); }
+  .topwrap .shut em { position:relative; z-index:1; margin-bottom:10px; font-style:normal; font-size:11.5px; font-weight:800; color:#1a1b1d; background:#ffd84d; padding:3px 8px; border-radius:4px; letter-spacing:.02em; }
+  .topwrap .shut.pre { height:100%; }
+  .topwrap .shut.up { animation:shutup 1.8s cubic-bezier(.5,0,.3,1) forwards; }
+  @keyframes shutdown { from { transform:translateY(-100%); } }
+  @keyframes shutup { to { transform:translateY(-105%); } }
+  /* 바닥 곰돌이 + 비상구 */
+  .floor { position:relative; height:170px; margin:16px 10px 0; overflow:hidden; display:flex; align-items:flex-end; justify-content:center; }
+  .floor .fbear { position:relative; width:76px; transform:translateY(80px); transition:transform .7s cubic-bezier(.3,1.5,.5,1); }
+  .floor.peek .fbear { transform:translateY(14px); }
+  .floor .fbear img { width:100%; display:block; filter:hue-rotate(var(--caphue, 0deg)); }
+  .floor .fbear em { position:absolute; bottom:88%; left:62%; white-space:nowrap; font-style:normal; font-size:12px; font-weight:700; line-height:1.35; color:#111; background:#fff; padding:7px 10px; border-radius:12px 12px 12px 2px; opacity:0; transition:opacity .3s .5s; }
+  .floor.peek .fbear em { opacity:1; }
+  .floor.bye .fbear { animation:wave .5s ease-in-out 4; }
+  @keyframes wave { 50% { transform:translateY(14px) rotate(-8deg); } }
+  body.ntclosed .floor { margin-bottom:56px; }
+  .exitb { position:absolute; left:6px; bottom:10px; padding:3px 6px 2px; border:1px solid #173a27; border-radius:3px; background:#07150e; color:#2b5c3f; font:inherit; font-size:9.5px; font-weight:800; letter-spacing:.05em; line-height:1.2; cursor:pointer; box-shadow:0 0 6px rgba(40,140,80,.18); }
+  .exitb b { margin-right:2px; filter:grayscale(.6) brightness(.6); }
+  body.ntdark .exitb { color:#4fd08a; border-color:#2fd47a; box-shadow:0 0 14px rgba(47,212,122,.5); }
+  /* 로고 별가루 · 곰돌이 모자 색 */
+  .spark { position:fixed; z-index:9999; pointer-events:none; font-style:normal; font-size:15px; transform:translate(-50%,-50%); animation:spark .9s ease-out forwards; }
+  @keyframes spark { to { transform:translate(calc(-50% + var(--tx)), calc(-50% + var(--ty))) scale(.4); opacity:0; } }
+  .hstk, .bearimg, .roll img { filter:hue-rotate(var(--caphue, 0deg)); }
+  /* 날씨 곰돌이 */
+  .wxh { position:relative; }
+  .wxbear { position:absolute; right:-4px; top:-30px; width:46px; pointer-events:none; }
+  .wxbear img { width:100%; display:block; filter:hue-rotate(var(--caphue, 0deg)) drop-shadow(0 3px 6px rgba(0,0,0,.5)); }
+  .wxbear i { position:absolute; font-style:normal; font-size:22px; left:-10px; top:-14px; animation:bob 2.4s ease-in-out infinite; }
+  .wxbear.cold i { left:auto; right:-8px; top:18px; font-size:14px; color:#fff; opacity:.8; animation:puff 2.2s ease-out infinite; }
+  @keyframes puff { 0% { opacity:0; transform:translate(0,0) scale(.6); } 30% { opacity:.85; } 100% { opacity:0; transform:translate(12px,-8px) scale(1.4); } }
+
+  /* 261126 스티커: 메인 첫 칸 오른쪽 위 */
+  .box.hasstk { position:relative; }
+  .boxstk { position:absolute; right:12px; top:-16px; z-index:3; pointer-events:none; }
+  .boxstk .hstk { position:static; display:block; width:84px; height:auto; margin:0; transform:rotate(5deg); filter:drop-shadow(0 4px 8px rgba(0,0,0,.5)) hue-rotate(var(--caphue, 0deg)); }
+  .boxstk .hstk.big { width:auto; height:72px; transform:rotate(6deg); }
+  .box.hasstk .wxbear { right:84px; }
+  .lkimg.side { flex-direction:column; }
+
+  /* 261126 조이스틱: 원 안에 곰돌이 얼굴, 손전등은 원 밖으로 */
+  body.ntdark #nbear { width:120px; height:120px; margin-left:-60px; bottom:calc(var(--nb2) + 30px); }
+  body.ntdark #nbear .ring { left:0; top:0; width:120px; height:120px; margin:0; opacity:1; border:1.5px solid rgba(255,214,120,.45); background:radial-gradient(circle, rgba(20,16,8,.5) 55%, rgba(20,16,8,.78)); box-shadow:0 0 22px rgba(255,200,90,.16), inset 0 0 18px rgba(0,0,0,.6); }
+  body.ntdark #nbear.drag .ring { border-color:rgba(255,214,120,.8); }
+  #nbear .ar { display:none; position:absolute; width:0; height:0; border:7px solid transparent; opacity:.85; pointer-events:none; }
+  body.ntdark #nbear .ar { display:block; }
+  #nbear .ar.u { left:50%; top:6px; margin-left:-7px; border-bottom:9px solid #ffd98a; border-top:0; }
+  #nbear .ar.d { left:50%; bottom:6px; margin-left:-7px; border-top:9px solid #ffd98a; border-bottom:0; }
+  #nbear .ar.l { top:50%; left:6px; margin-top:-7px; border-right:9px solid #ffd98a; border-left:0; }
+  #nbear .ar.r { top:50%; right:6px; margin-top:-7px; border-left:9px solid #ffd98a; border-right:0; }
+  #nbear .hint { display:none; position:absolute; left:50%; top:100%; transform:translateX(-50%); margin-top:5px; white-space:nowrap; font-size:11px; font-weight:600; color:#ffe9b5; opacity:.85; pointer-events:none; text-shadow:0 1px 4px #000; }
+  body.ntdark:not(.joyknown) #nbear .hint { display:block; }
+  body.ntdark #nbear .hint ~ .knob, body.ntdark #nbear .knob { position:absolute; left:27px; top:27px; width:66px; height:66px; border-radius:50%; background:radial-gradient(circle at 40% 35%, #3a3326, #16130d); border:2px solid rgba(255,214,120,.7); box-shadow:0 4px 12px rgba(0,0,0,.6); }
+  body.ntdark #nbear .knob img { width:62px; margin:-12px 0 0 0; }
+  body.ntdark #nbear .zz { right:-4px; top:-10px; }
+  body.ntdark.joyknown #nbear:not(.drag) .knob { animation:none; }
+  body.ntdark #nbear .say { right:50%; }
+  /* 261126 바닥 곰돌이: 메뉴바를 두 손으로 짚고 빼꼼 */
+  .floor { height:64px; margin:10px 10px 0; overflow:visible; }
+  body.ntclosed .floor { margin-bottom:0; }
+  #peek { position:fixed; left:50%; bottom:calc(var(--tab-h) - 4px + env(safe-area-inset-bottom)); width:104px; margin-left:-52px; z-index:9991; pointer-events:none; transform:translateY(calc(100% + var(--tab-h) + 30px)); transition:transform .55s cubic-bezier(.3,1.5,.5,1); }
+  body.peekon #peek { transform:none; }
+  body.peekon #nbar, body.peekon #nbear { visibility:hidden; }
+  body:not([data-r="home"]) #peek { display:none; }
+  #peek .head { display:block; width:104px; position:relative; z-index:1; filter:hue-rotate(var(--caphue, 0deg)); }
+  #peek .paw { position:absolute; bottom:-9px; width:30px; height:22px; border-radius:50% 50% 45% 45%; background:radial-gradient(circle at 40% 35%, #fff, #efe9df); border:2.2px solid #151515; z-index:3; box-shadow:0 2px 0 rgba(0,0,0,.35); }
+  #peek .paw::before, #peek .paw::after { content:''; position:absolute; bottom:3px; width:1.8px; height:6px; background:#151515; border-radius:1px; }
+  #peek .paw::before { left:9px; } #peek .paw::after { right:9px; }
+  #peek .paw.l { left:4px; transform:rotate(-8deg); } #peek .paw.r { right:4px; transform:rotate(8deg); }
+  #peek .paw i { position:absolute; width:7px; height:5px; border-radius:50%; background:#7ab6ff; opacity:.55; left:8px; top:4px; }
+  #peek .paw.r i { background:#ffcf4a; left:12px; }
+  #peek em { position:absolute; bottom:92%; left:70%; white-space:nowrap; font-style:normal; font-size:12px; font-weight:700; line-height:1.35; color:#111; background:#fff; padding:7px 10px; border-radius:12px 12px 12px 2px; box-shadow:0 6px 16px rgba(0,0,0,.4); opacity:0; transition:opacity .25s .35s; }
+  body.peekon #peek em { opacity:1; }
+  #peek.bye .head { animation:tilt .45s ease-in-out 4; transform-origin:50% 90%; }
+  @keyframes tilt { 50% { transform:rotate(-9deg); } }
 </style>
 </head>
 <body>
@@ -1124,7 +1205,8 @@
     [].forEach.call(document.querySelectorAll('[data-wish="' + c + '"]'), function (el) { el.classList.toggle('on', on); el.classList.remove('pop'); if (on) { void el.offsetWidth; el.classList.add('pop'); setTimeout(function () { el.classList.remove('pop'); }, 700); } });
     wishBadge();
     if (on) logE('w', c);
-    toast(on ? '찜했어요 ♡' : '찜에서 뺐어요');
+    if (on && wishCount() >= 10 && !ntSS('dj_w10')) { ntSS('dj_w10', '1'); ntSay('이 정도면 매장에서 다 입어봐야 해요', 5000, { href: '#/wish', t: '찜한 상품 한 번에 문의하기 ›' }); }
+    else toast(on ? '찜했어요 ♡' : '찜에서 뺐어요');
     if (document.body.dataset.r === 'wish') renderWish();
   }
   function wishCount() { return loadWish().filter(function (c) { return byCode[c]; }).length; }
@@ -1169,7 +1251,7 @@
   var STK_PRESET = [['xmas-bear', '산타 곰돌이'], ['tree-bear', '트리 곰돌이'], ['holidays', 'HAPPY HOLIDAYS'], ['newyear', 'HAPPY 2027']];
   function stkSrc(id) { return /^d:/.test(id) ? img(id.slice(2), 240) : 'assets/stk/' + id + '.png'; }
   function stkTag() { var k = D && D.stk; return k && k.on && k.id ? '<img class="hstk' + (/bear/.test(k.id) || /^d:/.test(k.id) ? ' big' : '') + '" src="' + esc(stkSrc(k.id)) + '" alt="">' : ''; }
-  function openLine() { var o = openInfo(); return '<span class="open' + (o.on ? ' on' : '') + '"><i></i>' + o.t + ' · B1</span>'; }
+  function openLine() { var o = openInfo(); return '<span class="open' + (o.on ? ' on' : '') + '"><i></i>' + o.t + ' · B1<span class="lsw' + (typeof NT !== 'undefined' && NT.dark ? '' : ' on') + '" role="switch" tabindex="0" aria-label="백화점 몰래 전등 켜기"><span class="lever"></span></span></span>'; }
 
   // ---------- 색상 점 · 재고 사이즈 ----------
   var COLOR_HEX = { BK:'#151515', WH:'#f4f4f4', IV:'#efe8d8', CR:'#eadfc6', BE:'#cdb48e', CA:'#b07b45', BR:'#6b4428', KH:'#6b6b3a', GN:'#3f7a46', BG:'#1f7f78', SB:'#9cc7e6', BL:'#3a63b8', NV:'#1f2a4a', PU:'#7b4fa8', PK:'#f0a3c0', RE:'#c8323a', WI:'#6e1f2b', OR:'#e8772e', YE:'#f2cf3a', MU:'#c9a227', GY:'#9a9a9a', LG:'#c9c9c9', CH:'#4a4a4f', MG:'#b8b8b8' };
@@ -1187,7 +1269,7 @@
     var app = document.getElementById('app');
     if (!document.getElementById('content')) {
       app.innerHTML =
-        '<div class="topwrap hcard"><header class="top"><div class="trow"><a class="brand hb" href="#/" aria-label="더블제이디 현대백화점 천호점"><span class="av"><img src="assets/store-sign.jpg" alt=""></span><span class="bt"><span class="lgrow"><img src="assets/logo-white.png" alt="DOUBLEJD"><span class="fskw"><i class="fsk">플래그십(자칭)</i>' + stkTag() + '</span></span><b class="hstore">현대백화점 천호점</b>' + openLine() + '</span></a>' +
+        '<div class="topwrap hcard"><header class="top"><div class="trow"><a class="brand hb" href="#/" aria-label="더블제이디 현대백화점 천호점"><span class="av"><img src="assets/store-sign.jpg" alt=""></span><span class="bt"><span class="lgrow"><img src="assets/logo-white.png" alt="DOUBLEJD"><span class="fskw"><i class="fsk">플래그십(자칭)</i></span></span><b class="hstore">현대백화점 천호점</b>' + openLine() + '</span></a>' +
         '<div class="hact"><button class="inst" id="inst" hidden>' + ICON_DL + '<span>앱 설치</span></button>' + wishBtn() + '<a class="icb" href="#/search" aria-label="상품 검색">' + ICON_SEARCH + '</a></div></div></header></div>' +
         '<div class="ticker" id="ticker" aria-hidden="true"></div><div class="stories hs" id="stories"></div>' +
         '<div id="hometop"></div>' +
@@ -1251,6 +1333,8 @@
     h += '<div class="box" id="newbox">' + secHead(secNo('new'), 'FRESH DROP', '신상품', '<button class="evall" data-allnew="1">전체 보기 ›</button>', drop ? 'DROP ' + drop : '');
     h += (news.length ? '<div class="row hs">' + news.map(function (p) { return card(p, { isNew: true }); }).join('') + '</div>' : empty('새로 들어온 상품을 정리하고 있어요.')) + '</div>';
     el.innerHTML = h; h = '';
+    var fb = el.querySelector('.box'), sk = stkTag();
+    if (fb && sk) { fb.classList.add('hasstk'); fb.insertAdjacentHTML('beforeend', '<span class="boxstk">' + sk + '</span>'); }
     var sets = homeSets(false);
     if (sets.length) {
       h += '<div class="box" id="stybox">' + secHead(secNo('sty'), 'FLAGSHIP* STYLING', '추천 코디', '<button class="pill sm" data-hroll="1">' + ICON_DICE + '랜덤</button>', D.homeAll.length + ' LOOKS') +
@@ -1308,8 +1392,9 @@
     h += (all.length ? '<div class="grid">' + all.map(function (p) { return card(p, { isNew: true }); }).join('') + '</div>' : emptyX({ t: '이 품목은 지금 매장에 없어요', s: '다른 품목을 골라 보시거나 매장에 물어봐 주세요.', acts: ['<button class="pill sm" data-cat="전체">전체 보기</button>', '<button class="pill sm" data-ask="1">' + ICON_SMS + '매장에 물어보기</button>'] })) + '</div><div class="foot">';
     h += '<a class="visitcard" href="#/visit"><img src="assets/b1-map-v3.png" alt=""><span><b>찾아오시는 길</b><small>천호역 3·4번 출구에서 백화점 지하로 바로 연결 · 지하1층 영스트리트</small></span>' + chev('r') + '</a>';
     h += '<p class="note">매장 재고는 수시로 바뀌어요. 방문 전 매장에 문의해 주세요.' + (atText(D.at) ? '<br>' + atText(D.at) + ' 기준' : '') + '</p>';
-    h += '</div>';
+    h += floorHtml() + '</div>';
     document.getElementById('content2').innerHTML = h;
+    floorWatch();
   }
 
   // ---------- 천호점 행사 (앱스 스크립트가 현대백화점 행사안내에서 가져옴) ----------
@@ -1629,7 +1714,7 @@
         '<button class="fnav" data-mv="' + which + ':1" aria-label="다음">' + chev('r') + '</button></div>';
     }
     var fitHtml = '<div class="fit fit2"><div class="fitin">' +
-      '<div class="topwrap hcard"><header class="top"><div class="trow"><a class="brand hb" href="#/" aria-label="더블제이디 현대백화점 천호점 메인으로"><span class="av"><img src="assets/store-sign.jpg" alt=""></span><span class="bt"><span class="lgrow"><img src="assets/logo-white.png" alt="DOUBLEJD"><span class="fskw"><i class="fsk">플래그십(자칭)</i>' + stkTag() + '</span></span><b class="hstore">현대백화점 천호점</b>' + openLine() + '</span></a>' +
+      '<div class="topwrap hcard"><header class="top"><div class="trow"><a class="brand hb" href="#/" aria-label="더블제이디 현대백화점 천호점 메인으로"><span class="av"><img src="assets/store-sign.jpg" alt=""></span><span class="bt"><span class="lgrow"><img src="assets/logo-white.png" alt="DOUBLEJD"><span class="fskw"><i class="fsk">플래그십(자칭)</i></span></span><b class="hstore">현대백화점 천호점</b>' + openLine() + '</span></a>' +
       '<div class="hact">' + wishBtn() + '<a class="icb" href="#/search" aria-label="상품 검색">' + ICON_SEARCH + '</a></div></div></header></div>' +
       '<div class="fith2"><a class="ib" href="#/" aria-label="메인으로">' + chev('l') + '</a><b>코디해보기</b><button class="pill sm" data-rnd="all">' + ICON_DICE + '전체 랜덤</button></div>' +
       '<div class="fstage">' +
@@ -1761,6 +1846,7 @@
   var KR_HOLI = { '20261225': '성탄절', '20270101': '새해 첫날', '20270206': '설 연휴', '20270207': '설날', '20270208': '설 연휴', '20270209': '대체공휴일', '20270301': '삼일절', '20270505': '어린이날', '20270513': '부처님오신날', '20270606': '현충일', '20270815': '광복절', '20270816': '대체공휴일', '20270914': '추석 연휴', '20270915': '추석', '20270916': '추석 연휴', '20271003': '개천절', '20271004': '대체공휴일', '20271009': '한글날', '20271011': '대체공휴일', '20271225': '성탄절' };
   function storeNotice() {
     var cal = EV && EV.ok && EV.cal ? EV.cal : null, out = [], n = new Date();
+    var hr0 = ntHours(); if (!hr0.off && hr0.m < hr0.close && hr0.close - hr0.m <= 10) out.push('곧 마감해요 · ' + Math.floor(hr0.close / 60) + ':' + ('0' + hr0.close % 60).slice(-2) + '까지');
     var hm = function (x) { return Math.floor(x / 60) + ':' + ('0' + x % 60).slice(-2); };
     for (var i = 0; i < 7; i++) {
       var d = new Date(n.getTime() + i * 86400000), k = ymd(d), w = d.getDay();
@@ -1830,9 +1916,16 @@
     var list = D.items.filter(function (p) { return p.img && want(p); }).sort(function (a, b) { return (a.ro || 999) - (b.ro || 999) || newOrder(a, b); }).slice(0, 10);
     return list.length >= 3 ? { msg: msg, list: list } : null;
   }
+  function wxBear() {
+    var c = WX.code, rain = (c >= 51 && c <= 67) || (c >= 80 && c <= 82) || c >= 95, snow = (c >= 71 && c <= 77) || c === 85 || c === 86;
+    if (snow) return '<span class="wxbear"><img src="assets/bear-cap.png" alt=""><i>❄️</i></span>';
+    if (rain) return '<span class="wxbear"><img src="assets/bear-cap.png" alt=""><i>☂️</i></span>';
+    if (WX.temp < 0) return '<span class="wxbear cold"><img src="assets/bear-cap.png" alt=""><i>후~</i></span>';
+    return '';
+  }
   function wxSection() {
     var w = wxPick(); if (!w) return '';
-    return '<div class="box wxbox" id="wxbox"><div class="wxlab"><span>TODAY\'S FIT</span><em>날씨 맞춤 추천</em></div><div class="wxh"><b class="wxt">' + WX.temp + '°</b><div><strong>지금 천호동 ' + WX_TXT(WX.code) + ' · 최저 ' + WX.lo + '° / 최고 ' + WX.hi + '°</strong><span>' + w.msg + '</span></div></div>' +
+    return '<div class="box wxbox" id="wxbox"><div class="wxlab"><span>TODAY\'S FIT</span><em>날씨 맞춤 추천</em></div><div class="wxh">' + wxBear() + '<b class="wxt">' + WX.temp + '°</b><div><strong>지금 천호동 ' + WX_TXT(WX.code) + ' · 최저 ' + WX.lo + '° / 최고 ' + WX.hi + '°</strong><span>' + w.msg + '</span></div></div>' +
       '<div class="row hs">' + w.list.map(function (p) { return card(p); }).join('') + '</div></div>';
   }
 
@@ -1866,7 +1959,7 @@
     var ims = [].slice.call(el.querySelectorAll('img')).filter(function (x) { return x.naturalWidth; });
     var r = ims.length ? ims.reduce(function (t, x) { return t + x.naturalWidth / x.naturalHeight; }, 0) / ims.length : 1;   // 사진 가로/세로
     var area = function (bw, bh) { var w = Math.min(bw, bh * r); return w * w / r; };
-    if (area(W / 2, H) > area(W, H / 2) * 1.08) el.classList.add('side');
+    // 261126~ 늘 위(상의)·아래(하의)로 — 나란히 두지 않음
     ims.length < 2 && [].forEach.call(el.querySelectorAll('img'), function (x) { if (!x.naturalWidth && !x.dataset.lf) { x.dataset.lf = 1; x.addEventListener('load', lookFit, { once: true }); } });
   }
   window.addEventListener('resize', function () { if (document.body.dataset.r === 'look') lookFit(); });
@@ -2424,100 +2517,255 @@
     back2();
   }
   function back2() { if (navIn && history.length > 1 && location.hash.indexOf('#/p/') === 0) history.back(); else location.hash = '#/'; }
-  // ---------- 261126 밤의 백화점: 영업시간 밖엔 불 꺼진 백화점을 손전등으로 몰래 구경 ----------
-  //  closed(영업 전·마감 뒤·휴점일) → 기본 어둡게 + 손전등. 우상단 전등 스위치로 '몰래 전등 켜기'(이 탭 동안 기억)
-  //  영업 중에 스위치를 내리면 '정전' — 말풍선 + 5초 세고 다시 밝게. 비상구를 누르면 곰돌이가 인사
-  //  관리자 화면에선 안 함. '동작 줄이기' 손님은 손전등이 따라오지 않고 가운데 고정
-  var NT = { dark: false, closed: false, outage: 0, x: innerWidth / 2, y: innerHeight * .55, bx: innerWidth / 2, raf: 0, moved: false };
-  var NT_R = { home: [150, .55, 1], search: [160, .5, 1], wish: [160, .5, 1], visit: [180, .5, 1], detail: [235, .32, 0], fit: [265, .47, 0], look: [270, .42, 0] };
+  // ---------- 261126 밤의 백화점 v2 ----------
+  //  영업시간 밖(영업 전·마감 뒤·휴점일) → 불 꺼진 백화점 + 손전등. 손전등은 아래 가운데 곰돌이를 잡고 조이스틱처럼 움직임(천천히, 끝까지는 안 감)
+  //  전등 스위치 = 머리줄 영업 표시 줄 끝의 작은 스위치(.lsw) — 어두울 땐 그 자리에 야광 스위치(#lswg)를 띄움
+  //  영업 중에 내리면 '정전' 5초. 비상구 = 메인 맨 아래(바닥 곰돌이가 인사)
+  //  어둠은 큰 판 4장을 transform으로만 옮김(다시 그리지 않아 느린 기기도 부드럽게)
+  var NT = { dark: false, closed: false, sleep: false, outage: 0, lx: 0, ly: 0, jx: 0, jy: 0, drag: null, raf: 0, last: 0, S: 0, rad: 0, r: '' };
+  var NT_R = { home: [190, .5], search: [190, .5], wish: [190, .5], visit: [200, .48], detail: [250, .33], fit: [280, .47], look: [290, .42] };
+  var NT_SPEED = 230;   // 조이스틱 끝까지 밀었을 때 1초에 움직이는 거리(px)
   function ntLightOn() { try { return sessionStorage.getItem('dj_light') === 'on'; } catch (e) { return false; } }
+  function ntSS(k, v) { try { if (v === undefined) return sessionStorage.getItem(k); sessionStorage.setItem(k, v); } catch (e) {} }
   function ntSetup() {
     if (document.getElementById('nfx')) return;
     var w = document.createElement('div'); w.id = 'nfx';
-    w.innerHTML = '<div id="nwarm"></div><div id="ndark"></div><svg id="nbeam" aria-hidden="true"><defs><linearGradient id="nbg" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#ffe6aa" stop-opacity=".30"/><stop offset="1" stop-color="#ffe6aa" stop-opacity=".04"/></linearGradient></defs><polygon id="nbp" fill="url(#nbg)"/></svg><div id="nglow"></div><div id="ndust"></div>' +
+    w.innerHTML = '<div class="nl" id="nwarm"></div><div class="nl" id="ndark"></div><svg id="nbeam" aria-hidden="true"><defs><linearGradient id="nbg" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#ffe6aa" stop-opacity=".30"/><stop offset="1" stop-color="#ffe6aa" stop-opacity=".04"/></linearGradient></defs><polygon id="nbp" fill="url(#nbg)"/></svg><div class="nl" id="nglow"></div><div class="nl" id="ndust"></div>' +
       '<div id="nbar" role="status"></div>' +
-      '<div id="nbear" aria-hidden="true"><img src="assets/bear-torch.png" alt=""><span class="say"></span></div>' +
-      '<div id="lsw"><span class="cap">몰래<br>전등 켜기</span><button id="lswb" role="switch" aria-label="백화점 몰래 전등 켜기"><span class="plate"><i class="screw"></i><span class="slot"><span class="lever"></span></span><i class="screw"></i></span></button>' +
-      '<button id="nexit" aria-label="비상구"><b>🏃</b>EXIT</button><div id="nbub" role="status"></div></div>';
+      '<div id="nbear"><span class="ring"></span><i class="ar u"></i><i class="ar d"></i><i class="ar l"></i><i class="ar r"></i><small class="hint">곰돌이를 잡고 움직여 보세요</small><span class="knob"><img src="assets/bear-torch.png" alt="" draggable="false"><i class="zz">Z<b>z</b><b>z</b></i></span><span class="say"></span></div>' +
+      '<span id="lswg" role="switch" tabindex="0" aria-label="백화점 몰래 전등 켜기"><span class="lever"></span></span><div id="nbub" role="status"></div>';
     document.body.appendChild(w);
-    document.getElementById('lswb').onclick = ntToggle;
-    document.getElementById('nexit').onclick = function () { ntSay('감사합니다. 또 오세요!', 2800); };
-    var mv = function (x, y) { NT.x = x; NT.y = y; NT.moved = true; if (NT.dark) ntKick(); };
-    window.addEventListener('pointermove', function (e) { mv(e.clientX, e.clientY); }, { passive: true });
-    window.addEventListener('pointerdown', function (e) { mv(e.clientX, e.clientY); }, { passive: true });
-    window.addEventListener('touchmove', function (e) { var t = e.touches[0]; if (t) mv(t.clientX, t.clientY); }, { passive: true });
-    window.addEventListener('resize', ntKick);
-    window.addEventListener('hashchange', function () { NT.moved = false; setTimeout(ntSync, 0); });
+    var bear = document.getElementById('nbear'), knob = bear.querySelector('.knob');
+    // 조이스틱: 곰돌이를 누른 채로 밀기
+    knob.addEventListener('pointerdown', function (e) {
+      if (!NT.dark) return;
+      e.preventDefault();
+      try { knob.setPointerCapture(e.pointerId); } catch (er) {}
+      NT.drag = { id: e.pointerId, x: e.clientX, y: e.clientY };
+      bear.classList.add('drag'); NT.last = 0; ntKick();
+      if (!ntSS('dj_joy')) { ntSS('dj_joy', '1'); document.body.classList.add('joyknown'); }
+    });
+    knob.addEventListener('pointermove', function (e) {
+      if (!NT.drag || e.pointerId !== NT.drag.id) return;
+      var dx = e.clientX - NT.drag.x, dy = e.clientY - NT.drag.y, L = Math.sqrt(dx * dx + dy * dy), M = 28;
+      if (L > M) { dx = dx / L * M; dy = dy / L * M; }
+      NT.jx = dx / M; NT.jy = dy / M;
+      knob.style.transform = 'translate(' + dx.toFixed(1) + 'px,' + dy.toFixed(1) + 'px) rotate(' + (NT.jx * 12).toFixed(1) + 'deg)';
+    });
+    var up = function (e) { if (!NT.drag || (e && e.pointerId !== NT.drag.id)) return; NT.drag = null; NT.jx = NT.jy = 0; knob.style.transform = ''; bear.classList.remove('drag'); };
+    knob.addEventListener('pointerup', up); knob.addEventListener('pointercancel', up); knob.addEventListener('lostpointercapture', up);
+    var sw = document.getElementById('lswg');
+    sw.addEventListener('click', ntToggle);
+    sw.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); ntToggle(); } });
+    // 머리줄 스위치(링크 안에 있으므로 이동 막고 켜고 끄기)
+    document.addEventListener('click', function (e) { var t = e.target.closest && e.target.closest('.lsw'); if (!t) return; e.preventDefault(); e.stopPropagation(); ntToggle(); }, true);
+    document.addEventListener('keydown', function (e) { if ((e.key === 'Enter' || e.key === ' ') && e.target.classList && e.target.classList.contains('lsw')) { e.preventDefault(); ntToggle(); } }, true);
+    var place = function () { if (NT.dark || document.getElementById('nbub').classList.contains('on')) ntPlaceSwitch(); };
+    window.addEventListener('scroll', place, { passive: true });
+    window.addEventListener('resize', function () { NT.S = 0; NT.r = ''; ntSync(); });
+    window.addEventListener('hashchange', function () { NT.r = ''; setTimeout(ntSync, 0); });
     setInterval(ntSync, 60 * 1000);
+  }
+  // 지금 보이는 머리줄 스위치 위치 (없으면 null)
+  function ntSwitchRect() {
+    var list = document.querySelectorAll('.lsw');
+    for (var i = 0; i < list.length; i++) { var r = list[i].getBoundingClientRect(); if (r.width && r.bottom > 0 && r.top < innerHeight) return r; }
+    return null;
+  }
+  function ntPlaceSwitch() {
+    var g = document.getElementById('lswg'), bub = document.getElementById('nbub'), r = ntSwitchRect();
+    if (g) { if (r && NT.dark) { g.style.left = r.left + 'px'; g.style.top = r.top + 'px'; g.classList.add('show'); } else g.classList.remove('show'); }
+    if (bub) { var rr = r || { left: innerWidth - 30, top: 20, bottom: 40, width: 14 }; bub.style.top = (rr.bottom + 8) + 'px'; bub.style.right = Math.max(8, innerWidth - rr.left - rr.width - 10) + 'px'; }
+  }
+  function ntBubble(html, ms) {
+    var bub = document.getElementById('nbub'); if (!bub) return;
+    bub.innerHTML = html; ntPlaceSwitch(); bub.classList.add('on');
+    clearTimeout(NT.bubT); if (ms) NT.bubT = setTimeout(function () { bub.classList.remove('on'); }, ms);
   }
   function ntToggle() {
     if (NT.outage) { ntEndOutage(); return; }
     if (NT.closed) {   // 영업시간 밖: 몰래 전등 켜기/끄기
       var on = !ntLightOn();
       try { if (on) sessionStorage.setItem('dj_light', 'on'); else sessionStorage.removeItem('dj_light'); } catch (e) {}
-      ntSync(); return;
+      document.getElementById('nbub').classList.remove('on');
+      ntSync();
+      if (on) ntBubble('불 켰어요 💡<small>경비 아저씨한테는 비밀이에요</small>', 2600);
+      return;
     }
-    // 영업 중: 정전 5초
-    var n = 5, bub = document.getElementById('nbub');
+    var n = 5;   // 영업 중: 정전 5초
     var tick = function () {
       if (!NT.outage) return;
-      bub.innerHTML = '정전으로 불편을 드려 죄송합니다.<small>조명 복구 중… <b>' + n + '</b></small>';
+      ntBubble('정전으로 불편을 드려 죄송합니다.<small>조명 복구 중… <b>' + n + '</b></small>');
       if (n-- <= 0) { ntEndOutage(); return; }
       NT.outage = setTimeout(tick, 1000);
     };
-    NT.outage = 1; bub.classList.add('on'); ntSync(); tick();
+    NT.outage = 1; ntSync(); tick();
   }
   function ntEndOutage() {
     clearTimeout(NT.outage); NT.outage = 0;
     var bub = document.getElementById('nbub'); if (bub) bub.classList.remove('on');
     ntSync();
   }
-  function ntSay(t, ms) {
+  // 곰돌이 말풍선 (밝을 땐 오른쪽 아래에 잠깐 나옴). act = { href, t } 누를 수 있는 줄
+  function ntSay(t, ms, act) {
+    ntSetup();
     var b = document.getElementById('nbear'); if (!b) return;
-    b.querySelector('.say').textContent = t;
+    b.querySelector('.say').innerHTML = esc(t) + (act ? '<a href="' + act.href + '">' + esc(act.t) + '</a>' : '');
     b.classList.add('talk'); clearTimeout(NT.sayT);
-    if (!NT.dark) { NT.bx = Math.min(innerWidth - 50, Math.max(50, innerWidth - 70)); b.style.left = NT.bx + 'px'; }
-    NT.sayT = setTimeout(function () { b.classList.remove('talk'); }, ms || 2500);
+    NT.sayT = setTimeout(function () { b.classList.remove('talk'); }, ms || 2600);
+  }
+  // 오늘 마감·오픈 시각(분)
+  function ntHours() {
+    var n = new Date(), d = n.getDay(), today = ymd(n), cal = EV && EV.ok && EV.cal ? EV.cal : null;
+    var close = 20 * 60;
+    if (cal && cal.ext && cal.ext[today] != null) close += cal.ext[today]; else if (d === 5 || d === 6 || d === 0) close += 30;
+    return { m: n.getHours() * 60 + n.getMinutes(), open: 10 * 60 + 30, close: close, off: !!(cal && cal.closed && cal.closed.indexOf(today) >= 0) };
   }
   function ntSync() {
     ntSetup();
-    var r = document.body.dataset.r || 'home', admin = r === 'admin';
-    var o = openInfo();
+    var r = document.body.dataset.r || 'home', admin = r === 'admin', o = openInfo(), hr = ntHours();
     NT.closed = !o.on && !admin;
+    NT.sleep = NT.closed && hr.off;
     NT.dark = !admin && (NT.outage ? true : (NT.closed && !ntLightOn()));
     var b = document.body;
-    b.classList.toggle('ntdark', NT.dark); b.classList.toggle('ntclosed', NT.closed); b.classList.toggle('ntadmin', admin);
+    if (ntSS('dj_joy')) b.classList.add('joyknown');
+    b.classList.toggle('ntdark', NT.dark); b.classList.toggle('ntclosed', NT.closed); b.classList.toggle('ntadmin', admin); b.classList.toggle('ntsleep', NT.sleep);
     var bar = document.getElementById('nbar');
     if (bar) {
-      var when = /휴점/.test(o.t) ? '휴점일 백화점' : /영업 전/.test(o.t) ? '오픈 전 백화점' : '영업 끝난 백화점';
-      var nx = /영업 전/.test(o.t) ? '오늘 10:30 오픈' : (o.t.split(' · ')[1] || '').replace('내일 휴점', '내일은 휴점');
-      bar.innerHTML = '<i>🔦</i>쉿… ' + when + ' 몰래 구경 중' + (nx ? ' · ' + nx : '');
+      if (NT.sleep) bar.innerHTML = '<i>💤</i>오늘은 곰돌이도 쉬는 날 · 내일 10:30에 만나요';
+      else {
+        var when = /영업 전/.test(o.t) ? '오픈 전 백화점' : '영업 끝난 백화점';
+        var nx = /영업 전/.test(o.t) ? '오늘 10:30 오픈' : (o.t.split(' · ')[1] || '').replace('내일 휴점', '내일은 백화점 휴점일');
+        bar.innerHTML = '<i>🔦</i>쉿… ' + when + ' 몰래 구경 중' + (nx ? ' · ' + nx : '');
+      }
     }
-    var sw = document.getElementById('lswb');
-    if (sw) { var lit = !NT.dark; sw.classList.toggle('on', lit); sw.setAttribute('aria-checked', lit ? 'true' : 'false'); }
-    if (NT.dark) ntKick(); else { cancelAnimationFrame(NT.raf); NT.raf = 0; }
+    [].forEach.call(document.querySelectorAll('.lsw, #lswg'), function (s) { s.classList.toggle('on', !NT.dark); s.setAttribute('aria-checked', NT.dark ? 'false' : 'true'); });
+    // 손전등 처음 켜질 때 스위치 알려 주기(탭마다 한 번)
+    if (NT.dark && NT.closed && !ntSS('dj_lhint')) { ntSS('dj_lhint', '1'); setTimeout(function () { if (NT.dark) ntBubble('쉿, 여기서 몰래 불 켤 수 있어요', 3800); }, 1200); }
+    ntShutter(hr, o);
+    if (NT.dark) { if (NT.r !== r) ntReset(r); ntPlaceSwitch(); ntKick(); }
+    else { cancelAnimationFrame(NT.raf); NT.raf = 0; ntPlaceSwitch(); }
+  }
+  function ntReset(r) {
+    var cfg = NT_R[r] || NT_R.home, W = innerWidth, H = innerHeight;
+    NT.r = r; NT.rad = Math.round(Math.min(cfg[0], Math.max(W, 320) * .66));
+    NT.lx = W / 2; NT.ly = H * cfg[1];
+    var S = Math.ceil(Math.sqrt(W * W + H * H)) * 2 + NT.rad * 2;
+    NT.S = S;
+    ['nwarm', 'ndark', 'nglow', 'ndust'].forEach(function (id) { var e = document.getElementById(id); e.style.width = e.style.height = S + 'px'; e.style.setProperty('--fr', NT.rad + 'px'); });
   }
   function ntKick() { if (!NT.raf) NT.raf = requestAnimationFrame(ntFrame); }
-  function ntFrame() {
+  function ntFrame(ts) {
     NT.raf = 0;
     if (!NT.dark) return;
-    var r = document.body.dataset.r || 'home', cfg = NT_R[r] || NT_R.home, W = innerWidth, H = innerHeight;
-    var rad = Math.min(cfg[0], Math.max(W, 320) * .62);
-    var follow = cfg[2] && NT.moved && !REDUCE;
-    var cx = follow ? NT.x : W / 2, cy = follow ? NT.y : H * cfg[1];
-    var tx = follow ? NT.x : W / 2;
-    NT.bx += (Math.min(W - 34, Math.max(34, tx)) - NT.bx) * (REDUCE ? 1 : .22);
-    var bear = document.getElementById('nbear');
-    bear.style.left = NT.bx + 'px';
-    var br = bear.getBoundingClientRect(), lx = br.left + br.width * .63, ly = br.top + br.height * .04;
-    ['nwarm', 'ndark', 'nglow', 'ndust'].forEach(function (id) { var e = document.getElementById(id); e.style.setProperty('--fx', cx + 'px'); e.style.setProperty('--fy', cy + 'px'); e.style.setProperty('--fr', rad + 'px'); });
-    // 손전등에서 원까지 빛줄기
-    var dx = cx - lx, dy = cy - ly, L = Math.sqrt(dx * dx + dy * dy) || 1, nx = -dy / L, ny = dx / L, k = rad * .92;
-    var pts = [[lx + nx * 5, ly + ny * 5], [cx + nx * k, cy + ny * k], [cx - nx * k, cy - ny * k], [lx - nx * 5, ly - ny * 5]];
-    document.getElementById('nbp').setAttribute('points', pts.map(function (p) { return p[0].toFixed(1) + ',' + p[1].toFixed(1); }).join(' '));
-    var g = document.getElementById('nbg'); g.setAttribute('x1', lx); g.setAttribute('y1', ly); g.setAttribute('x2', cx); g.setAttribute('y2', cy);
-    if (Math.abs(NT.bx - Math.min(W - 34, Math.max(34, tx))) > .5) ntKick();
+    var W = innerWidth, H = innerHeight, dt = NT.last ? Math.min(.05, (ts - NT.last) / 1000) : 0;
+    NT.last = ts;
+    if (NT.drag) {   // 끝까지는 안 가게: 가로 18~82%, 세로 14~70%
+      NT.lx = Math.min(W * .82, Math.max(W * .18, NT.lx + NT.jx * NT_SPEED * dt));
+      NT.ly = Math.min(H * .70, Math.max(H * .14, NT.ly + NT.jy * NT_SPEED * dt));
+    }
+    var off = 'translate3d(' + (NT.lx - NT.S / 2).toFixed(1) + 'px,' + (NT.ly - NT.S / 2).toFixed(1) + 'px,0)';
+    ['nwarm', 'ndark', 'nglow', 'ndust'].forEach(function (id) { document.getElementById(id).style.transform = off; });
+    // 곰돌이 손전등 → 빛 원
+    var img = document.querySelector('#nbear .knob img'), br = img && img.getBoundingClientRect();
+    var p = document.getElementById('nbp');
+    if (br && br.width) {
+      var lx = br.left + br.width * .63, ly = br.top + br.height * .04, cx = NT.lx, cy = NT.ly;
+      var dx = cx - lx, dy = cy - ly, L = Math.sqrt(dx * dx + dy * dy) || 1, nx = -dy / L, ny = dx / L, k = NT.rad * .92;
+      p.setAttribute('points', [[lx + nx * 4, ly + ny * 4], [cx + nx * k, cy + ny * k], [cx - nx * k, cy - ny * k], [lx - nx * 4, ly - ny * 4]].map(function (q) { return q[0].toFixed(1) + ',' + q[1].toFixed(1); }).join(' '));
+      var g = document.getElementById('nbg'); g.setAttribute('x1', lx); g.setAttribute('y1', ly); g.setAttribute('x2', cx); g.setAttribute('y2', cy);
+    } else p.setAttribute('points', '');
+    if (NT.drag) ntKick(); else NT.last = 0;
   }
+  // 셔터: 마감 10분 전엔 머리줄 위로 셔터가 살짝, 오픈 10분 전엔 내려와 있다가 10:30에 올라감
+  function ntShutter(hr, o) {
+    var tw = document.querySelector('#app .topwrap, #layer .fit2 .topwrap'); if (!tw) return;
+    var sh = tw.querySelector('.shut');
+    var soon = o.on && hr.close - hr.m <= 10 && hr.close - hr.m >= 0;
+    var pre = !o.on && !hr.off && hr.open - hr.m <= 10 && hr.open - hr.m > 0;
+    if (!soon && !pre) { if (sh && sh.classList.contains('pre')) { sh.classList.remove('pre'); sh.classList.add('up'); setTimeout(function () { sh.remove(); }, 2200); } else if (sh && !sh.classList.contains('up')) sh.remove(); return; }
+    if (!sh) { sh = document.createElement('div'); sh.className = 'shut'; sh.setAttribute('aria-hidden', 'true'); tw.appendChild(sh); }
+    sh.classList.toggle('soon', soon); sh.classList.toggle('pre', pre);
+    sh.innerHTML = '<em>' + (soon ? '곧 마감해요 · ' + Math.floor(hr.close / 60) + ':' + ('0' + hr.close % 60).slice(-2) + '까지' : '10:30 OPEN · 곧 셔터 올라가요') + '</em>';
+  }
+  // 바닥 곰돌이 + 비상구 (메인 맨 아래)
+  function floorHtml() {
+    return '<div class="floor" id="floor"><button class="exitb" data-exit="1" aria-label="비상구"><b>🏃</b>비상구 EXIT</button></div>';
+  }
+  function peekEl() {
+    var pk = document.getElementById('peek');
+    if (!pk) {
+      pk = document.createElement('div'); pk.id = 'peek'; pk.setAttribute('aria-hidden', 'true');
+      pk.innerHTML = '<img class="head" src="assets/bear-cap.png" alt=""><span class="paw l"><i></i></span><span class="paw r"><i></i></span><em></em>';
+      document.body.appendChild(pk);
+      window.addEventListener('hashchange', function () { document.body.classList.remove('peekon'); });
+    }
+    return pk;
+  }
+  function floorWatch() {
+    var f = document.getElementById('floor'); if (!f || f.dataset.w) return;
+    f.dataset.w = '1';
+    var pk = peekEl();
+    var on = function (v) {
+      if (v && !document.body.classList.contains('peekon')) { pk.classList.remove('bye'); pk.querySelector('em').innerHTML = '여기까지 본 손님은<br>진짜 찐팬 인정 👍'; }
+      document.body.classList.toggle('peekon', !!v && (document.body.dataset.r || 'home') === 'home');
+    };
+    if (!('IntersectionObserver' in window)) return;
+    new IntersectionObserver(function (es) { es.forEach(function (x) { on(x.isIntersecting); }); }, { threshold: .3 }).observe(f);
+  }
+  function floorBye() {
+    var pk = peekEl();
+    pk.querySelector('em').innerHTML = '감사합니다.<br>또 오세요! 👋';
+    document.body.classList.add('peekon');
+    pk.classList.remove('bye'); void pk.offsetWidth; pk.classList.add('bye');
+  }
+  // 로고 다섯 번 → 별가루 + 곰돌이 모자 색 바뀜
+  (function () {
+    var n = 0, t = 0, hue = 0;
+    try { hue = +(sessionStorage.getItem('dj_hue') || 0); } catch (e) {}
+    if (hue) document.documentElement.style.setProperty('--caphue', hue + 'deg');
+    document.addEventListener('click', function (e) {
+      var lg = e.target.closest && e.target.closest('.lgrow > img'); if (!lg) return;
+      e.preventDefault();
+      var now = Date.now(); n = now - t < 900 ? n + 1 : 1; t = now;
+      if (n < 5) return;
+      n = 0; hue = (hue + 72) % 360;
+      document.documentElement.style.setProperty('--caphue', hue + 'deg');
+      try { sessionStorage.setItem('dj_hue', hue); } catch (er) {}
+      var r = lg.getBoundingClientRect(), cx = r.left + r.width / 2, cy = r.top + r.height / 2;
+      for (var i = 0; i < 16; i++) {
+        var s = document.createElement('i'); s.className = 'spark'; s.textContent = ['★', '✦', '♥', '✧'][i % 4];
+        var a = Math.PI * 2 * i / 16, d = 50 + Math.random() * 50;
+        s.style.left = cx + 'px'; s.style.top = cy + 'px'; s.style.color = ['#ff4d8d', '#ffc21a', '#62c6ff', '#b48cff'][i % 4];
+        s.style.setProperty('--tx', (Math.cos(a) * d).toFixed(0) + 'px'); s.style.setProperty('--ty', (Math.sin(a) * d).toFixed(0) + 'px');
+        document.body.appendChild(s); setTimeout(function (x) { return function () { x.remove(); }; }(s), 1000);
+      }
+      toast('곰돌이 모자를 바꿨어요 🧢');
+    }, true);
+  })();
+  // 코디해보기: 폰을 흔들면 전체 랜덤
+  (function () {
+    var asked = false, lastA = null, lastT = 0, hinted = false;
+    function onMotion(e) {
+      if (document.body.dataset.r !== 'fit') return;
+      var a = e.accelerationIncludingGravity; if (!a || a.x == null) return;
+      if (lastA) {
+        var d = Math.abs(a.x - lastA.x) + Math.abs(a.y - lastA.y) + Math.abs(a.z - lastA.z);
+        if (d > 32 && Date.now() - lastT > 1600 && !st.rolling) { lastT = Date.now(); roll('all'); }
+      }
+      lastA = { x: a.x, y: a.y, z: a.z };
+    }
+    function arm() {
+      if (asked) return; asked = true;
+      var DM = window.DeviceMotionEvent;
+      if (DM && typeof DM.requestPermission === 'function') DM.requestPermission().then(function (s) { if (s === 'granted') window.addEventListener('devicemotion', onMotion); }).catch(function () {});
+      else if (DM) window.addEventListener('devicemotion', onMotion);
+    }
+    document.addEventListener('touchend', function () { if (document.body.dataset.r === 'fit') arm(); }, { passive: true });
+    window.addEventListener('hashchange', function () {
+      if (/^#\/fit/.test(location.hash) && 'ontouchstart' in window && !hinted && !ntSS('dj_shake')) { hinted = true; ntSS('dj_shake', '1'); setTimeout(function () { toast('폰을 흔들어도 주사위가 굴러가요 🎲'); }, 900); }
+    });
+  })();
   function route() {
     var h = location.hash || '#/', m;
     [].forEach.call(document.querySelectorAll('body > .guide'), function (g) { g.remove(); });   // 화면을 옮기면 떠 있던 아래 창은 닫음
@@ -2536,7 +2784,7 @@
     document.body.style.overflow = '';
   }
   document.addEventListener('click', function (e) {
-    var t = e.target.closest('[data-p],[data-cat],[data-sub],[data-best],[data-more],[data-mv],[data-rnd],[data-rec],[data-load],[data-acat],[data-ahide],[data-aedit],[data-opt],[data-pk],[data-delph],[data-main],[data-addsz],[data-hset],[data-admhome],[data-ev],[data-hroll],[data-allnew],[data-sq],[data-sqdel],[data-sqclr],[data-ask],[data-wish],[data-wclr],[data-story],[data-lk],[data-lkclose],[data-lksave],[data-askp],[data-share],[data-hold],[data-sqclr2],[data-rest],[data-totop]');
+    var t = e.target.closest('[data-p],[data-cat],[data-sub],[data-best],[data-more],[data-mv],[data-rnd],[data-rec],[data-load],[data-acat],[data-ahide],[data-aedit],[data-opt],[data-pk],[data-delph],[data-main],[data-addsz],[data-hset],[data-admhome],[data-ev],[data-hroll],[data-allnew],[data-sq],[data-sqdel],[data-sqclr],[data-ask],[data-wish],[data-wclr],[data-story],[data-lk],[data-lkclose],[data-lksave],[data-askp],[data-share],[data-hold],[data-sqclr2],[data-rest],[data-totop],[data-exit]');
     if (!t) return;
     var d = t.dataset;
     if (d.ev) { st.ev = d.ev; renderTop(); evVisit(); return; }
@@ -2549,6 +2797,7 @@
     if (d.lksave) { var sv = loadSaved(), si = sv.indexOf(d.lksave); if (si < 0) sv.push(d.lksave); else sv.splice(si, 1); storeSaved(sv); toast(si < 0 ? '코디를 저장했어요' : '저장에서 뺐어요'); renderLook(+(location.hash.split('/')[2] || 0)); return; }
     if (d.ask) { openAsk(); return; }
     if (d.share) { e.preventDefault(); shareP(d.share); return; }
+    if (d.exit) { floorBye(); return; }
     if (d.totop) { window.scrollTo({ top: 0, behavior: REDUCE ? 'auto' : 'smooth' }); return; }
     if (d.rest) { openRestock(d.rest); return; }
     if (d.hold) { openHold(d.hold); return; }
