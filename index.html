@@ -1219,6 +1219,8 @@
   .grip { flex:none; align-self:center; width:16px; cursor:grab; color:var(--mute); font-size:14px; letter-spacing:-2px; user-select:none; -webkit-user-select:none; }
   .igadm.dragging, .epadm.dragging { opacity:.4; }
   .igadm.dropto, .epadm.dropto { box-shadow:inset 0 3px 0 var(--pink); }
+  /* 261128 몰래 구경 줄: 손전등 원 바로 아래 고정(모든 화면 같은 자리) */
+  body.ntclosed #nbar, body[data-r] #nbar { bottom:auto !important; }
 </style>
 </head>
 <body>
@@ -1681,9 +1683,9 @@
     var cols = o.cols.filter(function (_, j) { return used[j]; });
     var rows = o.rows.filter(function (r) { return r.slice(1).some(function (x) { return String(x || '').trim(); }); });
     if (!rows.length) return '';
-    var h = '<div class="szt"><table><thead><tr><th></th>' + cols.map(function (c) { return '<th>' + esc(c) + '</th>'; }).join('') + '</tr></thead><tbody>' +
+    var h = '<div class="szt"><table><thead><tr><th></th>' + cols.map(function (c) { return '<th>' + esc(c === '허리(인치)' ? '허리 단면' : c) + '</th>'; }).join('') + '</tr></thead><tbody>' +
       rows.map(function (r) { return '<tr><th>' + esc(r[0]) + '</th>' + o.cols.map(function (_, j) { return used[j] ? '<td>' + esc(String(r[j + 1] || '–')) + '</td>' : ''; }).join('') + '</tr>'; }).join('') + '</tbody></table></div>';
-    var note = ['단위 cm' + (o.k === 'b' ? ' (허리는 인치)' : ''), o.base ? '실측 색상 ' + o.base + ' 기준' : '', '재는 방법에 따라 1~2cm 차이가 날 수 있어요'].filter(String).join(' · ');
+    var note = ['단위 cm', o.base ? '실측 색상 ' + o.base + ' 기준' : '', '재는 방법에 따라 1~2cm 차이가 날 수 있어요'].filter(String).join(' · ');
     return h + '<p class="szn">' + esc(note) + '</p>' + (o.memo ? '<p class="szm">' + esc(o.memo) + '</p>' : '');
   }
   // 재고 보유 현황: 색상마다 사이즈별 배터리 — 품절 빨강 1칸 · 조금(1~2장) 노랑 2칸 · 보통(3~4장) 초록 3칸 · 넉넉(5장~) 초록 4칸
@@ -2567,19 +2569,20 @@
   }
   function sizeMode(p) { return isBot(p) ? 'b' : (isTop(p) ? 't' : ''); }
   // 261127~ 실측 사이즈 표 칸 (빈 칸은 손님 화면에서 자동으로 숨김)
-  var SZ_COLS = { b: ['허리(인치)', '밑위', '허벅지 단면', '밑단 단면', '총장'], t: ['어깨', '가슴 단면', '소매', '총장', '추천 (여성/남성)'] };
+  var SZ_COLS = { b: ['허리 단면', '밑위', '허벅지 단면', '밑단 단면', '총장'], t: ['어깨', '가슴 단면', '소매', '총장', '추천 (여성/남성)'] };
   function sizeForm(p) {
     var mode = sizeMode(p), cols = SZ_COLS[mode];
     if (!cols) return { cols: [], m: {}, sizes: [], base: '', memo: '' };
     var o = sizeJson(p.size), m = {}, base = '', memo = '', sizes;
     if (o) {
-      o.rows.forEach(function (r) { m[r[0]] = cols.map(function (c) { var j = o.cols.indexOf(c); return j >= 0 ? String(r[j + 1] || '') : ''; }); });
+      var oc = o.cols.map(function (c) { return c === '허리(인치)' ? '허리 단면' : c; });
+      o.rows.forEach(function (r) { m[r[0]] = cols.map(function (c) { var j = oc.indexOf(c); return j >= 0 ? String(r[j + 1] || '') : ''; }); });
       base = o.base || ''; memo = o.memo || '';
     } else {   // 예전 글자('M: 허리 28인치 · 총장 107cm' / 'M: 여성 55~66 · 남성 95')를 표로 옮김
       var ps = parseSize(p.size, mode);
       Object.keys(ps.rows).forEach(function (sz) {
         var r = ps.rows[sz], row = cols.map(function () { return ''; });
-        if (mode === 'b') { row[0] = r.w || ''; row[4] = r.l || ''; }
+        if (mode === 'b') { row[4] = r.l || ''; }   // 예전 허리(인치)는 cm 칸이라 옮기지 않음
         else row[4] = [r.w ? '여성 ' + r.w : '', r.l ? '남성 ' + r.l : ''].filter(String).join(' / ');
         m[sz] = row;
       });
@@ -2619,7 +2622,7 @@
     var ask = A.askMain ? '<div class="askmain"><span>방금 올린 사진을 대표 이미지로 쓸까요?</span><div><button class="pill sm blue" data-main="' + esc(A.askMain) + '">이 사진으로</button><button class="pill sm" id="keepmain">기존 유지</button></div></div>' : '';
     var sizeHtml, mode = sizeMode(p);
     if (f.cols.length) {
-      sizeHtml = '<div class="fld"><label>실측 사이즈 (cm, 하의 허리는 인치 · 빈 칸은 손님 화면에 안 나와요)</label><div class="szgrid2" style="grid-template-columns:34px ' + f.cols.map(function (c) { return /추천/.test(c) ? 'minmax(150px, 2.4fr)' : 'minmax(56px, 1fr)'; }).join(' ') + '"><span></span>' + f.cols.map(function (c) { return '<span>' + esc(c) + '</span>'; }).join('') +
+      sizeHtml = '<div class="fld"><label>실측 사이즈 (모두 cm · 빈 칸은 손님 화면에 안 나와요)</label><div class="szgrid2" style="grid-template-columns:34px ' + f.cols.map(function (c) { return /추천/.test(c) ? 'minmax(150px, 2.4fr)' : 'minmax(56px, 1fr)'; }).join(' ') + '"><span></span>' + f.cols.map(function (c) { return '<span>' + esc(c) + '</span>'; }).join('') +
         f.sizes.map(function (sz) { var r = f.m[sz] || []; return '<b>' + sz + '</b>' + f.cols.map(function (c, j) { return '<input data-m="' + sz + ':' + j + '" value="' + esc(r[j] || '') + '"' + (/추천/.test(c) ? ' placeholder="여성 55~66 / 남성 95"' : /허리/.test(c) ? ' placeholder="28~38"' : ' inputmode="decimal"') + '>'; }).join(''); }).join('') +
         '</div><div class="opts">' + SIZES.filter(function (x) { return f.sizes.indexOf(x) < 0; }).map(function (x) { return '<button data-addsz="' + x + '">+ ' + x + '</button>'; }).join('') + '</div>' +
         '<input id="f_base" value="' + esc(f.base) + '" placeholder="실측 기준 색상 (예: 블랙)">' +
@@ -2806,7 +2809,7 @@
   //  영업 중에 내리면 '정전' 5초. 비상구 = 메인 맨 아래(바닥 곰돌이가 인사)
   //  어둠은 큰 판 4장을 transform으로만 옮김(다시 그리지 않아 느린 기기도 부드럽게)
   var NT = { dark: false, closed: false, sleep: false, outage: 0, lx: 0, ly: 0, jx: 0, jy: 0, drag: null, raf: 0, last: 0, S: 0, rad: 0, r: '' };
-  var NT_R = { home: [190, .5], search: [190, .5], wish: [190, .5], visit: [200, .48], detail: [250, .33], fit: [280, .47], look: [290, .42] };
+  var NT_R = { home: [250, .33] };   // 261128~ 모든 화면 같은 크기·위치(상품정보 기준)
   var NT_SPEED = 230;   // 조이스틱 끝까지 밀었을 때 1초에 움직이는 거리(px)
   function ntLightOn() { try { return sessionStorage.getItem('dj_light') === 'on'; } catch (e) { return false; } }
   function ntSS(k, v) { try { if (v === undefined) return sessionStorage.getItem(k); sessionStorage.setItem(k, v); } catch (e) {} }
@@ -2917,12 +2920,13 @@
     if (bar) {
       if (NT.sleep) bar.innerHTML = '<i>💤</i>오늘은 곰돌이도 쉬는 날 · 내일 10:30에 만나요';
       else {
-        var when = /영업 전/.test(o.t) ? '오픈 전 백화점' : '영업 끝난 백화점';
+        var when = /영업 전/.test(o.t) ? '오픈 전' : '마감 후';
         var nx = /영업 전/.test(o.t) ? '오늘 10:30 오픈' : (o.t.split(' · ')[1] || '').replace('내일 휴점', '내일은 백화점 휴점일');
         bar.innerHTML = '<i>🔦</i>쉿… ' + when + ' 몰래 구경 중' + (nx ? ' · ' + nx : '');
       }
       bar.innerHTML = '<span class="nbt">' + bar.innerHTML + '</span><button class="lsw2' + (NT.dark ? '' : ' on') + '" role="switch" aria-checked="' + (NT.dark ? 'false' : 'true') + '" aria-label="백화점 몰래 전등 켜기"><span class="trk"><b>' + (NT.dark ? 'OFF' : 'ON') + '</b><i class="kn">💡</i></span></button>';
     }
+    if (bar) ntPlaceBar(bar);
     [].forEach.call(document.querySelectorAll('.lsw, #lswg'), function (s) { s.classList.toggle('on', !NT.dark); s.setAttribute('aria-checked', NT.dark ? 'false' : 'true'); });
     // 손전등 처음 켜질 때 스위치 알려 주기(탭마다 한 번)
 
@@ -2930,8 +2934,14 @@
     if (NT.dark) { if (NT.r !== r) ntReset(r); ntPlaceSwitch(); ntKick(); }
     else { cancelAnimationFrame(NT.raf); NT.raf = 0; ntPlaceSwitch(); }
   }
+  // 몰래 구경 줄: 모든 화면에서 같은 자리 = 손전등 원 바로 아래
+  function ntPlaceBar(bar) {
+    var W = innerWidth, H = innerHeight, cfg = NT_R.home, rad = Math.round(Math.min(cfg[0], Math.max(W, 320) * .66));
+    var top = Math.min(H * cfg[1] + rad + 12, H - 200);
+    bar.style.top = Math.round(top) + 'px';
+  }
   function ntReset(r) {
-    var cfg = NT_R[r] || NT_R.home, W = innerWidth, H = innerHeight;
+    var cfg = NT_R.home, W = innerWidth, H = innerHeight;
     NT.r = r; NT.rad = Math.round(Math.min(cfg[0], Math.max(W, 320) * .66));
     NT.lx = W / 2; NT.ly = H * cfg[1];
     var S = Math.ceil(Math.sqrt(W * W + H * H)) * 2 + NT.rad * 2;
