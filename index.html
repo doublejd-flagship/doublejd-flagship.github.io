@@ -1225,6 +1225,32 @@
   body[data-r="look"] #nbar { --nb:calc(176px + env(safe-area-inset-bottom)); }
   body[data-r="wish"] #nbar, body[data-r="visit"] #nbar { --nb:calc(var(--tab-h) + 14px + env(safe-area-inset-bottom)); }
   body.ntclosed:not([data-r="look"]) .toast { margin-bottom:56px; }   /* 알림은 몰래 구경 줄 위로 */
+  /* 261128 천호점 시그니처: 5호선 퍼플·8호선 핑크를 포인트로만. 나머지 흰·회색, 배경 그래피티와 검정 상자는 그대로 */
+  :root { --pink:#E74E6D; --p5:#996CAC; }
+  .ring { background:linear-gradient(135deg, var(--p5), var(--pink)); padding:2px; }
+  .sty.seen .ring { background:rgba(255,255,255,.16); }
+  .ticker { transform:none; margin:12px 0 0; height:30px; background:#121113; color:#d8d8dc; box-shadow:none; border-top:1px solid rgba(153,108,172,.7); border-bottom:1px solid rgba(231,78,109,.5); }
+  .ticker .tk { color:var(--pink); font-size:14px; }
+  .ticker .star { color:var(--p5); }
+  .tkin { animation-duration:76s; }
+  .stk, .sec[data-ac] .stk { transform:none; box-shadow:none; background:rgba(153,108,172,.12); color:#c9a6dc; border:1px solid rgba(153,108,172,.6); }
+  .sec[data-ac] { --ac:#8d8d95; }
+  .sec[data-ac] .ksub::before { display:none; }
+  .ksub em, .sec[data-ac] .ksub em { color:var(--pink); }
+  .sht .dsp::before { content:''; display:inline-block; width:4px; height:.8em; background:linear-gradient(180deg, var(--p5), var(--pink)); border-radius:2px; margin-right:9px; vertical-align:.05em; }
+  .bd { color:var(--sub) !important; border-color:rgba(255,255,255,.12) !important; background:transparent !important; }
+  .wxt { color:#c9a6dc; }
+  .wxbear i { animation:none; }
+  .boxstk .hstk, .boxstk .hstk.big { transform:none; }
+  .nw { background:rgba(10,10,12,.78); color:#fff; font-weight:600; border:1px solid rgba(231,78,109,.55); }
+  .nw::before { content:''; display:inline-block; width:5px; height:5px; border-radius:50%; background:var(--pink); margin-right:4px; vertical-align:1px; }
+  .evall { color:#c9a6dc; }
+  .tabbar .on { color:var(--pink); }
+  .scl .sr > b small { color:var(--sub); }
+  .scl .bar i.pre { background:rgba(153,108,172,.45); }
+  .scl .bar i.on { background:var(--p5); box-shadow:none; }
+  .fk.rk { background:rgba(255,255,255,.07); color:#d8d8dc; }
+  .bub small { color:#c3a0d6; }
 </style>
 </head>
 <body>
